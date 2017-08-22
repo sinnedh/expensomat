@@ -19,8 +19,9 @@ defmodule ApiServerWeb.Router do
     get "/", PageController, :index
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", ApiServerWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", ApiServerWeb do
+    pipe_through :api
+
+    resources "/calculations", CalculationController, except: [:new, :edit]
+  end
 end
