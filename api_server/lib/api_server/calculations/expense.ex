@@ -15,7 +15,7 @@ defmodule ApiServer.Calculations.Expense do
   @doc false
   def changeset(%Expense{} = expense, attrs) do
     expense
-    |> cast(attrs, [:description, :amount])
-    |> validate_required([:description, :amount])
+    |> cast(attrs, [:description, :amount, :calculation_id])
+    |> validate_required([:description, :amount, :calculation_id])
   end
 end

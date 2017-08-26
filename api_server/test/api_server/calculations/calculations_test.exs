@@ -72,9 +72,15 @@ defmodule ApiServer.CalculationsTest do
     @update_attrs %{amount: 43, description: "some updated description"}
     @invalid_attrs %{amount: nil, description: nil}
 
-    def expense_fixture(attrs \\ %{}) do
+    def expense_fixture() do
+      calculation = calculation_fixture()
+      expense_fixture(calculation)
+    end
+
+    def expense_fixture(calculation, attrs \\ %{}) do
       {:ok, expense} =
         attrs
+        |> Map.put(:calculation_id, calculation.id)
         |> Enum.into(@valid_attrs)
         |> Calculations.create_expense()
 
@@ -92,13 +98,17 @@ defmodule ApiServer.CalculationsTest do
     end
 
     test "create_expense/1 with valid data creates a expense" do
-      assert {:ok, %Expense{} = expense} = Calculations.create_expense(@valid_attrs)
+      calculation = calculation_fixture()
+      valid_attrs = @valid_attrs |> Map.put(:calculation_id, calculation.id)
+      assert {:ok, %Expense{} = expense} = Calculations.create_expense(valid_attrs)
       assert expense.amount == 42
       assert expense.description == "some description"
     end
 
     test "create_expense/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Calculations.create_expense(@invalid_attrs)
+      calculation = calculation_fixture()
+      invalid_attrs = @invalid_attrs |> Map.put(:calculation_id, calculation.id)
+      assert {:error, %Ecto.Changeset{}} = Calculations.create_expense(invalid_attrs)
     end
 
     test "update_expense/2 with valid data updates the expense" do
