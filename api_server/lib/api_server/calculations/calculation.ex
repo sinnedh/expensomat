@@ -15,6 +15,6 @@ defmodule ApiServer.Calculations.Calculation do
   def changeset(%Calculation{} = calculation, attrs) do
     calculation
     |> cast(attrs, [:name, :description])
-    |> validate_required([:name, :description])
+    |> validate_required([:name])
   end
 end
