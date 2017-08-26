@@ -22,7 +22,9 @@ defmodule ApiServerWeb.Router do
   scope "/api", ApiServerWeb do
     pipe_through :api
 
-    resources "/calculations", CalculationController, except: [:new, :edit]
+    resources "/calculations", CalculationController, except: [:new, :edit] do
+      get "/expenses", ExpenseController, :index
+    end
     resources "/expenses", ExpenseController, except: [:new, :edit]
   end
 end
