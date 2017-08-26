@@ -105,6 +105,19 @@ defmodule ApiServer.Calculations do
   alias ApiServer.Calculations.Expense
 
   @doc """
+  Returns the list of expenses for a given calculation.
+
+  ## Examples
+
+      iex> list_expenses(23)
+      [%Expense{}, ...]
+
+  """
+  def list_expenses(calculation_id) do
+    Repo.all(from e in Expense, where: e.calculation_id == ^calculation_id)
+  end
+
+  @doc """
   Returns the list of expenses.
 
   ## Examples

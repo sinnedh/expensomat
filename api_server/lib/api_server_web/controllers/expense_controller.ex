@@ -6,6 +6,11 @@ defmodule ApiServerWeb.ExpenseController do
 
   action_fallback ApiServerWeb.FallbackController
 
+  def index(conn, %{"calculation_id" => calculation_id}) do
+    expenses = Calculations.list_expenses(calculation_id)
+    render(conn, "index.json", expenses: expenses)
+  end
+
   def index(conn, _params) do
     expenses = Calculations.list_expenses()
     render(conn, "index.json", expenses: expenses)
