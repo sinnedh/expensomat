@@ -10,7 +10,7 @@ class Calculation extends React.Component {
   }
 
   componentDidMount() {
-    const calculation_id = 5
+    const calculation_id = this.props.match.params.id;
     getCalculation(calculation_id, calculation => this.setState({
       name: calculation.name,
       description: calculation.description,
