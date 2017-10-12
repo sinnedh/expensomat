@@ -154,17 +154,21 @@ defmodule ApiServer.CalculationsTest do
     end
 
     test "list_members/0 returns all members" do
-      member = member_fixture()
+      calculation = calculation_fixture()
+      member = member_fixture %{calculation_id: calculation.id}
       assert Calculations.list_members() == [member]
     end
 
     test "get_member!/1 returns the member with given id" do
-      member = member_fixture()
+      calculation = calculation_fixture()
+      member = member_fixture %{calculation_id: calculation.id}
       assert Calculations.get_member!(member.id) == member
     end
 
     test "create_member/1 with valid data creates a member" do
-      assert {:ok, %Member{} = member} = Calculations.create_member(@valid_attrs)
+      calculation = calculation_fixture()
+      valid_attrs = @valid_attrs |> Map.put(:calculation_id, calculation.id)
+      assert {:ok, %Member{} = member} = Calculations.create_member(valid_attrs)
       assert member.name == "some name"
     end
 
@@ -173,26 +177,30 @@ defmodule ApiServer.CalculationsTest do
     end
 
     test "update_member/2 with valid data updates the member" do
-      member = member_fixture()
+      calculation = calculation_fixture()
+      member = member_fixture %{calculation_id: calculation.id}
       assert {:ok, member} = Calculations.update_member(member, @update_attrs)
       assert %Member{} = member
       assert member.name == "some updated name"
     end
 
     test "update_member/2 with invalid data returns error changeset" do
-      member = member_fixture()
+      calculation = calculation_fixture()
+      member = member_fixture %{calculation_id: calculation.id}
       assert {:error, %Ecto.Changeset{}} = Calculations.update_member(member, @invalid_attrs)
       assert member == Calculations.get_member!(member.id)
     end
 
     test "delete_member/1 deletes the member" do
-      member = member_fixture()
+      calculation = calculation_fixture()
+      member = member_fixture %{calculation_id: calculation.id}
       assert {:ok, %Member{}} = Calculations.delete_member(member)
       assert_raise Ecto.NoResultsError, fn -> Calculations.get_member!(member.id) end
     end
 
     test "change_member/1 returns a member changeset" do
-      member = member_fixture()
+      calculation = calculation_fixture()
+      member = member_fixture %{calculation_id: calculation.id}
       assert %Ecto.Changeset{} = Calculations.change_member(member)
     end
   end
