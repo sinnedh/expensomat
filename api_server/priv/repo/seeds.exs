@@ -13,9 +13,11 @@
 alias ApiServer.Repo
 alias ApiServer.Calculations.Calculation
 alias ApiServer.Calculations.Expense
+alias ApiServer.Calculations.Member
 
 Repo.delete_all Expense
 Repo.delete_all Calculation
+Repo.delete_all Member
 
 c1 = Repo.insert!(%Calculation{
   name: "TV room",
