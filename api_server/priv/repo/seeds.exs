@@ -64,3 +64,43 @@ Repo.insert!(%Expense{
   amount: 12800,
   description: "Final cleaning",
 })
+
+
+c3 = Repo.insert!(%Calculation{
+  name: "Micha / Dennis",
+  description: "Shared expenses between Micha and Dennis",
+})
+
+c3_m1 = Repo.insert!(%Member{
+  calculation_id: c3.id,
+  name: "Micha",
+})
+
+c3_m2 = Repo.insert!(%Member{
+  calculation_id: c3.id,
+  name: "Dennis",
+})
+
+Repo.insert!(%Expense{
+  calculation_id: c3.id,
+  amount: 800,
+  description: "Pasta  beim Italiener",
+})
+
+Repo.insert!(%Expense{
+  calculation_id: c3.id,
+  amount: 550,
+  description: "Königsberger Klopse im Orderbird Cafe",
+})
+
+Repo.insert!(%Expense{
+  calculation_id: c3.id,
+  amount: 850,
+  description: "Pizza beim Fake Vapiano",
+})
+
+Repo.insert!(%Expense{
+  calculation_id: c3.id,
+  amount: 1000,
+  description: "Geliehen beim Fake Vapiano",
+})
