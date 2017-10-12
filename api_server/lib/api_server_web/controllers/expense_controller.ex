@@ -7,7 +7,7 @@ defmodule ApiServerWeb.ExpenseController do
   action_fallback ApiServerWeb.FallbackController
 
   def index(conn, %{"calculation_id" => calculation_id}) do
-    expenses = Calculations.list_expenses(calculation_id, :preload_members)
+    expenses = Calculations.list_expenses(calculation_id)
     render(conn, "index.json", expenses: expenses)
   end
 
@@ -26,12 +26,12 @@ defmodule ApiServerWeb.ExpenseController do
   end
 
   def show(conn, %{"id" => id}) do
-    expense = Calculations.get_expense!(id, :preload_members)
+    expense = Calculations.get_expense!(id)
     render(conn, "show.json", expense: expense)
   end
 
   def update(conn, %{"id" => id, "expense" => expense_params}) do
-    expense = Calculations.get_expense!(id, :preload_members)
+    expense = Calculations.get_expense!(id)
 
     with {:ok, %Expense{} = expense} <- Calculations.update_expense(expense, expense_params) do
       render(conn, "show.json", expense: expense |> ApiServer.Repo.preload([:paid_by, :paid_for]))
@@ -39,7 +39,7 @@ defmodule ApiServerWeb.ExpenseController do
   end
 
   def delete(conn, %{"id" => id}) do
-    expense = Calculations.get_expense!(id, :preload_members)
+    expense = Calculations.get_expense!(id)
     with {:ok, %Expense{}} <- Calculations.delete_expense(expense) do
       send_resp(conn, :no_content, "")
     end

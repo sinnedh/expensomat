@@ -17,11 +17,12 @@ defmodule ApiServer.Calculations do
       [%Calculation{}, ...]
 
   """
-  def list_calculations do
+  def list_calculations(:no_preload) do
     Repo.all(Calculation)
   end
-  def list_calculations_with_members do
-    list_calculations
+
+  def list_calculations do
+    list_calculations(:no_preload)
     |> Repo.preload(:members)
   end
 
@@ -39,8 +40,12 @@ defmodule ApiServer.Calculations do
       ** (Ecto.NoResultsError)
 
   """
-  def get_calculation!(id), do: Repo.get!(Calculation, id)
-  def get_calculation_with_members!(id), do: get_calculation!(id) |> Repo.preload(:members)
+  def get_calculation!(:no_preload, id), do: Repo.get!(Calculation, id)
+
+  def get_calculation!(id) do
+     get_calculation!(:no_preload, id)
+     |> Repo.preload(:members)
+   end
 
   @doc """
   Creates a calculation.
@@ -118,12 +123,12 @@ defmodule ApiServer.Calculations do
       [%Expense{}, ...]
 
   """
-  def list_expenses(calculation_id) do
+  def list_expenses(:no_preload, calculation_id) do
     Repo.all(from e in Expense, where: e.calculation_id == ^calculation_id)
   end
 
-  def list_expenses(calculation_id, :preload_members) do
-    list_expenses(calculation_id)
+  def list_expenses(calculation_id) do
+    list_expenses(:no_preload, calculation_id)
     |> Repo.preload([:paid_by, :paid_for])
   end
 
@@ -154,12 +159,12 @@ defmodule ApiServer.Calculations do
       ** (Ecto.NoResultsError)
 
   """
-  def get_expense!(id) do
+  def get_expense!(:no_preload, id) do
     Repo.get!(Expense, id)
   end
 
-  def get_expense!(id, :preload_members) do
-    get_expense!(id)
+  def get_expense!(id) do
+    get_expense!(:no_preload, id)
     |> Repo.preload([:paid_by, :paid_for])
   end
 
