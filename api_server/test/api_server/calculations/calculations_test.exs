@@ -16,7 +16,7 @@ defmodule ApiServer.CalculationsTest do
         |> Enum.into(@valid_attrs)
         |> Calculations.create_calculation()
 
-      calculation
+      calculation |> Repo.preload([:members])
     end
 
     test "list_calculations/0 returns all calculations" do
@@ -84,7 +84,7 @@ defmodule ApiServer.CalculationsTest do
         |> Enum.into(@valid_attrs)
         |> Calculations.create_expense()
 
-      expense
+      expense |> Repo.preload([:paid_by, :paid_for])
     end
 
     test "list_expenses/0 returns all expenses" do
