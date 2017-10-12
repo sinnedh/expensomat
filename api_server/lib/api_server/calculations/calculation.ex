@@ -7,6 +7,7 @@ defmodule ApiServer.Calculations.Calculation do
   schema "calculations" do
     field :description, :string
     field :name, :string
+    has_many :members, ApiServer.Calculations.Member
 
     timestamps()
   end
