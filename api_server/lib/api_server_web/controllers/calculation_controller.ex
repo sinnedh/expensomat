@@ -7,7 +7,7 @@ defmodule ApiServerWeb.CalculationController do
   action_fallback ApiServerWeb.FallbackController
 
   def index(conn, _params) do
-    calculations = Calculations.list_calculations()
+    calculations = Calculations.list_calculations_with_members()
     render(conn, "index.json", calculations: calculations)
   end
 
@@ -21,7 +21,7 @@ defmodule ApiServerWeb.CalculationController do
   end
 
   def show(conn, %{"id" => id}) do
-    calculation = Calculations.get_calculation!(id)
+    calculation = Calculations.get_calculation_with_members!(id)
     render(conn, "show.json", calculation: calculation)
   end
 

@@ -9,7 +9,7 @@ defmodule ApiServer.Calculations do
   alias ApiServer.Calculations.Calculation
 
   @doc """
-  Returns the list of calculations.
+  Returns the list of calculations (optionally with preloaded members).
 
   ## Examples
 
@@ -20,9 +20,13 @@ defmodule ApiServer.Calculations do
   def list_calculations do
     Repo.all(Calculation)
   end
+  def list_calculations_with_members do
+    list_calculations
+    |> Repo.preload(:members)
+  end
 
   @doc """
-  Gets a single calculation.
+  Gets a single calculation (optionally with preloaded members).
 
   Raises `Ecto.NoResultsError` if the Calculation does not exist.
 
@@ -36,6 +40,7 @@ defmodule ApiServer.Calculations do
 
   """
   def get_calculation!(id), do: Repo.get!(Calculation, id)
+  def get_calculation_with_members!(id), do: get_calculation!(id) |> Repo.preload(:members)
 
   @doc """
   Creates a calculation.
@@ -209,5 +214,101 @@ defmodule ApiServer.Calculations do
   """
   def change_expense(%Expense{} = expense) do
     Expense.changeset(expense, %{})
+  end
+
+  alias ApiServer.Calculations.Member
+
+  @doc """
+  Returns the list of members.
+
+  ## Examples
+
+      iex> list_members()
+      [%Member{}, ...]
+
+  """
+  def list_members do
+    Repo.all(Member)
+  end
+
+  @doc """
+  Gets a single member.
+
+  Raises `Ecto.NoResultsError` if the Member does not exist.
+
+  ## Examples
+
+      iex> get_member!(123)
+      %Member{}
+
+      iex> get_member!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_member!(id), do: Repo.get!(Member, id)
+
+  @doc """
+  Creates a member.
+
+  ## Examples
+
+      iex> create_member(%{field: value})
+      {:ok, %Member{}}
+
+      iex> create_member(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_member(attrs \\ %{}) do
+    %Member{}
+    |> Member.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a member.
+
+  ## Examples
+
+      iex> update_member(member, %{field: new_value})
+      {:ok, %Member{}}
+
+      iex> update_member(member, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_member(%Member{} = member, attrs) do
+    member
+    |> Member.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a Member.
+
+  ## Examples
+
+      iex> delete_member(member)
+      {:ok, %Member{}}
+
+      iex> delete_member(member)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_member(%Member{} = member) do
+    Repo.delete(member)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking member changes.
+
+  ## Examples
+
+      iex> change_member(member)
+      %Ecto.Changeset{source: %Member{}}
+
+  """
+  def change_member(%Member{} = member) do
+    Member.changeset(member, %{})
   end
 end
