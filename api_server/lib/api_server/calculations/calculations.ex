@@ -122,6 +122,11 @@ defmodule ApiServer.Calculations do
     Repo.all(from e in Expense, where: e.calculation_id == ^calculation_id)
   end
 
+  def list_expenses(calculation_id, :preload_members) do
+    list_expenses(calculation_id)
+    |> Repo.preload([:paid_by, :paid_for])
+  end
+
   @doc """
   Returns the list of expenses.
 
@@ -149,7 +154,14 @@ defmodule ApiServer.Calculations do
       ** (Ecto.NoResultsError)
 
   """
-  def get_expense!(id), do: Repo.get!(Expense, id)
+  def get_expense!(id) do
+    Repo.get!(Expense, id)
+  end
+
+  def get_expense!(id, :preload_members) do
+    get_expense!(id)
+    |> Repo.preload([:paid_by, :paid_for])
+  end
 
   @doc """
   Creates a expense.
