@@ -16,7 +16,7 @@ defmodule ApiServerWeb.CalculationController do
       conn
       |> put_status(:created)
       |> put_resp_header("location", calculation_path(conn, :show, calculation))
-      |> render("show.json", calculation: calculation)
+      |> render("show.json", calculation: calculation |> ApiServer.Repo.preload(:members))
     end
   end
 
@@ -29,7 +29,7 @@ defmodule ApiServerWeb.CalculationController do
     calculation = Calculations.get_calculation!(id)
 
     with {:ok, %Calculation{} = calculation} <- Calculations.update_calculation(calculation, calculation_params) do
-      render(conn, "show.json", calculation: calculation)
+      render(conn, "show.json", calculation: calculation |> ApiServer.Repo.preload(:members))
     end
   end
 
