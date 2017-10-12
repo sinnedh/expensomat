@@ -24,10 +24,6 @@ defmodule ApiServerWeb.ExpenseControllerTest do
   end
 
   describe "index" do
-    test "lists all expenses", %{conn: conn} do
-      conn = get conn, expense_path(conn, :index)
-      assert json_response(conn, 200)["data"] == []
-    end
 
     test "lists all expenses for a given calculation", %{conn: conn, calculation: calculation} do
       {:ok, other_calculation} = Calculations.create_calculation(%{name: "Another calculation"})

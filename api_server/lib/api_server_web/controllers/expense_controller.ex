@@ -11,11 +11,6 @@ defmodule ApiServerWeb.ExpenseController do
     render(conn, "index.json", expenses: expenses)
   end
 
-  def index(conn, _params) do
-    expenses = Calculations.list_expenses()
-    render(conn, "index.json", expenses: expenses)
-  end
-
   def create(conn, %{"expense" => expense_params}) do
     with {:ok, %Expense{} = expense} <- Calculations.create_expense(expense_params) do
       conn

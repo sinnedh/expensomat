@@ -133,19 +133,6 @@ defmodule ApiServer.Calculations do
   end
 
   @doc """
-  Returns the list of expenses.
-
-  ## Examples
-
-      iex> list_expenses()
-      [%Expense{}, ...]
-
-  """
-  def list_expenses do
-    Repo.all(Expense)
-  end
-
-  @doc """
   Gets a single expense.
 
   Raises `Ecto.NoResultsError` if the Expense does not exist.
