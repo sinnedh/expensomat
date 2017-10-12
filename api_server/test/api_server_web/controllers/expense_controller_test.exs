@@ -3,7 +3,7 @@ defmodule ApiServerWeb.ExpenseControllerTest do
 
   alias ApiServer.Calculations
 
-  @create_attrs %{amount: 42, description: "some description"}
+  @create_attrs %{amount: 42, description: "some description", paid_by: [], paid_for: []}
   @update_attrs %{amount: 43, description: "some updated description"}
   @invalid_attrs %{amount: nil, description: nil}
 
@@ -59,7 +59,10 @@ defmodule ApiServerWeb.ExpenseControllerTest do
       assert json_response(conn, 200)["data"] == %{
         "id" => id,
         "amount" => 42,
-        "description" => "some description"}
+        "description" => "some description",
+        "paid_by" => [],
+        "paid_for" => [],
+      }
     end
 
     test "renders errors when data is invalid", %{conn: conn, calculation: calculation} do
@@ -80,7 +83,10 @@ defmodule ApiServerWeb.ExpenseControllerTest do
       assert json_response(conn, 200)["data"] == %{
         "id" => expense.id,
         "amount" => 43,
-        "description" => "some updated description"}
+        "description" => "some updated description",
+        "paid_by" => [],
+        "paid_for" => [],
+      }
     end
 
     test "renders errors when data is invalid", %{conn: conn, calculation: calculation} do

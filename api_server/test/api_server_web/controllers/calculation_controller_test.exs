@@ -33,7 +33,9 @@ defmodule ApiServerWeb.CalculationControllerTest do
       assert json_response(conn, 200)["data"] == %{
         "id" => id,
         "description" => "some description",
-        "name" => "some name"}
+        "name" => "some name",
+        "members" => []
+      }
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
@@ -53,7 +55,9 @@ defmodule ApiServerWeb.CalculationControllerTest do
       assert json_response(conn, 200)["data"] == %{
         "id" => id,
         "description" => "some updated description",
-        "name" => "some updated name"}
+        "name" => "some updated name",
+        "members" => []
+      }
     end
 
     test "renders errors when data is invalid", %{conn: conn, calculation: calculation} do

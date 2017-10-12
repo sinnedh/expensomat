@@ -13,6 +13,9 @@ defmodule ApiServerWeb.ExpenseView do
   def render("expense.json", %{expense: expense}) do
     %{id: expense.id,
       description: expense.description,
-      amount: expense.amount}
+      amount: expense.amount,
+      paid_by: render_many(expense.paid_by, ApiServerWeb.MemberView, "member.json"),
+      paid_for: render_many(expense.paid_for, ApiServerWeb.MemberView, "member.json")
+    }
   end
 end
