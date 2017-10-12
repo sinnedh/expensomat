@@ -84,24 +84,32 @@ c3_m2 = Repo.insert!(%Member{
 })
 
 Repo.insert!(%Expense{
+  paid_by: [c3_m2],
+  paid_for: [c3_m1],
   calculation_id: c3.id,
   amount: 800,
   description: "Pasta  beim Italiener",
 })
 
 Repo.insert!(%Expense{
+  paid_by: [c3_m2],
+  paid_for: [c3_m1],
   calculation_id: c3.id,
   amount: 550,
   description: "Königsberger Klopse im Orderbird Cafe",
 })
 
 Repo.insert!(%Expense{
+  paid_by: [c3_m1],
+  paid_for: [c3_m2],
   calculation_id: c3.id,
   amount: 850,
   description: "Pizza beim Fake Vapiano",
 })
 
 Repo.insert!(%Expense{
+  paid_by: [c3_m2],
+  paid_for: [c3_m1],
   calculation_id: c3.id,
   amount: 1000,
   description: "Geliehen beim Fake Vapiano",
