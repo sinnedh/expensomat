@@ -16,7 +16,7 @@ defmodule ApiServerWeb.ExpenseController do
       conn
       |> put_status(:created)
       |> put_resp_header("location", expense_path(conn, :show, expense))
-      |> render("show.json", expense: expense |> ApiServer.Repo.preload([:paid_by, :paid_for]))
+      |> render("show.json", expense: expense)
     end
   end
 
@@ -29,7 +29,7 @@ defmodule ApiServerWeb.ExpenseController do
     expense = Calculations.get_expense!(id)
 
     with {:ok, %Expense{} = expense} <- Calculations.update_expense(expense, expense_params) do
-      render(conn, "show.json", expense: expense |> ApiServer.Repo.preload([:paid_by, :paid_for]))
+      render(conn, "show.json", expense: expense)
     end
   end
 
