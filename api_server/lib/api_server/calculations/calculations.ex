@@ -17,11 +17,12 @@ defmodule ApiServer.Calculations do
       [%Calculation{}, ...]
 
   """
-  def list_calculations do
+  def list_calculations(:no_preload) do
     Repo.all(Calculation)
   end
-  def list_calculations_with_members do
-    list_calculations
+
+  def list_calculations do
+    list_calculations(:no_preload)
     |> Repo.preload(:members)
   end
 
@@ -39,8 +40,12 @@ defmodule ApiServer.Calculations do
       ** (Ecto.NoResultsError)
 
   """
-  def get_calculation!(id), do: Repo.get!(Calculation, id)
-  def get_calculation_with_members!(id), do: get_calculation!(id) |> Repo.preload(:members)
+  def get_calculation!(:no_preload, id), do: Repo.get!(Calculation, id)
+
+  def get_calculation!(id) do
+     get_calculation!(:no_preload, id)
+     |> Repo.preload(:members)
+   end
 
   @doc """
   Creates a calculation.
@@ -54,10 +59,19 @@ defmodule ApiServer.Calculations do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_calculation(attrs \\ %{}) do
+  def create_calculation(:no_preload, attrs) do
     %Calculation{}
     |> Calculation.changeset(attrs)
     |> Repo.insert()
+  end
+
+  def create_calculation(attrs \\ %{}) do
+    case create_calculation(:no_preload, attrs) do
+      {:ok, new_calculation} ->
+        {:ok, new_calculation |> ApiServer.Repo.preload(:members)}
+      {:error, changeset} ->
+        {:error, changeset}
+    end
   end
 
   @doc """
@@ -72,11 +86,21 @@ defmodule ApiServer.Calculations do
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_calculation(%Calculation{} = calculation, attrs) do
+  def update_calculation(:no_preload, %Calculation{} = calculation, attrs) do
     calculation
     |> Calculation.changeset(attrs)
     |> Repo.update()
   end
+
+  def update_calculation(%Calculation{} = calculation, attrs \\ %{}) do
+    case update_calculation(:no_preload, calculation, attrs) do
+      {:ok, updated_calculation} ->
+        {:ok, updated_calculation |> ApiServer.Repo.preload(:members)}
+      {:error, changeset} ->
+        {:error, changeset}
+    end
+  end
+
 
   @doc """
   Deletes a Calculation.
@@ -118,26 +142,13 @@ defmodule ApiServer.Calculations do
       [%Expense{}, ...]
 
   """
-  def list_expenses(calculation_id) do
+  def list_expenses(:no_preload, calculation_id) do
     Repo.all(from e in Expense, where: e.calculation_id == ^calculation_id)
   end
 
-  def list_expenses(calculation_id, :preload_members) do
-    list_expenses(calculation_id)
+  def list_expenses(calculation_id) do
+    list_expenses(:no_preload, calculation_id)
     |> Repo.preload([:paid_by, :paid_for])
-  end
-
-  @doc """
-  Returns the list of expenses.
-
-  ## Examples
-
-      iex> list_expenses()
-      [%Expense{}, ...]
-
-  """
-  def list_expenses do
-    Repo.all(Expense)
   end
 
   @doc """
@@ -154,12 +165,12 @@ defmodule ApiServer.Calculations do
       ** (Ecto.NoResultsError)
 
   """
-  def get_expense!(id) do
+  def get_expense!(:no_preload, id) do
     Repo.get!(Expense, id)
   end
 
-  def get_expense!(id, :preload_members) do
-    get_expense!(id)
+  def get_expense!(id) do
+    get_expense!(:no_preload, id)
     |> Repo.preload([:paid_by, :paid_for])
   end
 
@@ -175,10 +186,19 @@ defmodule ApiServer.Calculations do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_expense(attrs \\ %{}) do
+  def create_expense(:no_preload, attrs) do
     %Expense{}
     |> Expense.changeset(attrs)
     |> Repo.insert()
+  end
+
+  def create_expense(attrs \\ %{}) do
+    case create_expense(:no_preload, attrs) do
+      {:ok, new_expense} ->
+        {:ok, new_expense |> ApiServer.Repo.preload([:paid_by, :paid_for])}
+      {:error, changeset} ->
+        {:error, changeset}
+    end
   end
 
   @doc """
@@ -193,10 +213,19 @@ defmodule ApiServer.Calculations do
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_expense(%Expense{} = expense, attrs) do
+  def update_expense(:no_preload, %Expense{} = expense, attrs) do
     expense
     |> Expense.changeset(attrs)
     |> Repo.update()
+  end
+
+  def update_expense(%Expense{} = expense, attrs) do
+    case update_expense(:no_preload, expense, attrs) do
+      {:ok, updated_expense} ->
+        {:ok, updated_expense |> ApiServer.Repo.preload([:paid_by, :paid_for])}
+      {:error, changeset} ->
+        {:error, changeset}
+    end
   end
 
   @doc """
