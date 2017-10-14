@@ -68,8 +68,8 @@ defmodule ApiServer.CalculationsTest do
   describe "expenses" do
     alias ApiServer.Calculations.Expense
 
-    @valid_attrs %{amount: 42, description: "some description", paid_by: [], paid_for: []}
-    @update_attrs %{amount: 43, description: "some updated description"}
+    @valid_attrs %{amount: 42, description: "some description", paid_by: [], paid_for: [], paid_at: "2010-04-17 14:00:00.000000Z"}
+    @update_attrs %{amount: 43, description: "some updated description", paid_at: "2011-05-18 15:01:01.000000Z"}
     @invalid_attrs %{amount: nil, description: nil, paid_by: [], paid_for: []}
 
     def expense_fixture() do

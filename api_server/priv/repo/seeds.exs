@@ -84,6 +84,7 @@ c3_m2 = Repo.insert!(%Member{
 })
 
 Repo.insert!(%Expense{
+  paid_at: elem(DateTime.from_iso8601("2017-10-11 12:00:00.0Z"), 1),
   paid_by: [c3_m2],
   paid_for: [c3_m1],
   calculation_id: c3.id,
@@ -92,6 +93,7 @@ Repo.insert!(%Expense{
 })
 
 Repo.insert!(%Expense{
+  paid_at: elem(DateTime.from_iso8601("2017-10-01 12:00:00.0Z"), 1),
   paid_by: [c3_m2],
   paid_for: [c3_m1],
   calculation_id: c3.id,
@@ -100,6 +102,7 @@ Repo.insert!(%Expense{
 })
 
 Repo.insert!(%Expense{
+  paid_at: elem(DateTime.from_iso8601("2017-09-25 12:00:00.0Z"), 1),
   paid_by: [c3_m1],
   paid_for: [c3_m2],
   calculation_id: c3.id,
@@ -108,6 +111,7 @@ Repo.insert!(%Expense{
 })
 
 Repo.insert!(%Expense{
+  paid_at: elem(DateTime.from_iso8601("2017-09-20 12:00:00.0Z"), 1),
   paid_by: [c3_m2],
   paid_for: [c3_m1],
   calculation_id: c3.id,

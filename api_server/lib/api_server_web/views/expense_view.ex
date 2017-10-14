@@ -14,6 +14,8 @@ defmodule ApiServerWeb.ExpenseView do
     %{id: expense.id,
       description: expense.description,
       amount: expense.amount,
+      # TODO: set the microsecond precision to 0 at a more central place than here:
+      paid_at: DateTime.to_iso8601(%{expense.paid_at | microsecond: {0, 0}}),
       paid_by: render_many(expense.paid_by, ApiServerWeb.MemberView, "member.json"),
       paid_for: render_many(expense.paid_for, ApiServerWeb.MemberView, "member.json")
     }
