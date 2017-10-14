@@ -3,8 +3,10 @@ defmodule ApiServerWeb.ExpenseControllerTest do
 
   alias ApiServer.Calculations
 
-  @create_attrs %{amount: 42, description: "some description", paid_by: [], paid_for: []}
-  @update_attrs %{amount: 43, description: "some updated description"}
+  @now DateTime.utc_now()
+
+  @create_attrs %{amount: 42, description: "some description", paid_by: [], paid_for: [], paid_at: "2010-04-17 14:00:00.000000Z"}
+  @update_attrs %{amount: 43, description: "some updated description", paid_at: "2011-05-18 15:01:01.000000Z"}
   @invalid_attrs %{amount: nil, description: nil}
 
   setup %{conn: conn} do
@@ -58,6 +60,7 @@ defmodule ApiServerWeb.ExpenseControllerTest do
         "description" => "some description",
         "paid_by" => [],
         "paid_for" => [],
+        "paid_at" => "2010-04-17T14:00:00Z",
       }
     end
 
@@ -82,6 +85,7 @@ defmodule ApiServerWeb.ExpenseControllerTest do
         "description" => "some updated description",
         "paid_by" => [],
         "paid_for" => [],
+        "paid_at" => "2011-05-18T15:01:01Z",
       }
     end
 
