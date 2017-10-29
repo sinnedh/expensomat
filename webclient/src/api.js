@@ -2,21 +2,21 @@ import 'whatwg-fetch';
 
 const baseurl = 'http://localhost:4000/api';
 
-var getCalculation = (calculationId, onSuccess) => {
+var getCalculation = (calculationId, onSuccess, onFailure) => {
   fetch(`${baseurl}/calculations/${calculationId}`)
     .then(r => r.json())
     .then(r => onSuccess(r.data))
-    .catch(err => console.error(err));
+    .catch(e => onFailure(e));
 };
 
-var getExpensesForCalculation = (calculationId, onSuccess) => {
+var getExpensesForCalculation = (calculationId, onSuccess, onFailure) => {
   fetch(`${baseurl}/calculations/${calculationId}/expenses`)
     .then(r => r.json())
     .then(r => onSuccess(r.data))
-    .catch(err => console.error(err));
+    .catch(e => onFailure(e));
 };
 
-var createExpense = (calculationId, expense, onSuccess) => {
+var createExpense = (calculationId, expense, onSuccess, onFailure) => {
   const options = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -26,7 +26,7 @@ var createExpense = (calculationId, expense, onSuccess) => {
   fetch(`${baseurl}/calculations/${calculationId}/expenses`, options)
     .then(r => r.json())
     .then(r => onSuccess(r.data))
-    .catch(err => console.error(err));
+    .catch(e => onFailure(e));
 }
 
 export { createExpense, getCalculation, getExpensesForCalculation };

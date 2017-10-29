@@ -18,14 +18,26 @@ class Calculation extends React.Component {
 
   componentDidMount() {
     const calculationId = this.props.match.params.id;
-    const onSuccess = response => this.setState({
-      name: response.name,
-      description: response.description,
-      members: response.members,
-    });
-    getCalculation(calculationId, onSuccess);
+    {
+      const onSuccess = response => this.setState({
+        name: response.name,
+        description: response.description,
+        members: response.members,
+      });
+      const onFailure = response => {
+        this.setState({notification: 'Could not load calculation'});
+      }
+      getCalculation(calculationId, onSuccess, onFailure);
+    }
 
-    getExpensesForCalculation(calculationId, expenses => this.setState({ expenses }));
+    {
+      const onSuccess = expenses => this.setState({ expenses });
+      const onFailure = response => {
+        this.setState({notification: 'Could not load expenses'});
+      }
+      getExpensesForCalculation(calculationId, onSuccess, onFailure);
+    }
+
   }
 
   createExpense = (expense) => {
@@ -33,7 +45,10 @@ class Calculation extends React.Component {
     const onSuccess = response => {
       this.setState({notification: 'Succesfully created expense'});
     }
-    createExpense(calculationId, expense, onSuccess);
+    const onFailure = response => {
+      this.setState({notification: 'Could not create expense'});
+    }
+    createExpense(calculationId, expense, onSuccess, onFailure);
   }
 
   render() {
