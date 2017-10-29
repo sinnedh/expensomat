@@ -6,7 +6,13 @@ import MembersList from '../components/MembersList';
 class Calculation extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { name: '', description: '', members: [], expenses: [] };
+    this.state = {
+      name: '',
+      description: '',
+      members: [],
+      expenses: [],
+      notification: '',
+    };
   }
 
   componentDidMount() {
@@ -30,6 +36,7 @@ class Calculation extends React.Component {
       <div>
         <h1>{this.state.name}</h1>
         <p>{this.state.description}</p>
+        {this.state.notification && <p>{this.state.notification}</p>}
         <h2>Members</h2>
         <MembersList members={this.state.members} />
         <h2>Expenses</h2>
