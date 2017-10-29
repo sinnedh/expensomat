@@ -1,5 +1,5 @@
 import React from 'react';
-import { getCalculation, getExpensesForCalculation } from '../api';
+import { createExpense, getCalculation, getExpensesForCalculation } from '../api';
 import ExpenseList from '../components/ExpenseList';
 import MembersList from '../components/MembersList';
 
@@ -17,6 +17,12 @@ class Calculation extends React.Component {
       members: calculation.members,
     }));
     getExpensesForCalculation(calculation_id, expenses => this.setState({ expenses }));
+  createExpense = (expense) => {
+    const calculationId = this.props.match.params.id;
+    const onSuccess = response => {
+      this.setState({notification: 'Succesfully created expense'});
+    }
+    createExpense(calculationId, expense, onSuccess);
   }
 
   render() {
