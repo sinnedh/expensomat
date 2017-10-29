@@ -11,11 +11,13 @@ defmodule ApiServerWeb.ExpenseController do
     render(conn, "index.json", expenses: expenses)
   end
 
-  def create(conn, %{"expense" => expense_params}) do
-    with {:ok, %Expense{} = expense} <- Calculations.create_expense(expense_params) do
+  def create(conn, %{"calculation_id" => calculation_id, "expense" => expense_params}) do
+    calculation = Calculations.get_calculation!(calculation_id)
+
+    with {:ok, %Expense{} = expense} <- Calculations.create_expense(calculation, expense_params) do
       conn
       |> put_status(:created)
-      |> put_resp_header("location", expense_path(conn, :show, expense))
+      |> put_resp_header("location", calculation_expense_path(conn, :show, calculation, expense))
       |> render("show.json", expense: expense)
     end
   end

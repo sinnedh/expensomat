@@ -3,11 +3,9 @@ defmodule ApiServerWeb.ExpenseControllerTest do
 
   alias ApiServer.Calculations
 
-  @now DateTime.utc_now()
-
-  @create_attrs %{amount: 42, description: "some description", paid_by: [], paid_for: [], paid_at: "2010-04-17 14:00:00.000000Z"}
-  @update_attrs %{amount: 43, description: "some updated description", paid_at: "2011-05-18 15:01:01.000000Z"}
-  @invalid_attrs %{amount: nil, description: nil}
+  @create_attrs %{"amount" => 42, "description" => "some description", "paid_by" => [], "paid_for" => [], "paid_at" => "2010-04-17 14:00:00.000000Z"}
+  @update_attrs %{"amount" => 43, "description" => "some updated description", "paid_at" => "2011-05-18 15:01:01.000000Z"}
+  @invalid_attrs %{"amount" => nil, "description" => nil}
 
   setup %{conn: conn} do
     {:ok, calculation} = Calculations.create_calculation(%{name: "Main calculation"})
@@ -19,9 +17,7 @@ defmodule ApiServerWeb.ExpenseControllerTest do
   end
 
   def fixture(calculation, :expense) do
-    attrs = @create_attrs
-      |> Map.put(:calculation_id, calculation.id)
-    {:ok, expense} = Calculations.create_expense(attrs)
+    {:ok, expense} = Calculations.create_expense(calculation, @create_attrs)
     expense
   end
 
@@ -49,11 +45,10 @@ defmodule ApiServerWeb.ExpenseControllerTest do
 
   describe "create expense" do
     test "renders expense when data is valid", %{conn: conn, calculation: calculation} do
-      create_attrs = @create_attrs |> Map.put(:calculation_id, calculation.id)
-      conn = post conn, expense_path(conn, :create), expense: create_attrs
+      conn = post conn, calculation_expense_path(conn, :create, calculation.id), expense: @create_attrs
       assert %{"id" => id} = json_response(conn, 201)["data"]
 
-      conn = get conn, expense_path(conn, :show, id)
+      conn = get conn, calculation_expense_path(conn, :show, calculation, id)
       assert json_response(conn, 200)["data"] == %{
         "id" => id,
         "amount" => 42,
@@ -65,8 +60,8 @@ defmodule ApiServerWeb.ExpenseControllerTest do
     end
 
     test "renders errors when data is invalid", %{conn: conn, calculation: calculation} do
-      invalid_attrs = @invalid_attrs |> Map.put(:calculation_id, calculation.id)
-      conn = post conn, expense_path(conn, :create), expense: invalid_attrs
+      # invalid_attrs = @invalid_attrs |> Map.put("calculation_id", calculation.id)
+      conn = post conn, calculation_expense_path(conn, :create, calculation), expense: @invalid_attrs
       assert json_response(conn, 422)["errors"] != %{}
     end
   end
@@ -75,10 +70,10 @@ defmodule ApiServerWeb.ExpenseControllerTest do
     test "renders expense when data is valid", %{conn: conn, calculation: calculation} do
       expense = fixture(calculation, :expense)
       id = expense.id
-      conn = put conn, expense_path(conn, :update, expense), expense: @update_attrs
+      conn = put conn, calculation_expense_path(conn, :update, calculation, expense), expense: @update_attrs
       assert %{"id" => ^id} = json_response(conn, 200)["data"]
 
-      conn = get conn, expense_path(conn, :show, expense.id)
+      conn = get conn, calculation_expense_path(conn, :show, calculation, expense)
       assert json_response(conn, 200)["data"] == %{
         "id" => expense.id,
         "amount" => 43,
@@ -91,8 +86,7 @@ defmodule ApiServerWeb.ExpenseControllerTest do
 
     test "renders errors when data is invalid", %{conn: conn, calculation: calculation} do
       expense = fixture(calculation, :expense)
-      invalid_attrs = @invalid_attrs |> Map.put(:calculation_id, calculation.id)
-      conn = put conn, expense_path(conn, :update, expense), expense: invalid_attrs
+      conn = put conn, calculation_expense_path(conn, :update, calculation, expense), expense: @invalid_attrs
       assert json_response(conn, 422)["errors"] != %{}
     end
   end
@@ -100,10 +94,10 @@ defmodule ApiServerWeb.ExpenseControllerTest do
   describe "delete expense" do
     test "deletes chosen expense", %{conn: conn, calculation: calculation} do
       expense = fixture(calculation, :expense)
-      conn = delete conn, expense_path(conn, :delete, expense)
+      conn = delete conn, calculation_expense_path(conn, :delete, calculation, expense)
       assert response(conn, 204)
       assert_error_sent 404, fn ->
-        get conn, expense_path(conn, :show, expense)
+        get conn, calculation_expense_path(conn, :show, calculation, expense)
       end
     end
   end

@@ -46,7 +46,6 @@ Repo.insert!(%Expense{
 c2 = Repo.insert!(%Calculation{
   name: "Houseboat Holiday",
   description: "Expenses for the houseboat holiday in summer 2017",
-
 })
 
 Repo.insert!(%Expense{
@@ -84,6 +83,33 @@ c3_m2 = Repo.insert!(%Member{
 })
 
 Repo.insert!(%Expense{
+  paid_at: elem(DateTime.from_iso8601("2017-10-27 12:30:00.0Z"), 1),
+  paid_by: [c3_m2],
+  paid_for: [c3_m1],
+  calculation_id: c3.id,
+  amount: 800,
+  description: "Manti beim Knofi",
+})
+
+Repo.insert!(%Expense{
+  paid_at: elem(DateTime.from_iso8601("2017-10-19 12:30:00.0Z"), 1),
+  paid_by: [c3_m1],
+  paid_for: [c3_m2],
+  calculation_id: c3.id,
+  amount: 850,
+  description: "Pizza Salami beim Fake Vapiano",
+})
+
+Repo.insert!(%Expense{
+  paid_at: elem(DateTime.from_iso8601("2017-10-19 11:00:00.0Z"), 1),
+  paid_by: [c3_m1],
+  paid_for: [c3_m2],
+  calculation_id: c3.id,
+  amount: 800,
+  description: "Franzbrötchen im Orderbird Cafe",
+})
+
+Repo.insert!(%Expense{
   paid_at: elem(DateTime.from_iso8601("2017-10-11 12:00:00.0Z"), 1),
   paid_by: [c3_m2],
   paid_for: [c3_m1],
@@ -108,6 +134,15 @@ Repo.insert!(%Expense{
   calculation_id: c3.id,
   amount: 850,
   description: "Pizza beim Fake Vapiano",
+})
+
+Repo.insert!(%Expense{
+  paid_at: elem(DateTime.from_iso8601("2017-09-20 12:00:00.0Z"), 1),
+  paid_by: [c3_m2],
+  paid_for: [c3_m1],
+  calculation_id: c3.id,
+  amount: 1000,
+  description: "Geliehen beim Fake Vapiano",
 })
 
 Repo.insert!(%Expense{
