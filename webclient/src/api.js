@@ -16,4 +16,17 @@ var getExpensesForCalculation = (calculation_id, onSuccess) => {
     .catch(err => console.error(err));
 };
 
-export { getCalculation, getExpensesForCalculation };
+var createExpense = (calculationId, expense, onSuccess) => {
+  const options = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ expense }),
+  }
+
+  fetch(`${baseurl}/calculations/${calculationId}/expenses`, options)
+    .then(r => r.json())
+    .then(r => onSuccess(r.data))
+    .catch(err => console.error(err));
+}
+
+export { createExpense, getCalculation, getExpensesForCalculation };
