@@ -43,7 +43,11 @@ class Calculation extends React.Component {
   createExpense = (expense) => {
     const calculationId = this.props.match.params.id;
     const onSuccess = response => {
-      this.setState({notification: 'Succesfully created expense'});
+      this.setState({
+        notification: 'Succesfully created expense',
+        expenses: [response, ...this.state.expenses], // TODO: sort by date
+      });
+
     }
     const onFailure = response => {
       this.setState({notification: 'Could not create expense'});
