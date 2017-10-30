@@ -12,7 +12,7 @@ function getFormFieldValue(target, name) {
     let value = [];
     for (var i = 0, l = target.options.length; i < l; i++) {
       if (target.options[i].selected) {
-        value.push(target.options[i].value);
+        value.push(parseInt(target.options[i].value, 10));
       }
     }
     return value;
