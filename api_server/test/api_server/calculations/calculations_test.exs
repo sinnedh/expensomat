@@ -111,6 +111,47 @@ defmodule ApiServer.CalculationsTest do
       assert expense.description == "some description"
     end
 
+    test "create_expense/1 with paid_by" do
+      calculation = calculation_fixture()
+      peter = member_fixture(%{"name" => "Peter", "calculation_id" => calculation.id})
+      paul = member_fixture(%{"name" => "Paul", "calculation_id" => calculation.id})
+      calculation = Map.put(calculation, "members", [peter, paul])
+
+      valid_attrs = Map.put(@valid_attrs, "paid_by", [peter.id])
+
+      assert {:ok, %Expense{} = expense} = Calculations.create_expense(calculation, valid_attrs)
+      assert expense.paid_by == [peter]
+    end
+
+
+    test "create_expense/1 with paid_for" do
+      calculation = calculation_fixture()
+      peter = member_fixture(%{"name" => "Peter", "calculation_id" => calculation.id})
+      paul = member_fixture(%{"name" => "Paul", "calculation_id" => calculation.id})
+      calculation = Map.put(calculation, "members", [peter, paul])
+
+      valid_attrs = Map.put(@valid_attrs, "paid_for", [peter.id])
+
+      assert {:ok, %Expense{} = expense} = Calculations.create_expense(calculation, valid_attrs)
+      assert expense.paid_for == [peter]
+    end
+
+    test "create_expense/1 with paid_by and paid_for" do
+      calculation = calculation_fixture()
+      peter = member_fixture(%{"name" => "Peter", "calculation_id" => calculation.id})
+      paul = member_fixture(%{"name" => "Paul", "calculation_id" => calculation.id})
+      mary = member_fixture(%{"name" => "Mary", "calculation_id" => calculation.id})
+      calculation = Map.put(calculation, "members", [peter, paul, mary])
+
+      valid_attrs = @valid_attrs
+        |> Map.put("paid_by", [paul.id])
+        |> Map.put("paid_for", [peter.id, mary.id, paul.id])
+
+      assert {:ok, %Expense{} = expense} = Calculations.create_expense(calculation, valid_attrs)
+      assert expense.paid_by == [paul]
+      assert expense.paid_for == [peter, paul, mary]
+    end
+
     test "create_expense/1 with invalid data returns error changeset" do
       calculation = calculation_fixture()
       assert {:error, %Ecto.Changeset{}} = Calculations.create_expense(calculation, @invalid_attrs)

@@ -27,7 +27,7 @@ defmodule ApiServer.Calculations.Expense do
     |> put_assoc(:paid_by, get_paid_by(attrs))
   end
 
-  defp get_paid_for(%{paid_for: paid_for}) do
+  defp get_paid_for(%{"paid_for" => paid_for}) do
     Repo.all(from m in ApiServer.Calculations.Member, where: m.id in ^paid_for)
   end
 
@@ -35,7 +35,7 @@ defmodule ApiServer.Calculations.Expense do
     []
   end
 
-  defp get_paid_by(%{paid_by: paid_by}) do
+  defp get_paid_by(%{"paid_by" => paid_by}) do
     Repo.all(from m in ApiServer.Calculations.Member, where: m.id in ^paid_by)
   end
 
