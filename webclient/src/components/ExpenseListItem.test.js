@@ -9,6 +9,7 @@ it('renders with all params', () => {
     paid_by: [{ name: "Micha" }, { name: "Achim" } ],
     description: "Pasta beim Italiener",
     amount: 800,
+    paid_at: "2017-11-11 15:28",
   }
   ReactDOM.render(<ExpenseListItem expense={expense} />, div);
 });

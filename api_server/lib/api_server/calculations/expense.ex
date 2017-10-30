@@ -1,7 +1,9 @@
 defmodule ApiServer.Calculations.Expense do
   use Ecto.Schema
   import Ecto.Changeset
+  import Ecto.Query
   alias ApiServer.Calculations.Expense
+  alias ApiServer.Repo
 
 
   schema "expenses" do
@@ -18,7 +20,27 @@ defmodule ApiServer.Calculations.Expense do
   @doc false
   def changeset(%Expense{} = expense, attrs) do
     expense
-    |> cast(attrs, [:description, :amount, :calculation_id, :paid_at])
-    |> validate_required([:description, :amount, :calculation_id, :paid_at])
+    |> Repo.preload([:paid_by, :paid_for])
+    |> cast(attrs, [:calculation_id, :description, :amount, :paid_at])
+    |> validate_required([:calculation_id, :description, :amount, :paid_at, :paid_by, :paid_for])
+    |> put_assoc(:paid_for, get_paid_for(attrs))
+    |> put_assoc(:paid_by, get_paid_by(attrs))
   end
+
+  defp get_paid_for(%{"paid_for" => paid_for}) do
+    Repo.all(from m in ApiServer.Calculations.Member, where: m.id in ^paid_for)
+  end
+
+  defp get_paid_for(_) do
+    []
+  end
+
+  defp get_paid_by(%{"paid_by" => paid_by}) do
+    Repo.all(from m in ApiServer.Calculations.Member, where: m.id in ^paid_by)
+  end
+
+  defp get_paid_by(_) do
+    []
+  end
+
 end

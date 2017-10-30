@@ -6,9 +6,9 @@ defmodule ApiServer.CalculationsTest do
   describe "calculations" do
     alias ApiServer.Calculations.Calculation
 
-    @valid_attrs %{description: "some description", name: "some name"}
-    @update_attrs %{description: "some updated description", name: "some updated name"}
-    @invalid_attrs %{description: nil, name: nil}
+    @valid_attrs %{"description" => "some description", "name" => "some name"}
+    @update_attrs %{"description" => "some updated description", "name" => "some updated name"}
+    @invalid_attrs %{"description" => nil, "name" => nil}
 
     def calculation_fixture(attrs \\ %{}) do
       {:ok, calculation} =
@@ -68,9 +68,9 @@ defmodule ApiServer.CalculationsTest do
   describe "expenses" do
     alias ApiServer.Calculations.Expense
 
-    @valid_attrs %{amount: 42, description: "some description", paid_by: [], paid_for: [], paid_at: "2010-04-17 14:00:00.000000Z"}
-    @update_attrs %{amount: 43, description: "some updated description", paid_at: "2011-05-18 15:01:01.000000Z"}
-    @invalid_attrs %{amount: nil, description: nil, paid_by: [], paid_for: []}
+    @valid_attrs %{"amount" => 42, "description" => "some description", "paid_by" => [], "paid_for" => [], "paid_at" => "2010-04-17 14:00:00.000000Z"}
+    @update_attrs %{"amount" => 43, "description" => "some updated description", "paid_at" => "2011-05-18 15:01:01.000000Z"}
+    @invalid_attrs %{"amount" => nil, "description" => nil, "paid_by" => [], "paid_for" => []}
 
     def expense_fixture() do
       calculation = calculation_fixture()
@@ -78,11 +78,11 @@ defmodule ApiServer.CalculationsTest do
     end
 
     def expense_fixture(calculation, attrs \\ %{}) do
-      {:ok, expense} =
-        attrs
-        |> Map.put(:calculation_id, calculation.id)
+      attrs = attrs
+        |> Map.put("calculation_id", calculation.id)
         |> Enum.into(@valid_attrs)
-        |> Calculations.create_expense()
+
+      {:ok, expense} = Calculations.create_expense(calculation, attrs)
 
       expense |> Repo.preload([:paid_by, :paid_for])
     end
@@ -106,16 +106,55 @@ defmodule ApiServer.CalculationsTest do
 
     test "create_expense/1 with valid data creates a expense" do
       calculation = calculation_fixture()
-      valid_attrs = @valid_attrs |> Map.put(:calculation_id, calculation.id)
-      assert {:ok, %Expense{} = expense} = Calculations.create_expense(valid_attrs)
+      assert {:ok, %Expense{} = expense} = Calculations.create_expense(calculation, @valid_attrs)
       assert expense.amount == 42
       assert expense.description == "some description"
     end
 
+    test "create_expense/1 with paid_by" do
+      calculation = calculation_fixture()
+      peter = member_fixture(%{"name" => "Peter", "calculation_id" => calculation.id})
+      paul = member_fixture(%{"name" => "Paul", "calculation_id" => calculation.id})
+      calculation = Map.put(calculation, "members", [peter, paul])
+
+      valid_attrs = Map.put(@valid_attrs, "paid_by", [peter.id])
+
+      assert {:ok, %Expense{} = expense} = Calculations.create_expense(calculation, valid_attrs)
+      assert expense.paid_by == [peter]
+    end
+
+
+    test "create_expense/1 with paid_for" do
+      calculation = calculation_fixture()
+      peter = member_fixture(%{"name" => "Peter", "calculation_id" => calculation.id})
+      paul = member_fixture(%{"name" => "Paul", "calculation_id" => calculation.id})
+      calculation = Map.put(calculation, "members", [peter, paul])
+
+      valid_attrs = Map.put(@valid_attrs, "paid_for", [peter.id])
+
+      assert {:ok, %Expense{} = expense} = Calculations.create_expense(calculation, valid_attrs)
+      assert expense.paid_for == [peter]
+    end
+
+    test "create_expense/1 with paid_by and paid_for" do
+      calculation = calculation_fixture()
+      peter = member_fixture(%{"name" => "Peter", "calculation_id" => calculation.id})
+      paul = member_fixture(%{"name" => "Paul", "calculation_id" => calculation.id})
+      mary = member_fixture(%{"name" => "Mary", "calculation_id" => calculation.id})
+      calculation = Map.put(calculation, "members", [peter, paul, mary])
+
+      valid_attrs = @valid_attrs
+        |> Map.put("paid_by", [paul.id])
+        |> Map.put("paid_for", [peter.id, mary.id, paul.id])
+
+      assert {:ok, %Expense{} = expense} = Calculations.create_expense(calculation, valid_attrs)
+      assert expense.paid_by == [paul]
+      assert expense.paid_for == [peter, paul, mary]
+    end
+
     test "create_expense/1 with invalid data returns error changeset" do
       calculation = calculation_fixture()
-      invalid_attrs = @invalid_attrs |> Map.put(:calculation_id, calculation.id)
-      assert {:error, %Ecto.Changeset{}} = Calculations.create_expense(invalid_attrs)
+      assert {:error, %Ecto.Changeset{}} = Calculations.create_expense(calculation, @invalid_attrs)
     end
 
     test "update_expense/2 with valid data updates the expense" do
@@ -147,9 +186,9 @@ defmodule ApiServer.CalculationsTest do
   describe "members" do
     alias ApiServer.Calculations.Member
 
-    @valid_attrs %{name: "some name"}
-    @update_attrs %{name: "some updated name"}
-    @invalid_attrs %{name: nil}
+    @valid_attrs %{"name" => "some name"}
+    @update_attrs %{"name" => "some updated name"}
+    @invalid_attrs %{"name" => nil}
 
     def member_fixture(attrs \\ %{}) do
       {:ok, member} =
@@ -162,19 +201,19 @@ defmodule ApiServer.CalculationsTest do
 
     test "list_members/0 returns all members" do
       calculation = calculation_fixture()
-      member = member_fixture %{calculation_id: calculation.id}
+      member = member_fixture %{"calculation_id" => calculation.id}
       assert Calculations.list_members() == [member]
     end
 
     test "get_member!/1 returns the member with given id" do
       calculation = calculation_fixture()
-      member = member_fixture %{calculation_id: calculation.id}
+      member = member_fixture %{"calculation_id" => calculation.id}
       assert Calculations.get_member!(member.id) == member
     end
 
     test "create_member/1 with valid data creates a member" do
       calculation = calculation_fixture()
-      valid_attrs = @valid_attrs |> Map.put(:calculation_id, calculation.id)
+      valid_attrs = @valid_attrs |> Map.put("calculation_id", calculation.id)
       assert {:ok, %Member{} = member} = Calculations.create_member(valid_attrs)
       assert member.name == "some name"
     end
@@ -185,7 +224,7 @@ defmodule ApiServer.CalculationsTest do
 
     test "update_member/2 with valid data updates the member" do
       calculation = calculation_fixture()
-      member = member_fixture %{calculation_id: calculation.id}
+      member = member_fixture %{"calculation_id" => calculation.id}
       assert {:ok, member} = Calculations.update_member(member, @update_attrs)
       assert %Member{} = member
       assert member.name == "some updated name"
@@ -193,21 +232,21 @@ defmodule ApiServer.CalculationsTest do
 
     test "update_member/2 with invalid data returns error changeset" do
       calculation = calculation_fixture()
-      member = member_fixture %{calculation_id: calculation.id}
+      member = member_fixture %{"calculation_id" => calculation.id}
       assert {:error, %Ecto.Changeset{}} = Calculations.update_member(member, @invalid_attrs)
       assert member == Calculations.get_member!(member.id)
     end
 
     test "delete_member/1 deletes the member" do
       calculation = calculation_fixture()
-      member = member_fixture %{calculation_id: calculation.id}
+      member = member_fixture %{"calculation_id" => calculation.id}
       assert {:ok, %Member{}} = Calculations.delete_member(member)
       assert_raise Ecto.NoResultsError, fn -> Calculations.get_member!(member.id) end
     end
 
     test "change_member/1 returns a member changeset" do
       calculation = calculation_fixture()
-      member = member_fixture %{calculation_id: calculation.id}
+      member = member_fixture %{"calculation_id" => calculation.id}
       assert %Ecto.Changeset{} = Calculations.change_member(member)
     end
   end

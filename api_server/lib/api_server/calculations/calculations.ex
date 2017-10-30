@@ -186,14 +186,15 @@ defmodule ApiServer.Calculations do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_expense(:no_preload, attrs) do
+  def create_expense(:no_preload, calculation, attrs) do
+    attrs = attrs |> Map.put("calculation_id", calculation.id)
     %Expense{}
     |> Expense.changeset(attrs)
     |> Repo.insert()
   end
 
-  def create_expense(attrs \\ %{}) do
-    case create_expense(:no_preload, attrs) do
+  def create_expense(calculation, attrs \\ %{}) do
+    case create_expense(:no_preload, calculation, attrs) do
       {:ok, new_expense} ->
         {:ok, new_expense |> ApiServer.Repo.preload([:paid_by, :paid_for])}
       {:error, changeset} ->
