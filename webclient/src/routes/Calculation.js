@@ -2,6 +2,7 @@ import React from 'react';
 import { createExpense, getCalculation, getExpensesForCalculation } from '../api';
 import ExpenseForm from '../components/ExpenseForm';
 import ExpenseList from '../components/ExpenseList';
+import ExpenseMatrix from '../components/ExpenseMatrix';
 import MembersList from '../components/MembersList';
 
 class Calculation extends React.Component {
@@ -13,6 +14,7 @@ class Calculation extends React.Component {
       members: [],
       expenses: [],
       notification: '',
+      matrix: {},
     };
   }
 
@@ -23,6 +25,7 @@ class Calculation extends React.Component {
         name: response.name,
         description: response.description,
         members: response.members,
+        matrix: response.matrix,
       });
       const onFailure = response => {
         this.setState({notification: 'Could not load calculation'});
@@ -63,6 +66,8 @@ class Calculation extends React.Component {
         {this.state.notification && <p>{this.state.notification}</p>}
         <h2>Members</h2>
         <MembersList members={this.state.members} />
+        <h2>Matrix</h2>
+        <ExpenseMatrix members={this.state.members} elements={this.state.matrix} />
         <h2>Expenses</h2>
         <ExpenseForm calculationId={this.props.match.params.id} handleSubmit={this.createExpense} members={this.state.members} />
         <ExpenseList expenses={this.state.expenses} />
