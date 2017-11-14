@@ -71,7 +71,7 @@ defmodule ApiServer.Calculations do
   def get_calculation!(id) do
      get_calculation!(:no_preload, id)
      |> Repo.preload(:members)
-   end
+  end
 
   @doc """
   Creates a calculation.

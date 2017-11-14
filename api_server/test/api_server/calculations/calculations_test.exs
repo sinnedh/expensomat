@@ -123,7 +123,6 @@ defmodule ApiServer.CalculationsTest do
       assert expense.paid_by == [peter]
     end
 
-
     test "create_expense/1 with paid_for" do
       calculation = calculation_fixture()
       peter = member_fixture(%{"name" => "Peter", "calculation_id" => calculation.id})
