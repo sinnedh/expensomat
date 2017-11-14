@@ -14,6 +14,8 @@ defmodule ApiServerWeb.CalculationView do
     %{id: calculation.id,
       name: calculation.name,
       members: render_many(calculation.members, ApiServerWeb.MemberView, "member.json"),
-      description: calculation.description}
+      description: calculation.description,
+      matrix: ApiServer.Calculations.matrix_for_calculation(calculation)
+    }
   end
 end
