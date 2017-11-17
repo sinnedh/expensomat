@@ -123,7 +123,6 @@ defmodule ApiServer.CalculationsTest do
       assert expense.paid_by == [peter]
     end
 
-
     test "create_expense/1 with paid_for" do
       calculation = calculation_fixture()
       peter = member_fixture(%{"name" => "Peter", "calculation_id" => calculation.id})
@@ -249,5 +248,97 @@ defmodule ApiServer.CalculationsTest do
       member = member_fixture %{"calculation_id" => calculation.id}
       assert %Ecto.Changeset{} = Calculations.change_member(member)
     end
+  end
+
+  describe "calculation matrix" do
+    setup do
+      calculation = calculation_fixture()
+      peter = member_fixture(%{"name" => "Peter", "calculation_id" => calculation.id})
+      paul = member_fixture(%{"name" => "Paul", "calculation_id" => calculation.id})
+      mary = member_fixture(%{"name" => "Mary", "calculation_id" => calculation.id})
+      calculation = Map.put(calculation, "members", [peter, paul, mary])
+      %{calculation: calculation, peter: peter, paul: paul, mary: mary}
+    end
+
+
+    test "with three members and multiple expenses", %{calculation: calculation, peter: peter, paul: paul, mary: mary} do
+      expense_fixture(calculation, %{"amount" => 510, "paid_by" => [peter.id], "paid_for" => [peter.id, paul.id, mary.id]})
+      expense_fixture(calculation, %{"amount" => 180, "paid_by" => [paul.id], "paid_for" => [peter.id, paul.id, mary.id]})
+      expense_fixture(calculation, %{"amount" => 240, "paid_by" => [paul.id], "paid_for" => [peter.id, paul.id, mary.id]})
+      expense_fixture(calculation, %{"amount" => 330, "paid_by" => [peter.id], "paid_for" => [peter.id, paul.id, mary.id]})
+      expense_fixture(calculation, %{"amount" => 480, "paid_by" => [peter.id], "paid_for" => [peter.id, paul.id, mary.id]})
+
+      matrix = ApiServer.Calculations.matrix_for_calculation(calculation)
+
+      assert length(Map.keys(matrix)) == 6
+      assert matrix["#{paul.id}_#{paul.id}"] == 140
+      assert matrix["#{paul.id}_#{peter.id}"] == 140
+      assert matrix["#{paul.id}_#{mary.id}"] == 140
+      assert matrix["#{peter.id}_#{paul.id}"] == 440
+      assert matrix["#{peter.id}_#{peter.id}"] == 440
+      assert matrix["#{peter.id}_#{mary.id}"] == 440
+    end
+
+    test "with two members and multiple paid_by and paid_for", %{calculation: calculation, peter: peter, paul: paul} do
+      expense_fixture(calculation, %{"amount" => 340, "paid_by" => [paul.id, peter.id], "paid_for" => [paul.id, peter.id]})
+
+      matrix = ApiServer.Calculations.matrix_for_calculation(calculation)
+
+      assert length(Map.keys(matrix)) == 4
+      assert matrix["#{paul.id}_#{paul.id}"] == 85
+      assert matrix["#{paul.id}_#{peter.id}"] == 85
+      assert matrix["#{peter.id}_#{paul.id}"] == 85
+      assert matrix["#{peter.id}_#{peter.id}"] == 85
+    end
+
+    test "with two members and multiple paid_for", %{calculation: calculation, peter: peter, paul: paul} do
+      expense_fixture(calculation, %{"amount" => 340, "paid_by" => [paul.id], "paid_for" => [paul.id, peter.id]})
+
+      matrix = ApiServer.Calculations.matrix_for_calculation(calculation)
+
+      assert length(Map.keys(matrix)) == 2
+      assert matrix["#{paul.id}_#{paul.id}"] == 170
+      assert matrix["#{paul.id}_#{peter.id}"] == 170
+    end
+
+    test "with two members and multiple paid_by", %{calculation: calculation, peter: peter, paul: paul} do
+      expense_fixture(calculation, %{"amount" => 500, "paid_by" => [paul.id, peter.id], "paid_for" => [paul.id]})
+
+      matrix = ApiServer.Calculations.matrix_for_calculation(calculation)
+
+      assert length(Map.keys(matrix)) == 2
+      assert matrix["#{paul.id}_#{paul.id}"] == 250
+      assert matrix["#{peter.id}_#{paul.id}"] == 250
+    end
+
+    test "with two members", %{calculation: calculation, peter: peter, paul: paul} do
+      expense_fixture(calculation, %{"amount" => 500, "paid_by" => [peter.id], "paid_for" => [paul.id]})
+      expense_fixture(calculation, %{"amount" => 240, "paid_by" => [peter.id], "paid_for" => [paul.id]})
+      expense_fixture(calculation, %{"amount" => 200, "paid_by" => [paul.id], "paid_for" => [peter.id]})
+      expense_fixture(calculation, %{"amount" => 150, "paid_by" => [paul.id], "paid_for" => [peter.id]})
+
+      matrix = ApiServer.Calculations.matrix_for_calculation(calculation)
+
+      assert length(Map.keys(matrix)) == 2
+      assert matrix["#{peter.id}_#{paul.id}"] == 740
+      assert matrix["#{paul.id}_#{peter.id}"] == 350
+    end
+
+    test "with single member", %{calculation: calculation, peter: peter} do
+      expense_fixture(calculation, %{"amount" => 500, "paid_by" => [peter.id], "paid_for" => [peter.id]})
+      expense_fixture(calculation, %{"amount" => 200, "paid_by" => [peter.id], "paid_for" => [peter.id]})
+
+      matrix = ApiServer.Calculations.matrix_for_calculation(calculation)
+
+      assert length(Map.keys(matrix)) == 1
+      assert matrix["#{peter.id}_#{peter.id}"] == 700
+    end
+
+    test "with no expenses", %{calculation: calculation} do
+      matrix = ApiServer.Calculations.matrix_for_calculation(calculation)
+
+      assert matrix == %{}
+    end
+
   end
 end

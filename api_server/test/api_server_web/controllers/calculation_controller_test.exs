@@ -34,7 +34,8 @@ defmodule ApiServerWeb.CalculationControllerTest do
         "id" => id,
         "description" => "some description",
         "name" => "some name",
-        "members" => []
+        "members" => [],
+        "matrix" => %{}
       }
     end
 
@@ -56,7 +57,8 @@ defmodule ApiServerWeb.CalculationControllerTest do
         "id" => id,
         "description" => "some updated description",
         "name" => "some updated name",
-        "members" => []
+        "members" => [],
+        "matrix" => %{}
       }
     end
 

@@ -1,3 +1,7 @@
+function formatAmount(amount) {
+  return `${amount / 100} Euro`
+}
+
 function formatDate(datetime) {
   return datetime.substr(0, 10)
 }
@@ -21,4 +25,4 @@ function getFormFieldValue(target, name) {
   return target.value;
 }
 
-export { formatDate, getFormFieldValue }
+export { formatAmount, formatDate, getFormFieldValue }

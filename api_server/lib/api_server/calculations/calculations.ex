@@ -8,6 +8,32 @@ defmodule ApiServer.Calculations do
 
   alias ApiServer.Calculations.Calculation
 
+  def matrix_for_calculation(calculation) do
+    expenses = list_expenses(calculation.id)
+
+    handle_expense(%{}, expenses)
+  end
+
+  defp handle_expense(matrix, [expense | tail]) do
+    amount_per_share = expense.amount / (length(expense.paid_for) * length(expense.paid_by))
+
+    matrix
+      |> handle_shares(amount_per_share, expense.paid_by, expense.paid_for)
+      |> handle_expense(tail)
+  end
+
+  defp handle_expense(matrix, []) do
+    matrix
+  end
+
+  defp handle_shares(matrix, amount_per_share, paid_by, paid_for) do
+    for from <- paid_by, to <- paid_for, into: matrix
+      do
+        key = "#{from.id}_#{to.id}"
+        {key, Map.get(matrix, key, 0) + amount_per_share}
+      end
+  end
+
   @doc """
   Returns the list of calculations (optionally with preloaded members).
 
@@ -45,7 +71,7 @@ defmodule ApiServer.Calculations do
   def get_calculation!(id) do
      get_calculation!(:no_preload, id)
      |> Repo.preload(:members)
-   end
+  end
 
   @doc """
   Creates a calculation.
