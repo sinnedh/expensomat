@@ -5,7 +5,7 @@ defmodule ApiServer.Repo.Migrations.CreateExpenses do
     create table(:expenses) do
       add :description, :text
       add :amount, :integer
-      add :calculation_id, references(:calculations, on_delete: :nothing)
+      add :calculation_id, references(:calculations, on_delete: :delete_all)
 
       timestamps()
     end
