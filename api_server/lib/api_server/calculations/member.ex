@@ -5,6 +5,7 @@ defmodule ApiServer.Calculations.Member do
 
 
   schema "members" do
+    field :token, :string  # TODO: at least hash this token when being stored (e.g. using comeonin/bcrypt)
     field :name, :string
     field :calculation_id, :id
 
@@ -14,7 +15,8 @@ defmodule ApiServer.Calculations.Member do
   @doc false
   def changeset(%Member{} = member, attrs) do
     member
-    |> cast(attrs, [:name, :calculation_id])
-    |> validate_required([:name, :calculation_id])
+    |> cast(attrs, [:name, :calculation_id, :token])
+    |> validate_required([:name, :calculation_id, :token])
+    |> unique_constraint(:token)
   end
 end
