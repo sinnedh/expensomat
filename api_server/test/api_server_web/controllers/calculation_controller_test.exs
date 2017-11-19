@@ -2,16 +2,10 @@ defmodule ApiServerWeb.CalculationControllerTest do
   use ApiServerWeb.ConnCase
 
   alias ApiServer.Calculations
-  alias ApiServer.Calculations.Calculation
 
   @create_attrs %{description: "some description", name: "some name"}
   @update_attrs %{description: "some updated description", name: "some updated name"}
   @invalid_attrs %{description: nil, name: nil}
-
-  def fixture(:calculation) do
-    {:ok, calculation} = Calculations.create_calculation(@create_attrs)
-    calculation
-  end
 
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
@@ -29,12 +23,14 @@ defmodule ApiServerWeb.CalculationControllerTest do
       conn = post conn, calculation_path(conn, :create), calculation: @create_attrs
       assert %{"id" => id} = json_response(conn, 201)["data"]
 
-      conn = get conn, calculation_path(conn, :show, id)
+      {:ok, member} = Calculations.create_member(%{calculation_id: id, name: "A member", token: "ABCD"})
+
+      conn = get conn, calculation_path(conn, :show, member.token)
       assert json_response(conn, 200)["data"] == %{
         "id" => id,
         "description" => "some description",
         "name" => "some name",
-        "members" => [],
+        "members" => [%{"name" => "A member", "id" => member.id}],
         "matrix" => %{}
       }
     end
@@ -46,42 +42,44 @@ defmodule ApiServerWeb.CalculationControllerTest do
   end
 
   describe "update calculation" do
-    setup [:create_calculation]
+    setup [:create_calculation_and_member]
 
-    test "renders calculation when data is valid", %{conn: conn, calculation: %Calculation{id: id} = calculation} do
-      conn = put conn, calculation_path(conn, :update, calculation), calculation: @update_attrs
+    test "renders calculation when data is valid", %{conn: conn, member: member} do
+      id = member.calculation_id
+      conn = put conn, calculation_path(conn, :update, member.token), calculation: @update_attrs
       assert %{"id" => ^id} = json_response(conn, 200)["data"]
 
-      conn = get conn, calculation_path(conn, :show, id)
+      conn = get conn, calculation_path(conn, :show, member.token)
       assert json_response(conn, 200)["data"] == %{
         "id" => id,
         "description" => "some updated description",
         "name" => "some updated name",
-        "members" => [],
+        "members" => [%{"name" => "A member", "id" => member.id}],
         "matrix" => %{}
       }
     end
 
-    test "renders errors when data is invalid", %{conn: conn, calculation: calculation} do
-      conn = put conn, calculation_path(conn, :update, calculation), calculation: @invalid_attrs
+    test "renders errors when data is invalid", %{conn: conn, member: member} do
+      conn = put conn, calculation_path(conn, :update, member.token), calculation: @invalid_attrs
       assert json_response(conn, 422)["errors"] != %{}
     end
   end
 
   describe "delete calculation" do
-    setup [:create_calculation]
+    setup [:create_calculation_and_member]
 
-    test "deletes chosen calculation", %{conn: conn, calculation: calculation} do
-      conn = delete conn, calculation_path(conn, :delete, calculation)
+    test "deletes chosen calculation", %{conn: conn, member: member} do
+      conn = delete conn, calculation_path(conn, :delete, member.token)
       assert response(conn, 204)
       assert_error_sent 404, fn ->
-        get conn, calculation_path(conn, :show, calculation)
+        get conn, calculation_path(conn, :show, member.token)
       end
     end
   end
 
-  defp create_calculation(_) do
-    calculation = fixture(:calculation)
-    {:ok, calculation: calculation}
+  defp create_calculation_and_member(_) do
+    {:ok, calculation} = Calculations.create_calculation(@create_attrs)
+    {:ok, member} = Calculations.create_member(%{calculation_id: calculation.id, name: "A member", token: "ABCD"})
+    {:ok, member: member}
   end
 end

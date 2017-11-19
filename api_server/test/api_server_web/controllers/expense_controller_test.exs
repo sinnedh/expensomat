@@ -9,10 +9,12 @@ defmodule ApiServerWeb.ExpenseControllerTest do
 
   setup %{conn: conn} do
     {:ok, calculation} = Calculations.create_calculation(%{name: "Main calculation"})
+    {:ok, member} = Calculations.create_member(%{"name" => "Paul", "calculation_id" => calculation.id, "token" => "ABCD"})
     {
       :ok,
       conn: put_req_header(conn, "accept", "application/json"),
       calculation: calculation,
+      member: member,
     }
   end
 
@@ -23,32 +25,32 @@ defmodule ApiServerWeb.ExpenseControllerTest do
 
   describe "index" do
 
-    test "lists all expenses for a given calculation", %{conn: conn, calculation: calculation} do
+    test "lists all expenses for a given calculation", %{conn: conn, calculation: calculation, member: member} do
       {:ok, other_calculation} = Calculations.create_calculation(%{name: "Another calculation"})
       fixture(calculation, :expense)
       fixture(calculation, :expense)
       fixture(other_calculation, :expense)
 
-      conn = get conn, calculation_expense_path(conn, :index, calculation)
+      conn = get conn, calculation_expense_path(conn, :index, member.token)
       assert length(json_response(conn, 200)["data"]) == 2
     end
 
-    test "list no expenses from other calculations", %{conn: conn, calculation: calculation} do
+    test "list no expenses from other calculations", %{conn: conn, member: member} do
       {:ok, other_calculation} = Calculations.create_calculation(%{name: "Another calculation"})
       fixture(other_calculation, :expense)
       fixture(other_calculation, :expense)
 
-      conn = get conn, calculation_expense_path(conn, :index, calculation)
+      conn = get conn, calculation_expense_path(conn, :index, member.token)
       assert json_response(conn, 200)["data"] == []
     end
   end
 
   describe "create expense" do
-    test "renders expense when data is valid", %{conn: conn, calculation: calculation} do
-      conn = post conn, calculation_expense_path(conn, :create, calculation.id), expense: @create_attrs
+    test "renders expense when data is valid", %{conn: conn, member: member} do
+      conn = post conn, calculation_expense_path(conn, :create, member.token), expense: @create_attrs
       assert %{"id" => id} = json_response(conn, 201)["data"]
 
-      conn = get conn, calculation_expense_path(conn, :show, calculation, id)
+      conn = get conn, calculation_expense_path(conn, :show, member.token, id)
       assert json_response(conn, 200)["data"] == %{
         "id" => id,
         "amount" => 42,
@@ -59,9 +61,9 @@ defmodule ApiServerWeb.ExpenseControllerTest do
       }
     end
 
-    test "renders errors when data is invalid", %{conn: conn, calculation: calculation} do
+    test "renders errors when data is invalid", %{conn: conn, member: member} do
       # invalid_attrs = @invalid_attrs |> Map.put("calculation_id", calculation.id)
-      conn = post conn, calculation_expense_path(conn, :create, calculation), expense: @invalid_attrs
+      conn = post conn, calculation_expense_path(conn, :create, member.token), expense: @invalid_attrs
       assert json_response(conn, 422)["errors"] != %{}
     end
   end
