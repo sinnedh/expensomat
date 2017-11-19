@@ -20,21 +20,21 @@ defmodule ApiServerWeb.CalculationController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
-    calculation = Calculations.get_calculation!(id)
+  def show(conn, %{"token" => token}) do
+    calculation = Calculations.get_calculation_for_token!(token)
     render(conn, "show.json", calculation: calculation)
   end
 
-  def update(conn, %{"id" => id, "calculation" => calculation_params}) do
-    calculation = Calculations.get_calculation!(id)
+  def update(conn, %{"token" => token, "calculation" => calculation_params}) do
+    calculation = Calculations.get_calculation_for_token!(token)
 
     with {:ok, %Calculation{} = calculation} <- Calculations.update_calculation(calculation, calculation_params) do
       render(conn, "show.json", calculation: calculation)
     end
   end
 
-  def delete(conn, %{"id" => id}) do
-    calculation = Calculations.get_calculation!(id)
+  def delete(conn, %{"token" => token}) do
+    calculation = Calculations.get_calculation_for_token!(token)
     with {:ok, %Calculation{}} <- Calculations.delete_calculation(calculation) do
       send_resp(conn, :no_content, "")
     end
