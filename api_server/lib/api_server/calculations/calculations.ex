@@ -72,6 +72,7 @@ defmodule ApiServer.Calculations do
      get_calculation!(:no_preload, id)
      |> Repo.preload(:members)
   end
+  
 
   @doc """
   Creates a calculation.
@@ -286,6 +287,11 @@ defmodule ApiServer.Calculations do
 
   alias ApiServer.Calculations.Member
 
+  def get_calculation_for_token!(token) do
+    member = get_member_for_token!(token)
+    get_calculation!(member.calculation_id)
+  end
+
   @doc """
   Returns the list of members.
 
@@ -314,7 +320,8 @@ defmodule ApiServer.Calculations do
 
   """
   def get_member!(id), do: Repo.get!(Member, id)
-
+  def get_member_for_token!(token), do: Repo.get_by!(Member, token: token)
+  
   @doc """
   Creates a member.
 

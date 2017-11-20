@@ -6,13 +6,14 @@ defmodule ApiServerWeb.ExpenseController do
 
   action_fallback ApiServerWeb.FallbackController
 
-  def index(conn, %{"calculation_id" => calculation_id}) do
-    expenses = Calculations.list_expenses(calculation_id)
+  def index(conn, %{"calculation_token" => calculation_token}) do
+    member = Calculations.get_member_for_token!(calculation_token)
+    expenses = Calculations.list_expenses(member.calculation_id)
     render(conn, "index.json", expenses: expenses)
   end
 
-  def create(conn, %{"calculation_id" => calculation_id, "expense" => expense_params}) do
-    calculation = Calculations.get_calculation!(calculation_id)
+  def create(conn, %{"calculation_token" => calculation_token, "expense" => expense_params}) do
+    calculation = Calculations.get_calculation_for_token!(calculation_token)
 
     with {:ok, %Expense{} = expense} <- Calculations.create_expense(calculation, expense_params) do
       conn

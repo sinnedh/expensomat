@@ -8,7 +8,7 @@ class App extends Component {
     return (
       <Router>
         <div className="App">
-          <Route path="/calculation/:id" component={Calculation} />
+          <Route path="/calculation/:token" component={Calculation} />
         </div>
       </Router>
     );

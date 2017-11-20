@@ -19,7 +19,7 @@ class Calculation extends React.Component {
   }
 
   componentDidMount() {
-    const calculationId = this.props.match.params.id;
+    const token = this.props.match.params.token;
     {
       const onSuccess = response => this.setState({
         name: response.name,
@@ -30,7 +30,7 @@ class Calculation extends React.Component {
       const onFailure = response => {
         this.setState({notification: 'Could not load calculation'});
       }
-      getCalculation(calculationId, onSuccess, onFailure);
+      getCalculation(token, onSuccess, onFailure);
     }
 
     {
@@ -38,13 +38,13 @@ class Calculation extends React.Component {
       const onFailure = response => {
         this.setState({notification: 'Could not load expenses'});
       }
-      getExpensesForCalculation(calculationId, onSuccess, onFailure);
+      getExpensesForCalculation(token, onSuccess, onFailure);
     }
 
   }
 
   createExpense = (expense) => {
-    const calculationId = this.props.match.params.id;
+    const token = this.props.match.params.token;
     const onSuccess = response => {
       this.setState({
         notification: 'Succesfully created expense',
@@ -55,7 +55,7 @@ class Calculation extends React.Component {
     const onFailure = response => {
       this.setState({notification: 'Could not create expense'});
     }
-    createExpense(calculationId, expense, onSuccess, onFailure);
+    createExpense(token, expense, onSuccess, onFailure);
   }
 
   render() {
@@ -69,7 +69,7 @@ class Calculation extends React.Component {
         <h2>Matrix</h2>
         <ExpenseMatrix members={this.state.members} elements={this.state.matrix} />
         <h2>Expenses</h2>
-        <ExpenseForm calculationId={this.props.match.params.id} handleSubmit={this.createExpense} members={this.state.members} />
+        <ExpenseForm handleSubmit={this.createExpense} members={this.state.members} />
         <ExpenseList expenses={this.state.expenses} />
       </div>
     );

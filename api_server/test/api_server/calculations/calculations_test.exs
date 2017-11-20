@@ -113,8 +113,8 @@ defmodule ApiServer.CalculationsTest do
 
     test "create_expense/1 with paid_by" do
       calculation = calculation_fixture()
-      peter = member_fixture(%{"name" => "Peter", "calculation_id" => calculation.id})
-      paul = member_fixture(%{"name" => "Paul", "calculation_id" => calculation.id})
+      peter = member_fixture(%{"name" => "Peter", "calculation_id" => calculation.id, "token" => "ABCD"})
+      paul = member_fixture(%{"name" => "Paul", "calculation_id" => calculation.id, "token" => "EFGH"})
       calculation = Map.put(calculation, "members", [peter, paul])
 
       valid_attrs = Map.put(@valid_attrs, "paid_by", [peter.id])
@@ -125,8 +125,8 @@ defmodule ApiServer.CalculationsTest do
 
     test "create_expense/1 with paid_for" do
       calculation = calculation_fixture()
-      peter = member_fixture(%{"name" => "Peter", "calculation_id" => calculation.id})
-      paul = member_fixture(%{"name" => "Paul", "calculation_id" => calculation.id})
+      peter = member_fixture(%{"name" => "Peter", "calculation_id" => calculation.id, "token" => "ABCD"})
+      paul = member_fixture(%{"name" => "Paul", "calculation_id" => calculation.id, "token" => "EFGH"})
       calculation = Map.put(calculation, "members", [peter, paul])
 
       valid_attrs = Map.put(@valid_attrs, "paid_for", [peter.id])
@@ -137,9 +137,9 @@ defmodule ApiServer.CalculationsTest do
 
     test "create_expense/1 with paid_by and paid_for" do
       calculation = calculation_fixture()
-      peter = member_fixture(%{"name" => "Peter", "calculation_id" => calculation.id})
-      paul = member_fixture(%{"name" => "Paul", "calculation_id" => calculation.id})
-      mary = member_fixture(%{"name" => "Mary", "calculation_id" => calculation.id})
+      peter = member_fixture(%{"name" => "Peter", "calculation_id" => calculation.id, "token" => "ABC"})
+      paul = member_fixture(%{"name" => "Paul", "calculation_id" => calculation.id, "token" => "DEF"})
+      mary = member_fixture(%{"name" => "Mary", "calculation_id" => calculation.id, "token" => "GHI"})
       calculation = Map.put(calculation, "members", [peter, paul, mary])
 
       valid_attrs = @valid_attrs
@@ -185,7 +185,7 @@ defmodule ApiServer.CalculationsTest do
   describe "members" do
     alias ApiServer.Calculations.Member
 
-    @valid_attrs %{"name" => "some name"}
+    @valid_attrs %{"name" => "some name", "token" => "ABCD"}
     @update_attrs %{"name" => "some updated name"}
     @invalid_attrs %{"name" => nil}
 
@@ -253,9 +253,9 @@ defmodule ApiServer.CalculationsTest do
   describe "calculation matrix" do
     setup do
       calculation = calculation_fixture()
-      peter = member_fixture(%{"name" => "Peter", "calculation_id" => calculation.id})
-      paul = member_fixture(%{"name" => "Paul", "calculation_id" => calculation.id})
-      mary = member_fixture(%{"name" => "Mary", "calculation_id" => calculation.id})
+      peter = member_fixture(%{"name" => "Peter", "calculation_id" => calculation.id, "token" => "ABCD"})
+      paul = member_fixture(%{"name" => "Paul", "calculation_id" => calculation.id, "token" => "EFGH"})
+      mary = member_fixture(%{"name" => "Mary", "calculation_id" => calculation.id, "token" => "IJKL"})
       calculation = Map.put(calculation, "members", [peter, paul, mary])
       %{calculation: calculation, peter: peter, paul: paul, mary: mary}
     end
