@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import Calculation from './routes/Calculation'
+import ShowCalculation from './routes/ShowCalculation';
 import './App.css';
 
 class App extends Component {
@@ -8,7 +8,7 @@ class App extends Component {
     return (
       <Router>
         <div className="App">
-          <Route path="/calculation/:token" component={Calculation} />
+          <Route path="/calculation/:token" component={ShowCalculation} />
         </div>
       </Router>
     );
