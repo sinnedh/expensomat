@@ -17,5 +17,6 @@ defmodule ApiServer.Calculations.Calculation do
     calculation
     |> cast(attrs, [:name, :description])
     |> validate_required([:name])
+    |> cast_assoc(:members)
   end
 end
