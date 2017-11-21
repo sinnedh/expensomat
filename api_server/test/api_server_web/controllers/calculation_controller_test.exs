@@ -1,7 +1,9 @@
 defmodule ApiServerWeb.CalculationControllerTest do
   use ApiServerWeb.ConnCase
 
+  alias ApiServer.Repo
   alias ApiServer.Calculations
+  alias ApiServer.Calculations.Member
 
   @create_attrs %{description: "some description", name: "some name"}
   @update_attrs %{description: "some updated description", name: "some updated name"}
@@ -38,6 +40,27 @@ defmodule ApiServerWeb.CalculationControllerTest do
     test "renders errors when data is invalid", %{conn: conn} do
       conn = post conn, calculation_path(conn, :create), calculation: @invalid_attrs
       assert json_response(conn, 422)["errors"] != %{}
+    end
+
+    test "new members are created and assoiciated to calculation", %{conn: conn} do
+      create_attrs = @create_attrs
+      |> Map.put("members", [%{name: "First member"}, %{name: "Second member"}])
+
+      assert length(Repo.all(Member)) == 0
+
+      response = conn
+      |> post(calculation_path(conn, :create), calculation: create_attrs)
+      |> json_response(201)
+
+      assert length(Repo.all(Member)) == 2
+
+      member0 = Repo.get_by!(Member, name: "First member")
+      member1 = Repo.get_by!(Member, name: "Second member")
+
+      assert response["data"]["members"] == [
+        %{"id" => member0.id, "token" => member0.token, "name" => "First member"},
+        %{"id" => member1.id, "token" => member1.token, "name" => "Second member"},
+      ]
     end
   end
 
