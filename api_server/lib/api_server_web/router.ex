@@ -10,6 +10,7 @@ defmodule ApiServerWeb.Router do
   end
 
   pipeline :api do
+    plug CORSPlug
     plug :accepts, ["json"]
   end
 
@@ -26,6 +27,7 @@ defmodule ApiServerWeb.Router do
       resources "/expenses", ExpenseController, except: [:new, :edit]
       options "/expenses", ExpenseController, :nothing
     end
+    options "/calculations", CalculationController, :nothing
 
     get "/expenses", ExpenseController, :show
   end
