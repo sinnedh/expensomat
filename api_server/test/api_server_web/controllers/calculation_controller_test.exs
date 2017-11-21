@@ -32,7 +32,7 @@ defmodule ApiServerWeb.CalculationControllerTest do
         "id" => id,
         "description" => "some description",
         "name" => "some name",
-        "members" => [%{"name" => "A member", "id" => member.id}],
+        "members" => [%{"name" => "A member", "id" => member.id, "token" => member.token}],
         "matrix" => %{}
       }
     end
@@ -77,7 +77,7 @@ defmodule ApiServerWeb.CalculationControllerTest do
         "id" => id,
         "description" => "some updated description",
         "name" => "some updated name",
-        "members" => [%{"name" => "A member", "id" => member.id}],
+        "members" => [%{"name" => "A member", "id" => member.id, "token" => member.token}],
         "matrix" => %{}
       }
     end
