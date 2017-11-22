@@ -2,6 +2,20 @@ import 'whatwg-fetch';
 
 const baseurl = 'http://localhost:4000/api';
 
+
+var createCalculation = (calculation, onSuccess, onFailure) => {
+  const options = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ calculation }),
+  }
+
+  fetch(`${baseurl}/calculations/`, options)
+    .then(r => r.json())
+    .then(r => onSuccess(r.data))
+    .catch(e => onFailure(e));
+};
+
 var getCalculation = (token, onSuccess, onFailure) => {
   fetch(`${baseurl}/calculations/${token}`)
     .then(r => r.json())
@@ -29,4 +43,9 @@ var createExpense = (token, expense, onSuccess, onFailure) => {
     .catch(e => onFailure(e));
 }
 
-export { createExpense, getCalculation, getExpensesForCalculation };
+export {
+  createCalculation,
+  createExpense,
+  getCalculation,
+  getExpensesForCalculation
+};

@@ -5,7 +5,7 @@ import ExpenseList from '../components/ExpenseList';
 import ExpenseMatrix from '../components/ExpenseMatrix';
 import MembersList from '../components/MembersList';
 
-class Calculation extends React.Component {
+class ShowCalculation extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -76,4 +76,4 @@ class Calculation extends React.Component {
   }
 }
 
-export default Calculation;
+export default ShowCalculation;
