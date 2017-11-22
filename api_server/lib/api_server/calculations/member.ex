@@ -31,8 +31,9 @@ defmodule ApiServer.Calculations.Member do
   end
 
   def generate_token() do
-    :crypto.strong_rand_bytes(24)
-    |> Base.encode64
-    |> binary_part(0, 24)
+    length = 24
+    :crypto.strong_rand_bytes(length)
+    |> Base.url_encode64
+    |> binary_part(0, length)
   end
 end
