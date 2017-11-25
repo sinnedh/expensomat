@@ -23,11 +23,11 @@ var getCalculation = (token, onSuccess, onFailure) => {
     .catch(e => onFailure(e));
 };
 
-var getExpensesForCalculation = (token, onSuccess, onFailure) => {
+var fetchExpenses = (dispatch, token, onSuccess, onFailure) => {
   fetch(`${baseurl}/calculations/${token}/expenses`)
     .then(r => r.json())
-    .then(r => onSuccess(r.data))
-    .catch(e => onFailure(e));
+    .then(r => dispatch(onSuccess(r.data)))
+    .catch(e => dispatch(onFailure(e)));
 };
 
 var createExpense = (token, expense, onSuccess, onFailure) => {
@@ -47,5 +47,5 @@ export {
   createCalculation,
   createExpense,
   getCalculation,
-  getExpensesForCalculation
+  fetchExpenses,
 };
