@@ -3,49 +3,60 @@ import 'whatwg-fetch';
 const baseurl = 'http://localhost:4000/api';
 
 
-var createCalculation = (calculation, onSuccess, onFailure) => {
-  const options = {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ calculation }),
-  }
-
-  fetch(`${baseurl}/calculations/`, options)
-    .then(r => r.json())
-    .then(r => onSuccess(r.data))
-    .catch(e => onFailure(e));
-};
-
-var fetchCalculation = (dispatch, token, onSuccess, onFailure) => {
-  fetch(`${baseurl}/calculations/${token}`)
+const getRequest = (url, dispatch, onSuccess, onFailure) => {
+  fetch(url)
     .then(r => r.json())
     .then(r => dispatch(onSuccess(r.data)))
     .catch(e => dispatch(onFailure(e)));
-};
+}
 
-var fetchExpenses = (dispatch, token, onSuccess, onFailure) => {
-  fetch(`${baseurl}/calculations/${token}/expenses`)
-    .then(r => r.json())
-    .then(r => dispatch(onSuccess(r.data)))
-    .catch(e => dispatch(onFailure(e)));
-};
-
-var createExpense = (token, expense, onSuccess, onFailure) => {
+const postRequest = (url, body, dispatch, onSuccess, onFailure) => {
   const options = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ expense }),
+    body,
   }
 
-  fetch(`${baseurl}/calculations/${token}/expenses`, options)
+  fetch(url, options)
     .then(r => r.json())
     .then(r => onSuccess(r.data))
     .catch(e => onFailure(e));
 }
 
-export {
-  createCalculation,
-  createExpense,
-  fetchCalculation,
-  fetchExpenses,
+export const addCalculation = (dispatch, calculation, onSuccess, onFailure) => {
+  postRequest(
+    `${baseurl}/calculations/`,
+    JSON.stringify({ calculation }),
+    dispatch,
+    onSuccess,
+    onFailure,
+  )
 };
+
+export const fetchCalculation = (dispatch, token, onSuccess, onFailure) => {
+  getRequest(
+    `${baseurl}/calculations/${token}`,
+    dispatch,
+    onSuccess,
+    onFailure,
+  )
+};
+
+export const fetchExpenses = (dispatch, token, onSuccess, onFailure) => {
+  getRequest(
+    `${baseurl}/calculations/${token}/expenses`,
+    dispatch,
+    onSuccess,
+    onFailure,
+  )
+};
+
+export const addExpense = (dispatch, token, expense, onSuccess, onFailure) => {
+  postRequest(
+    `${baseurl}/calculations/${token}/expenses`,
+    JSON.stringify({ expense }),
+    dispatch,
+    onSuccess,
+    onFailure,
+  )
+}
