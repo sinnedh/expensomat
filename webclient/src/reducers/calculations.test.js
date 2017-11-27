@@ -55,3 +55,52 @@ describe('CALCULATION:LOAD_SUCCESS', () => {
     expect(calculations(beforeState, action(calculation))).toEqual(afterState);
   });
 });
+
+
+describe('CALCULATION:CREATE_REQUEST', () => {
+  const action = {type: 'CALCULATION:CREATE_REQUEST'};
+  const calculation = {name: 'A calculation', description: '', members: []};
+
+  it('sets isFetching', () => {
+    const calculation = {name: 'A new calculation', description: '', members: []};
+    const beforeState = {...calculation, isFetching: false};
+    expect(calculations(beforeState, action).isFetching).toEqual(true);
+  });
+});
+
+describe('CALCULATION:CREATE_FAILURE', () => {
+  const action = {type: 'CALCULATION:CREATE_FAILURE'};
+  const calculation = {name: 'A calculation', description: '', members: []};
+
+  it('resets isFetching', () => {
+    const beforeState = {...calculation, isFetching: true};
+    expect(calculations(beforeState, action).isFetching).toEqual(false);
+  });
+
+  it('does not change the calculation', () => {
+    const beforeState = {...calculation, isFetching: true};
+    const afterState = {...calculation, isFetching: false};
+
+    expect(calculations(beforeState, action)).toEqual(afterState);
+  });
+});
+
+describe('CALCULATION:CREATE_SUCCESS', () => {
+  const action = (calculation) => ({
+    type: 'CALCULATION:CREATE_SUCCESS',
+    ...calculation,
+  });
+  const calculation = {name: 'A calculation', description: '', members: []};
+
+  it('resets isFetching', () => {
+    const beforeState = {name: 'A calculation', isFetching: true};
+    expect(calculations(beforeState, action({})).isFetching).toEqual(false);
+  });
+
+  it('updates the calculation', () => {
+    const beforeState = {isFetching: true};
+    const afterState = {...calculation, isFetching: false};
+
+    expect(calculations(beforeState, action(calculation))).toEqual(afterState);
+  });
+});
