@@ -14,6 +14,15 @@ const expenses = (state = initialState, action) => {
     case 'EXPENSES:LOAD_FAILURE':
       return {...state, isFetching: false};
 
+    case 'EXPENSES:CREATE_REQUEST':
+      return {...state, isFetching: true};
+
+    case 'EXPENSES:CREATE_SUCCESS':
+      return {...state, items: [action.expense, ...state.items], isFetching: false};
+
+    case 'EXPENSES:CREATE_FAILURE':
+      return {...state, isFetching: false};
+
     default:
       return state;
   }
