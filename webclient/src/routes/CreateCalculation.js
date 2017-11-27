@@ -1,6 +1,6 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-import { createCalculation } from '../api';
+import { createCalculation } from '../actions';
 import CalculationForm from '../components/CalculationForm';
 
 class CreateCalculation extends React.Component {
@@ -16,14 +16,7 @@ class CreateCalculation extends React.Component {
   }
 
   createCalculation = (calculation) => {
-    const onSuccess = response => {
-      this.setState({redirect_to: 'calculation/' + response.members[0].token});
-    }
-    const onFailure = response => {
-      this.setState({notification: 'Could not load calculation'});
-    }
-
-    createCalculation(calculation, onSuccess, onFailure);
+    this.props.dispatch(createCalculation(calculation));
   }
 
   render() {

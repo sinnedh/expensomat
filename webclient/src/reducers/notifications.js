@@ -5,6 +5,37 @@ const initialState = {
 
 const notifications = (state = initialState, action) => {
   switch (action.type) {
+    case 'CALCULATION:LOAD_FAILURE':
+    case 'EXPENSES:LOAD_FAILURE':
+      return {
+        message: `Could not load data: "${action.message}"`,
+        type: 'error',
+      }
+    case 'EXPENSES:CREATE_FAILURE':
+      return {
+        message: `Could not create expense: ("${action.message}")`,
+        type: 'error',
+      }
+
+    case 'CALCULATION:CREATE_FAILURE':
+      return {
+        message: `Could not create calculation: ("${action.message}")`,
+        type: 'error',
+      }
+
+    case 'EXPENSES:CREATE_SUCCESS':
+      return {
+        message: 'Expense was created.',
+        type: 'info',
+      }
+
+    case 'CALCULATION:CREATE_SUCCESS':
+      return {
+        message: 'Calculation was created.',
+        type: 'info',
+      }
+
+
     case 'NOTIFICATION_RESET':
       return initialState;
 

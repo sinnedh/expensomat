@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import App from '../components/App';
-import { resetNotification, setErrorNotification } from '../actions';
 import './App.css';
 
 const mapStateToProps = (state, ownProps) => ({
