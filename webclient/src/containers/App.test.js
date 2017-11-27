@@ -6,7 +6,7 @@ import App from './App';
 describe('App', () => {
   const initialState = {notifications: {message: '', type: null}};
   const mockStore = configureStore();
-  let store,container;
+  let store, container;
 
   beforeEach(() => {
     store = mockStore(initialState);
