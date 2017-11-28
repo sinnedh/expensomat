@@ -1,16 +1,19 @@
 import 'whatwg-fetch';
 import {incrementLoadingCounter, decrementLoadingCounter} from './actions';
+import {setErrorNotification, setInfoNotification} from './actions';
 
 const baseurl = 'http://localhost:4000/api';
 
 const requestSuccess = (dispatch, callback, data) => {
   dispatch(callback(data));
   dispatch(decrementLoadingCounter());
+  dispatch(setInfoNotification('Request was successful.'));
 }
 
 const requestFailure = (dispatch, callback, data) => {
   dispatch(callback(data));
   dispatch(decrementLoadingCounter());
+  dispatch(setErrorNotification(`Could not load/send data. Error: ${data}`));
 }
 
 const getRequest = (url, dispatch, onSuccess, onFailure) => {
