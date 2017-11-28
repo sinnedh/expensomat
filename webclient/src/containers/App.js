@@ -3,8 +3,8 @@ import App from '../components/App';
 import './App.css';
 
 const mapStateToProps = (state, ownProps) => ({
-  notificationMessage: state.notifications.message,
-  notificationType: state.notifications.type,
+  notificationText: state.application.notificationText,
+  notificationType: state.application.notificationType,
   isLoading: state.application.loadingCounter > 0,
 })
 

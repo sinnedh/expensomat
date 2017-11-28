@@ -1,6 +1,10 @@
 import application from './application';
 
-const initialState = {loadingCounter: 0};
+const initialState = {
+  loadingCounter: 0,
+  notificationText: null,
+  notificationType: null
+};
 
 describe('APPLICATION:INCREMENT_LOADING_COUNTER', () => {
   const action = {type: 'APPLICATION:INCREMENT_LOADING_COUNTER'};
@@ -61,4 +65,43 @@ describe('APPLICATION:RESET_LOADING_COUNTER', () => {
 
     expect(application(beforeState, action)).toEqual(afterState);
   });
+});
+
+describe('APPLICATION:NOTIFICATION_RESET', () => {
+  const action = {type: 'APPLICATION:NOTIFICATION_RESET'};
+
+  it('resets to initial state', () => {
+    const beforeState = {
+      ...initialState,
+      notificationText: 'Hello world',
+      notificationType: 'something',
+    };
+    const afterState = initialState;
+
+    expect(application(beforeState, action)).toEqual(afterState);
+  });
+});
+
+describe('APPLICATION:NOTIFICATION_SET', () => {
+  const testCases = [
+    {...initialState, type: 'error', text: 'Something went wrong.'},
+    {...initialState, type: 'warning', text: 'Something could go wrong.'},
+    {...initialState, type: 'success', text: 'Something succeeded.'},
+    {...initialState, type: 'info', text: 'Something happened.'},
+  ];
+
+  for (const testCase of testCases) {
+    it(testCase.type.toUpperCase() + ' sets text and type', () => {
+      const action = {
+        type: 'APPLICATION:NOTIFICATION_SET',
+        notificationType: testCase.type,
+        notificationText: testCase.text,
+      };
+
+      const beforeState = {...initialState, notificationText: 'Hello world', notificationType: 'something'};
+      const afterState = {...initialState, notificationText: testCase.text, notificationType: testCase.type};
+
+      expect(application(beforeState, action)).toEqual(afterState);
+    });
+  }
 });
