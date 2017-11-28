@@ -23,7 +23,8 @@ describe('NOTIFICATION_SET_', () => {
   for (const testCase of testCases) {
     it(testCase.type.toUpperCase() + ' sets message and type', () => {
       const action = {
-        type: 'NOTIFICATION_SET_' + testCase.type.toUpperCase(),
+        type: 'NOTIFICATION_SET',
+        notificationType: testCase.type,
         message: testCase.message,
       };
 

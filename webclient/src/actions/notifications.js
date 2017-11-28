@@ -6,28 +6,32 @@ export const resetNotification = () => {
 
 export const setErrorNotification = (message) => {
   return {
-    type: 'NOTIFICATION_SET_ERROR',
-    message
+    type: 'NOTIFICATION_SET',
+    message,
+    notificationType: 'error',
   }
 }
 
 export const setWarningNotification = (message) => {
   return {
-    type: 'NOTIFICATION_SET_WARNING',
-    message
+    type: 'NOTIFICATION_SET',
+    message,
+    notificationType: 'warning',
   }
 }
 
 export const setInfoNotification = (message) => {
   return {
-    type: 'NOTIFICATION_SET_INFO',
-    message
+    type: 'NOTIFICATION_SET',
+    message,
+    notificationType: 'info',
   }
 }
 
 export const setSuccessNotification = (message) => {
   return {
-    type: 'NOTIFICATION_SET_SUCCESS',
-    message
+    type: 'NOTIFICATION_SET',
+    message,
+    notificationType: 'success',
   }
 }

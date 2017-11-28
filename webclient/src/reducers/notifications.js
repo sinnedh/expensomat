@@ -39,28 +39,10 @@ const notifications = (state = initialState, action) => {
     case 'NOTIFICATION_RESET':
       return initialState;
 
-    case 'NOTIFICATION_SET_ERROR':
+    case 'NOTIFICATION_SET':
       return {
         message: action.message,
-        type: 'error',
-      }
-
-    case 'NOTIFICATION_SET_WARNING':
-      return {
-        message: action.message,
-        type: 'warning',
-      }
-
-    case 'NOTIFICATION_SET_INFO':
-      return {
-        message: action.message,
-        type: 'info',
-      }
-
-    case 'NOTIFICATION_SET_SUCCESS':
-      return {
-        message: action.message,
-        type: 'success',
+        type: action.notificationType,
       }
 
     default:
