@@ -5,7 +5,9 @@ import App from './App';
 it('renders without notification', () => {
   const div = document.createElement('div');
   ReactDOM.render(
-    <App />, div);
+    <App
+      loadingCounter={0}
+    />, div);
 });
 
 it('renders with empty notification', () => {
@@ -14,6 +16,7 @@ it('renders with empty notification', () => {
     <App
       notificationMessage={''}
       notificationType={null}
+      loadingCounter={0}
     />, div);
 });
 
@@ -23,5 +26,6 @@ it('renders with notification', () => {
     <App
       notificationMessage={'A message'}
       notificationType={'warning'}
+      loadingCounter={0}
     />, div);
 });

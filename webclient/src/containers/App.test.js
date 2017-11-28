@@ -4,7 +4,10 @@ import { shallow } from 'enzyme';
 import App from './App';
 
 describe('App', () => {
-  const initialState = {notifications: {message: '', type: null}};
+  const initialState = {
+    application: {loadingCounter: 0},
+    notifications: {message: '', type: null},
+  };
   const mockStore = configureStore();
   let store, container;
 
