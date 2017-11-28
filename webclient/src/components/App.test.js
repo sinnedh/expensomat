@@ -14,7 +14,7 @@ it('renders with empty notification', () => {
   const div = document.createElement('div');
   ReactDOM.render(
     <App
-      notificationMessage={''}
+      notificationText={''}
       notificationType={null}
       loadingCounter={0}
     />, div);
@@ -24,7 +24,7 @@ it('renders with notification', () => {
   const div = document.createElement('div');
   ReactDOM.render(
     <App
-      notificationMessage={'A message'}
+      notificationText={'A message'}
       notificationType={'warning'}
       loadingCounter={0}
     />, div);

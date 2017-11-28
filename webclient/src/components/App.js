@@ -10,7 +10,7 @@ export default (props) => (
     <div className="App">
       <LoadingIndicator isLoading={props.isLoading} />
       <NotificationMessage
-        message={props.notificationMessage}
+        text={props.notificationText}
         type={props.notificationType}
       />
       <Route exact path="/calculation" component={CreateCalculation} />

@@ -1,7 +1,7 @@
 const initialState = {
   loadingCounter: 0,
-  message: null,
-  type: null,
+  notificationText: null,
+  notificationType: null,
 }
 
 export default (state = initialState, action) => {
@@ -24,8 +24,8 @@ export default (state = initialState, action) => {
     case 'APPLICATION:NOTIFICATION_SET':
       return {
         ...state,
-        message: action.message,
-        type: action.notificationType,
+        notificationText: action.notificationText,
+        notificationType: action.notificationType,
       }
 
     default:

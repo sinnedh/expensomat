@@ -5,8 +5,11 @@ import App from './App';
 
 describe('App', () => {
   const initialState = {
-    application: {loadingCounter: 0},
-    notifications: {message: '', type: null},
+    application: {
+      loadingCounter: 0,
+      notificationText: null,
+      notificationType: null,
+    },
   };
   const mockStore = configureStore();
   let store, container;

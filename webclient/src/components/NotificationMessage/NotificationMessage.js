@@ -1,7 +1,7 @@
 import React from 'react'
 
-export default ({message, type}) => (
-  message
-   ? <p>{type}: {message}</p>
+export default ({text, type}) => (
+  text
+   ? <p>{type}: {text}</p>
    : ''
 )

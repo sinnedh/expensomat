@@ -4,34 +4,34 @@ export const resetNotification = () => {
   }
 }
 
-export const setErrorNotification = (message) => {
+export const setErrorNotification = (notificationText) => {
   return {
     type: 'APPLICATION:NOTIFICATION_SET',
-    message,
+    notificationText,
     notificationType: 'error',
   }
 }
 
-export const setWarningNotification = (message) => {
+export const setWarningNotification = (notificationText) => {
   return {
     type: 'APPLICATION:NOTIFICATION_SET',
-    message,
+    notificationText,
     notificationType: 'warning',
   }
 }
 
-export const setInfoNotification = (message) => {
+export const setInfoNotification = (notificationText) => {
   return {
     type: 'APPLICATION:NOTIFICATION_SET',
-    message,
+    notificationText,
     notificationType: 'info',
   }
 }
 
-export const setSuccessNotification = (message) => {
+export const setSuccessNotification = (notificationText) => {
   return {
     type: 'APPLICATION:NOTIFICATION_SET',
-    message,
+    notificationText,
     notificationType: 'success',
   }
 }
