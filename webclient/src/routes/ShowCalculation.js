@@ -7,11 +7,6 @@ import ExpenseMatrix from '../components/ExpenseMatrix';
 import MembersList from '../components/MembersList';
 
 class ShowCalculation extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {notification: ''};
-  }
-
   componentDidMount() {
     const token = this.props.match.params.token;
     this.props.dispatch(getCalculation(token));
@@ -28,7 +23,6 @@ class ShowCalculation extends React.Component {
       <div>
         <h1>{this.props.name}</h1>
         <p>{this.props.description}</p>
-        {this.state.notification && <p>{this.state.notification}</p>}
         <h2>Members</h2>
         <MembersList members={this.props.members} />
         <h2>Matrix</h2>

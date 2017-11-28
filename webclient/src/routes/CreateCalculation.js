@@ -7,7 +7,6 @@ class CreateCalculation extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      notification: '',
       redirect_to: '',
     }
   }
@@ -24,7 +23,6 @@ class CreateCalculation extends React.Component {
       <div>
         {this.state.redirect_to !== '' && <Redirect to={this.state.redirect_to} />}
         <h1>Create new calculation</h1>
-        {this.state.notification && <p>{this.state.notification}</p>}
         <CalculationForm handleSubmit={this.createCalculation}/>
       </div>
     );
