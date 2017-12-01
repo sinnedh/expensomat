@@ -40,6 +40,10 @@ const getRequest = (url, dispatch, onSuccess, onFailure) => {
   return request('GET', url, dispatch, onSuccess, onFailure);
 }
 
+const deleteRequest = (url, dispatch, onSuccess, onFailure) => {
+  return request('DELETE', url, dispatch, onSuccess, onFailure, {});
+}
+
 export const addCalculation = (dispatch, calculation, onSuccess, onFailure) => {
   postRequest(
     `${baseurl}/calculations/`,
@@ -71,7 +75,16 @@ export const fetchExpenses = (dispatch, token, onSuccess, onFailure) => {
 export const addExpense = (dispatch, token, expense, onSuccess, onFailure) => {
   postRequest(
     `${baseurl}/calculations/${token}/expenses`,
+    dispatch,
+    onSuccess,
+    onFailure,
     JSON.stringify({ expense }),
+  )
+}
+
+export const deleteExpense = (dispatch, token, expense, onSuccess, onFailure) => {
+  deleteRequest(
+    `${baseurl}/calculations/${token}/expenses/${expense.id}`,
     dispatch,
     onSuccess,
     onFailure,
