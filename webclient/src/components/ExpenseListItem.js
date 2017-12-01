@@ -4,6 +4,7 @@ import {formatAmount} from '../utils';
 
 export default (props) => (
     <li>
+      <button onClick={(e) => props.onClickDelete(e, props.expense)}>X</button>
       {formatDate(props.expense.paid_at)}:
       { } <strong>{props.expense.description}</strong>
       { } {formatAmount(props.expense.amount)}
