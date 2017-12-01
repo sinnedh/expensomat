@@ -16,20 +16,15 @@ const requestFailure = (dispatch, callback, data) => {
   dispatch(setErrorNotification(`Could not load/send data. Error: ${data}`));
 }
 
-const getRequest = (url, dispatch, onSuccess, onFailure) => {
-  dispatch(incrementLoadingCounter());
-  fetch(url)
-    .then(r => r.json())
-    .then(r => requestSuccess(dispatch, onSuccess, r.data))
-    .catch(e => requestFailure(dispatch, onFailure, e));
-}
-
-const postRequest = (url, body, dispatch, onSuccess, onFailure) => {
-  const options = {
-    method: 'POST',
+const request = (method, url, dispatch, onSuccess, onFailure, body) => {
+  let options = {
+    method: method,
     headers: { 'Content-Type': 'application/json' },
-    body,
+  };
+  if (body !== undefined) {
+    options.body = body;
   }
+
   dispatch(incrementLoadingCounter());
   fetch(url, options)
     .then(r => r.json())
@@ -37,13 +32,21 @@ const postRequest = (url, body, dispatch, onSuccess, onFailure) => {
     .catch(e => requestFailure(dispatch, onFailure, e));
 }
 
+const postRequest = (url, dispatch, onSuccess, onFailure, body) => {
+  return request('POST', url, dispatch, onSuccess, onFailure, body);
+}
+
+const getRequest = (url, dispatch, onSuccess, onFailure) => {
+  return request('GET', url, dispatch, onSuccess, onFailure);
+}
+
 export const addCalculation = (dispatch, calculation, onSuccess, onFailure) => {
   postRequest(
     `${baseurl}/calculations/`,
-    JSON.stringify({ calculation }),
     dispatch,
     onSuccess,
     onFailure,
+    JSON.stringify({ calculation }),
   )
 };
 
