@@ -27,8 +27,9 @@ const request = (method, url, dispatch, onSuccess, onFailure, body) => {
 
   dispatch(incrementLoadingCounter());
   fetch(url, options)
-    .then(r => r.json())
-    .then(r => requestSuccess(dispatch, onSuccess, r.data))
+    .then(res => res.text())
+    .then(text => text.length > 0 ? JSON.parse(text) : {})
+    .then(json => requestSuccess(dispatch, onSuccess, json.data))
     .catch(e => requestFailure(dispatch, onFailure, e));
 }
 
