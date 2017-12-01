@@ -1,4 +1,8 @@
-import {addExpense, fetchExpenses} from '../api';
+import {
+  addExpense as apiAddExpense,
+  deleteExpense as apiDeleteExpense,
+  fetchExpenses as apiFetchExpenses
+} from '../api';
 
 export const getExpenses = (token) => {
   const requestExpenses = () => {
@@ -15,7 +19,7 @@ export const getExpenses = (token) => {
 
   return dispatch => {
     dispatch(requestExpenses());
-    return fetchExpenses(
+    return apiFetchExpenses(
       dispatch,
       token,
       receiveExpensesSuccess,
@@ -23,6 +27,7 @@ export const getExpenses = (token) => {
     )
   }
 }
+
 
 export const createExpense = (token, expense) => {
   const createExpenseRequest = (expense) => {
@@ -39,12 +44,38 @@ export const createExpense = (token, expense) => {
 
   return dispatch => {
     dispatch(createExpenseRequest(expense));
-    return addExpense(
+    return apiAddExpense(
       dispatch,
       token,
       expense,
       createExpenseSuccess,
       createExpenseFailure,
+    )
+  }
+}
+
+
+export const deleteExpense = (token, expense) => {
+  const deleteExpenseRequest = (expense) => {
+    return {type: 'EXPENSES:DELETE_REQUEST', expense}
+  }
+
+  const deleteExpenseSuccess = () => {
+    return {type: 'EXPENSES:DELETE_SUCCESS', id: expense.id}
+  }
+
+  const deleteExpenseFailure = (error) => {
+    return {type: 'EXPENSES:DELETE_FAILURE', message: error.message}
+  }
+
+  return dispatch => {
+    dispatch(deleteExpenseRequest(expense));
+    return apiDeleteExpense(
+      dispatch,
+      token,
+      expense,
+      deleteExpenseSuccess,
+      deleteExpenseFailure,
     )
   }
 }
