@@ -13,6 +13,7 @@ defmodule ApiServer.Calculations.Calculation do
     timestamps()
   end
 
+  def delete_changeset(%Calculation{} = calculation) do
     current_time = DateTime.utc_now
     calculation
     |> cast(%{deleted_at: current_time}, [:deleted_at])

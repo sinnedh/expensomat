@@ -94,10 +94,20 @@ defmodule ApiServerWeb.ExpenseControllerTest do
   end
 
   describe "delete expense" do
-    test "deletes chosen expense", %{conn: conn, calculation: calculation} do
+    test "deleted expense sets deleted_at", %{conn: conn, calculation: calculation} do
       expense = fixture(calculation, :expense)
       conn = delete conn, calculation_expense_path(conn, :delete, calculation, expense)
       assert response(conn, 204)
+
+      deleted_expense = Calculations.get_deleted_expense!(expense.id)
+      assert deleted_expense.deleted_at != nil
+    end
+
+    test "deleted calculation results in get with 404", %{conn: conn, calculation: calculation} do
+      expense = fixture(calculation, :expense)
+      conn = delete conn, calculation_expense_path(conn, :delete, calculation, expense)
+      assert response(conn, 204)
+
       assert_error_sent 404, fn ->
         get conn, calculation_expense_path(conn, :show, calculation, expense)
       end

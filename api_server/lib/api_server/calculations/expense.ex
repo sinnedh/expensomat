@@ -18,6 +18,13 @@ defmodule ApiServer.Calculations.Expense do
     timestamps()
   end
 
+  def delete_changeset(%Expense{} = calculation) do
+    current_time = DateTime.utc_now
+    calculation
+    |> cast(%{deleted_at: current_time}, [:deleted_at])
+    |> validate_required([:deleted_at])
+  end
+
   @doc false
   def changeset(%Expense{} = expense, attrs) do
     expense

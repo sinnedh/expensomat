@@ -53,10 +53,12 @@ defmodule ApiServer.CalculationsTest do
       assert calculation == Calculations.get_calculation!(calculation.id)
     end
 
-    test "delete_calculation/1 deletes the calculation" do
+    test "delete_calculation/1 sets the deleted_at timestamp" do
       calculation = calculation_fixture()
       assert {:ok, %Calculation{}} = Calculations.delete_calculation(calculation)
-      assert_raise Ecto.NoResultsError, fn -> Calculations.get_calculation!(calculation.id) end
+      assert_raise Ecto.NoResultsError, fn ->
+        Calculations.get_calculation!(calculation.id)
+      end
     end
 
     test "change_calculation/1 returns a calculation changeset" do

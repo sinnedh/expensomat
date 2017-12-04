@@ -130,7 +130,7 @@ defmodule ApiServer.Calculations do
 
 
   @doc """
-  Deletes a Calculation.
+  Marks a Calculation as deleted.
 
   ## Examples
 
@@ -142,7 +142,9 @@ defmodule ApiServer.Calculations do
 
   """
   def delete_calculation(%Calculation{} = calculation) do
-    Repo.delete(calculation)
+    calculation
+    |> Calculation.delete_changeset()
+    |> Repo.update()
   end
 
   @doc """
@@ -257,7 +259,7 @@ defmodule ApiServer.Calculations do
   end
 
   @doc """
-  Deletes a Expense.
+  Marks an Expense as deleted.
 
   ## Examples
 
@@ -269,7 +271,9 @@ defmodule ApiServer.Calculations do
 
   """
   def delete_expense(%Expense{} = expense) do
-    Repo.delete(expense)
+    expense
+    |> Expense.delete_changeset()
+    |> Repo.update()
   end
 
   @doc """
