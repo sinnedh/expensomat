@@ -13,6 +13,7 @@ defmodule ApiServer.Calculations.Expense do
     field :paid_at, :utc_datetime
     many_to_many :paid_by, ApiServer.Calculations.Member, join_through: "expense_paid_by_members"
     many_to_many :paid_for, ApiServer.Calculations.Member, join_through: "expense_paid_for_members"
+    field :deleted_at, :utc_datetime
 
     timestamps()
   end
@@ -21,7 +22,7 @@ defmodule ApiServer.Calculations.Expense do
   def changeset(%Expense{} = expense, attrs) do
     expense
     |> Repo.preload([:paid_by, :paid_for])
-    |> cast(attrs, [:calculation_id, :description, :amount, :paid_at])
+    |> cast(attrs, [:calculation_id, :description, :amount, :paid_at, :deleted_at])
     |> validate_required([:calculation_id, :description, :amount, :paid_at, :paid_by, :paid_for])
     |> put_assoc(:paid_for, get_paid_for(attrs))
     |> put_assoc(:paid_by, get_paid_by(attrs))
