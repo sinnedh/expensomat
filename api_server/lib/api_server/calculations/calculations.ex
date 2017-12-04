@@ -68,7 +68,12 @@ defmodule ApiServer.Calculations do
       ** (Ecto.NoResultsError)
 
   """
-  def get_calculation!(:no_preload, id), do: Repo.get!(Calculation, id)
+  def get_calculation!(:no_preload, id) do
+    Calculation
+    |> Calculation.undeleted
+    |> where(id: ^id)
+    |> Repo.one!
+  end
 
   def get_calculation!(id) do
      get_calculation!(:no_preload, id)
@@ -199,8 +204,12 @@ defmodule ApiServer.Calculations do
       ** (Ecto.NoResultsError)
 
   """
+
   def get_expense!(:no_preload, id) do
-    Repo.get!(Expense, id)
+    Expense
+    |> Expense.undeleted
+    |> where(id: ^id)
+    |> Repo.one!
   end
 
   def get_expense!(id) do
