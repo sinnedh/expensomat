@@ -44,7 +44,9 @@ defmodule ApiServer.Calculations do
 
   """
   def list_calculations(:no_preload) do
-    Repo.all(Calculation)
+    Calculation
+    |> Calculation.undeleted
+    |> Repo.all
   end
 
   def list_calculations do
@@ -172,7 +174,10 @@ defmodule ApiServer.Calculations do
 
   """
   def list_expenses(:no_preload, calculation_id) do
-    Repo.all(from e in Expense, where: e.calculation_id == ^calculation_id)
+    Expense
+    |> Expense.undeleted
+    |> where(calculation_id: ^calculation_id)
+    |> Repo.all
   end
 
   def list_expenses(calculation_id) do
