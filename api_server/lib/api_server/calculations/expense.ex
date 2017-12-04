@@ -18,6 +18,14 @@ defmodule ApiServer.Calculations.Expense do
     timestamps()
   end
 
+  def deleted(query) do
+    query |> where([e], not is_nil(e.deleted_at))
+  end
+
+  def undeleted(query) do
+    query |> where([e], is_nil(e.deleted_at))
+  end
+
   def delete_changeset(%Expense{} = calculation) do
     current_time = DateTime.utc_now
     calculation

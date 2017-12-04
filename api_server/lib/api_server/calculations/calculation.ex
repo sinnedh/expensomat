@@ -1,6 +1,7 @@
 defmodule ApiServer.Calculations.Calculation do
   use Ecto.Schema
   import Ecto.Changeset
+  import Ecto.Query
   alias ApiServer.Calculations.Calculation
 
 
@@ -11,6 +12,14 @@ defmodule ApiServer.Calculations.Calculation do
     field :deleted_at, :utc_datetime
 
     timestamps()
+  end
+
+  def deleted(query) do
+    query |> where([c], not is_nil(c.deleted_at))
+  end
+
+  def undeleted(query) do
+    query |> where([c], is_nil(c.deleted_at))
   end
 
   def delete_changeset(%Calculation{} = calculation) do
