@@ -13,15 +13,31 @@ defmodule ApiServer.Calculations.Expense do
     field :paid_at, :utc_datetime
     many_to_many :paid_by, ApiServer.Calculations.Member, join_through: "expense_paid_by_members"
     many_to_many :paid_for, ApiServer.Calculations.Member, join_through: "expense_paid_for_members"
+    field :deleted_at, :utc_datetime
 
     timestamps()
+  end
+
+  def deleted(query) do
+    query |> where([e], not is_nil(e.deleted_at))
+  end
+
+  def undeleted(query) do
+    query |> where([e], is_nil(e.deleted_at))
+  end
+
+  def delete_changeset(%Expense{} = calculation) do
+    current_time = DateTime.utc_now
+    calculation
+    |> cast(%{deleted_at: current_time}, [:deleted_at])
+    |> validate_required([:deleted_at])
   end
 
   @doc false
   def changeset(%Expense{} = expense, attrs) do
     expense
     |> Repo.preload([:paid_by, :paid_for])
-    |> cast(attrs, [:calculation_id, :description, :amount, :paid_at])
+    |> cast(attrs, [:calculation_id, :description, :amount, :paid_at, :deleted_at])
     |> validate_required([:calculation_id, :description, :amount, :paid_at, :paid_by, :paid_for])
     |> put_assoc(:paid_for, get_paid_for(attrs))
     |> put_assoc(:paid_by, get_paid_by(attrs))

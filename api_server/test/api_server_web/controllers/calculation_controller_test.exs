@@ -91,9 +91,18 @@ defmodule ApiServerWeb.CalculationControllerTest do
   describe "delete calculation" do
     setup [:create_calculation_and_member]
 
-    test "deletes chosen calculation", %{conn: conn, member: member} do
+    test "deleted calculation sets deleted_at", %{conn: conn, member: member} do
       conn = delete conn, calculation_path(conn, :delete, member.token)
       assert response(conn, 204)
+
+      deleted_calculation = Calculations.get_deleted_calculation!(member.calculation_id)
+      assert deleted_calculation.deleted_at != nil
+    end
+
+    test "deleted calculation results in get with 404", %{conn: conn, member: member} do
+      conn = delete conn, calculation_path(conn, :delete, member.token)
+      assert response(conn, 204)
+
       assert_error_sent 404, fn ->
         get conn, calculation_path(conn, :show, member.token)
       end

@@ -24,10 +24,25 @@ defmodule ApiServer.CalculationsTest do
       assert Calculations.list_calculations() == [calculation]
     end
 
+    test "list_calculations/0 does not list deleted calculations" do
+      calculation1 = calculation_fixture()
+      calculation2 = calculation_fixture()
+      calculation_fixture(%{"deleted_at" => "2011-06-18 15:01:01.000000Z"})
+      assert Calculations.list_calculations() == [calculation1, calculation2]
+    end
+
     test "get_calculation!/1 returns the calculation with given id" do
       calculation = calculation_fixture()
       assert Calculations.get_calculation!(calculation.id) == calculation
     end
+
+    test "get_calculation!/1 does not return deleted calculation" do
+      calculation = calculation_fixture(%{"deleted_at" => "2011-06-18 15:01:01.000000Z"})
+      assert_raise Ecto.NoResultsError, fn ->
+        Calculations.get_calculation!(calculation.id)
+      end
+    end
+
 
     test "create_calculation/1 with valid data creates a calculation" do
       assert {:ok, %Calculation{} = calculation} = Calculations.create_calculation(@valid_attrs)
@@ -53,10 +68,12 @@ defmodule ApiServer.CalculationsTest do
       assert calculation == Calculations.get_calculation!(calculation.id)
     end
 
-    test "delete_calculation/1 deletes the calculation" do
+    test "delete_calculation/1 sets the deleted_at timestamp" do
       calculation = calculation_fixture()
       assert {:ok, %Calculation{}} = Calculations.delete_calculation(calculation)
-      assert_raise Ecto.NoResultsError, fn -> Calculations.get_calculation!(calculation.id) end
+      assert_raise Ecto.NoResultsError, fn ->
+        Calculations.get_calculation!(calculation.id)
+      end
     end
 
     test "change_calculation/1 returns a calculation changeset" do
@@ -99,9 +116,27 @@ defmodule ApiServer.CalculationsTest do
       assert Calculations.list_expenses(calculation2.id) == [expense3]
     end
 
+    test "list_expenses/1 does not list deleted expenses" do
+      calculation = calculation_fixture()
+
+      expense1 = expense_fixture(calculation)
+      expense2 = expense_fixture(calculation)
+      expense_fixture(calculation, %{"deleted_at" => "2011-06-18 15:01:01.000000Z"})
+
+      assert Calculations.list_expenses(calculation.id) == [expense1, expense2]
+    end
+
     test "get_expense!/1 returns the expense with given id" do
       expense = expense_fixture()
       assert Calculations.get_expense!(expense.id) == expense
+    end
+
+    test "get_expense!/1 does not return deleted expense" do
+      expense = calculation_fixture()
+      |> expense_fixture(%{"deleted_at" => "2011-06-18 15:01:01.000000Z"})
+      assert_raise Ecto.NoResultsError, fn ->
+        Calculations.get_expense!(expense.id)
+      end
     end
 
     test "create_expense/1 with valid data creates a expense" do

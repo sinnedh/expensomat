@@ -44,7 +44,9 @@ defmodule ApiServer.Calculations do
 
   """
   def list_calculations(:no_preload) do
-    Repo.all(Calculation)
+    Calculation
+    |> Calculation.undeleted
+    |> Repo.all
   end
 
   def list_calculations do
@@ -66,13 +68,30 @@ defmodule ApiServer.Calculations do
       ** (Ecto.NoResultsError)
 
   """
-  def get_calculation!(:no_preload, id), do: Repo.get!(Calculation, id)
+  def get_calculation!(:no_preload, id) do
+    Calculation
+    |> Calculation.undeleted
+    |> where(id: ^id)
+    |> Repo.one!
+  end
 
   def get_calculation!(id) do
      get_calculation!(:no_preload, id)
      |> Repo.preload(:members)
   end
-  
+
+  def get_deleted_calculation!(:no_preload, id) do
+    Calculation
+    |> Calculation.deleted
+    |> where(id: ^id)
+    |> Repo.one!
+  end
+
+  def get_deleted_calculation!(id) do
+     get_deleted_calculation!(:no_preload, id)
+     |> Repo.preload(:members)
+  end
+
 
   @doc """
   Creates a calculation.
@@ -130,7 +149,7 @@ defmodule ApiServer.Calculations do
 
 
   @doc """
-  Deletes a Calculation.
+  Marks a Calculation as deleted.
 
   ## Examples
 
@@ -142,7 +161,9 @@ defmodule ApiServer.Calculations do
 
   """
   def delete_calculation(%Calculation{} = calculation) do
-    Repo.delete(calculation)
+    calculation
+    |> Calculation.delete_changeset()
+    |> Repo.update()
   end
 
   @doc """
@@ -170,7 +191,10 @@ defmodule ApiServer.Calculations do
 
   """
   def list_expenses(:no_preload, calculation_id) do
-    Repo.all(from e in Expense, where: e.calculation_id == ^calculation_id)
+    Expense
+    |> Expense.undeleted
+    |> where(calculation_id: ^calculation_id)
+    |> Repo.all
   end
 
   def list_expenses(calculation_id) do
@@ -192,12 +216,28 @@ defmodule ApiServer.Calculations do
       ** (Ecto.NoResultsError)
 
   """
+
   def get_expense!(:no_preload, id) do
-    Repo.get!(Expense, id)
+    Expense
+    |> Expense.undeleted
+    |> where(id: ^id)
+    |> Repo.one!
   end
 
   def get_expense!(id) do
     get_expense!(:no_preload, id)
+    |> Repo.preload([:paid_by, :paid_for])
+  end
+
+  def get_deleted_expense!(:no_preload, id) do
+    Expense
+    |> Expense.deleted
+    |> where(id: ^id)
+    |> Repo.one!
+  end
+
+  def get_deleted_expense!(id) do
+    get_deleted_expense!(:no_preload, id)
     |> Repo.preload([:paid_by, :paid_for])
   end
 
@@ -257,7 +297,7 @@ defmodule ApiServer.Calculations do
   end
 
   @doc """
-  Deletes a Expense.
+  Marks an Expense as deleted.
 
   ## Examples
 
@@ -269,7 +309,9 @@ defmodule ApiServer.Calculations do
 
   """
   def delete_expense(%Expense{} = expense) do
-    Repo.delete(expense)
+    expense
+    |> Expense.delete_changeset()
+    |> Repo.update()
   end
 
   @doc """
@@ -321,7 +363,7 @@ defmodule ApiServer.Calculations do
   """
   def get_member!(id), do: Repo.get!(Member, id)
   def get_member_for_token!(token), do: Repo.get_by!(Member, token: token)
-  
+
   @doc """
   Creates a member.
 
