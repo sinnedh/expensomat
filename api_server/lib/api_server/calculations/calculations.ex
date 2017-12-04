@@ -79,7 +79,19 @@ defmodule ApiServer.Calculations do
      get_calculation!(:no_preload, id)
      |> Repo.preload(:members)
   end
-  
+
+  def get_deleted_calculation!(:no_preload, id) do
+    Calculation
+    |> Calculation.deleted
+    |> where(id: ^id)
+    |> Repo.one!
+  end
+
+  def get_deleted_calculation!(id) do
+     get_deleted_calculation!(:no_preload, id)
+     |> Repo.preload(:members)
+  end
+
 
   @doc """
   Creates a calculation.
@@ -217,6 +229,18 @@ defmodule ApiServer.Calculations do
     |> Repo.preload([:paid_by, :paid_for])
   end
 
+  def get_deleted_expense!(:no_preload, id) do
+    Expense
+    |> Expense.deleted
+    |> where(id: ^id)
+    |> Repo.one!
+  end
+
+  def get_deleted_expense!(id) do
+    get_deleted_expense!(:no_preload, id)
+    |> Repo.preload([:paid_by, :paid_for])
+  end
+
   @doc """
   Creates a expense.
 
@@ -339,7 +363,7 @@ defmodule ApiServer.Calculations do
   """
   def get_member!(id), do: Repo.get!(Member, id)
   def get_member_for_token!(token), do: Repo.get_by!(Member, token: token)
-  
+
   @doc """
   Creates a member.
 
