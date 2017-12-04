@@ -16,34 +16,42 @@ const requestFailure = (dispatch, callback, data) => {
   dispatch(setErrorNotification(`Could not load/send data. Error: ${data}`));
 }
 
-const getRequest = (url, dispatch, onSuccess, onFailure) => {
+const request = (method, url, dispatch, onSuccess, onFailure, body) => {
+  let options = {
+    method: method,
+    headers: { 'Content-Type': 'application/json' },
+  };
+  if (body !== undefined) {
+    options.body = body;
+  }
+
   dispatch(incrementLoadingCounter());
-  fetch(url)
-    .then(r => r.json())
-    .then(r => requestSuccess(dispatch, onSuccess, r.data))
+  fetch(url, options)
+    .then(res => res.text())
+    .then(text => text.length > 0 ? JSON.parse(text) : {})
+    .then(json => requestSuccess(dispatch, onSuccess, json.data))
     .catch(e => requestFailure(dispatch, onFailure, e));
 }
 
-const postRequest = (url, body, dispatch, onSuccess, onFailure) => {
-  const options = {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body,
-  }
-  dispatch(incrementLoadingCounter());
-  fetch(url, options)
-    .then(r => r.json())
-    .then(r => requestSuccess(dispatch, onSuccess, r.data))
-    .catch(e => requestFailure(dispatch, onFailure, e));
+const postRequest = (url, dispatch, onSuccess, onFailure, body) => {
+  return request('POST', url, dispatch, onSuccess, onFailure, body);
+}
+
+const getRequest = (url, dispatch, onSuccess, onFailure) => {
+  return request('GET', url, dispatch, onSuccess, onFailure);
+}
+
+const deleteRequest = (url, dispatch, onSuccess, onFailure) => {
+  return request('DELETE', url, dispatch, onSuccess, onFailure, {});
 }
 
 export const addCalculation = (dispatch, calculation, onSuccess, onFailure) => {
   postRequest(
     `${baseurl}/calculations/`,
-    JSON.stringify({ calculation }),
     dispatch,
     onSuccess,
     onFailure,
+    JSON.stringify({ calculation }),
   )
 };
 
@@ -68,7 +76,16 @@ export const fetchExpenses = (dispatch, token, onSuccess, onFailure) => {
 export const addExpense = (dispatch, token, expense, onSuccess, onFailure) => {
   postRequest(
     `${baseurl}/calculations/${token}/expenses`,
+    dispatch,
+    onSuccess,
+    onFailure,
     JSON.stringify({ expense }),
+  )
+}
+
+export const deleteExpense = (dispatch, token, expense, onSuccess, onFailure) => {
+  deleteRequest(
+    `${baseurl}/calculations/${token}/expenses/${expense.id}`,
     dispatch,
     onSuccess,
     onFailure,
