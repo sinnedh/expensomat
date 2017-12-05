@@ -1,9 +1,9 @@
-import { call, put, takeLatest } from 'redux-saga/effects'
-import { setErrorNotification, setInfoNotification } from './actions'
-import { incrementLoadingCounter, decrementLoadingCounter } from './actions';
-import * as api from './api'
+import { call, put } from 'redux-saga/effects'
+import { setErrorNotification, setInfoNotification } from '../actions'
+import { incrementLoadingCounter, decrementLoadingCounter } from '../actions'
+import * as api from '../api'
 
-function* fetchCalculation(action) {
+export function* fetchCalculation(action) {
   yield put(incrementLoadingCounter())
 
   try {
@@ -24,9 +24,3 @@ function* fetchCalculation(action) {
     yield put(decrementLoadingCounter())
   }
 }
-
-function* appSaga() {
-  yield takeLatest("CALCULATION:LOAD_REQUEST", fetchCalculation)
-}
-
-export default appSaga;
