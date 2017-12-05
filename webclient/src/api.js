@@ -55,14 +55,17 @@ export const addCalculation = (dispatch, calculation, onSuccess, onFailure) => {
   )
 };
 
-export const fetchCalculation = (dispatch, token, onSuccess, onFailure) => {
-  getRequest(
-    `${baseurl}/calculations/${token}`,
-    dispatch,
-    onSuccess,
-    onFailure,
-  )
-};
+export const fetchCalculation = (token) => {
+  const options = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  }
+  const url = `${baseurl}/calculations/${token}`
+
+  return fetch(url, options)
+    .then(res => res.text())
+    .then(text => text.length > 0 ? JSON.parse(text) : {})
+}
 
 export const fetchExpenses = (dispatch, token, onSuccess, onFailure) => {
   getRequest(
