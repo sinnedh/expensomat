@@ -25,10 +25,15 @@ const calculations = (state = initialState, action) => {
         members: action.members,
       };
 
+    case 'CALCULATION:DELETE_SUCCESS':
+      return initialState;
+
     case 'CALCULATION:LOAD_REQUEST':
     case 'CALCULATION:LOAD_FAILURE':
     case 'CALCULATION:CREATE_REQUEST':
     case 'CALCULATION:CREATE_FAILURE':
+    case 'CALCULATION:DELETE_REQUEST':
+    case 'CALCULATION:DELETE_FAILURE':
     default:
       return state;
   }

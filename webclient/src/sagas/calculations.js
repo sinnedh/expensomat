@@ -22,6 +22,23 @@ export function* createCalculation(action) {
   }
 }
 
+export function* deleteCalculation(action) {
+  yield put(incrementLoadingCounter())
+  try {
+    yield call(api.deleteCalculation, action.token)
+    yield put({
+      type: "CALCULATION:DELETE_SUCCESS",
+      id: action.expense.id,
+    })
+    yield put(setInfoNotification('Calculation deleted succesfully'))
+  } catch (e) {
+    yield put({type: "CALCULATION:DELETED_FAILURE", message: e.message})
+    yield put(setErrorNotification(`Could not delete calculation ("${e.message}")`))
+  } finally {
+    yield put(decrementLoadingCounter())
+  }
+}
+
 export function* fetchCalculation(action) {
   yield put(incrementLoadingCounter())
 
