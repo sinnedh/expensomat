@@ -4,10 +4,12 @@ import CreateCalculation from '../routes/CreateCalculation';
 import ShowCalculation from '../routes/ShowCalculation';
 import LoadingIndicator from './LoadingIndicator';
 import NotificationMessage from './NotificationMessage';
+import Navigation from './Navigation';
 
 export default (props) => (
   <Router>
     <div className="App">
+      <Navigation token={props.token} />
       <LoadingIndicator isLoading={props.isLoading} />
       <NotificationMessage
         text={props.notificationText}
