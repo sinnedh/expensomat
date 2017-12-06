@@ -7,6 +7,7 @@ it('renders without notification', () => {
   ReactDOM.render(
     <App
       loadingCounter={0}
+      token={'123'}
     />, div);
 });
 
@@ -17,6 +18,7 @@ it('renders with empty notification', () => {
       notificationText={''}
       notificationType={null}
       loadingCounter={0}
+      token={'123'}
     />, div);
 });
 
@@ -27,5 +29,6 @@ it('renders with notification', () => {
       notificationText={'A message'}
       notificationType={'warning'}
       loadingCounter={0}
+      token={'123'}
     />, div);
 });

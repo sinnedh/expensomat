@@ -9,6 +9,7 @@ describe('App', () => {
       loadingCounter: 0,
       notificationText: null,
       notificationType: null,
+      token: null,
     },
   };
   const mockStore = configureStore();

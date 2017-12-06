@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { createExpense, deleteExpense, getCalculation, getExpenses } from '../actions';
+import {
+  createExpense, deleteExpense, getCalculation, getExpenses, setToken
+} from '../actions';
 import ExpenseForm from '../components/ExpenseForm';
 import ExpenseList from '../components/ExpenseList';
 import ExpenseMatrix from '../components/ExpenseMatrix';
@@ -39,6 +41,7 @@ const mapStateToProps = (state, ownProps) => ({
 const mapDispatchToProps = (dispatch, ownProps) => ({
   onComponentDidMount: () => {
     const token = ownProps.match.params.token;
+    dispatch(setToken(token));
     dispatch(getCalculation(token));
     dispatch(getExpenses(token));
   },
@@ -52,4 +55,5 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     dispatch(deleteExpense(token, expense));
   },
 })
+
 export default connect(mapStateToProps, mapDispatchToProps)(ShowCalculation);
