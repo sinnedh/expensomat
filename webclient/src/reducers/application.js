@@ -2,10 +2,18 @@ const initialState = {
   loadingCounter: 0,
   notificationText: null,
   notificationType: null,
+  token: null,
 }
 
 export default (state = initialState, action) => {
   switch (action.type) {
+
+    case 'APPLICATION:SET_TOKEN':
+      return {
+        ...state,
+        token: action.token,
+      }
+
     case 'APPLICATION:INCREMENT_LOADING_COUNTER':
       return {...state, loadingCounter: state.loadingCounter + 1};
 

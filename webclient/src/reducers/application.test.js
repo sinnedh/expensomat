@@ -3,7 +3,8 @@ import application from './application';
 const initialState = {
   loadingCounter: 0,
   notificationText: null,
-  notificationType: null
+  notificationType: null,
+  token: null,
 };
 
 describe('APPLICATION:INCREMENT_LOADING_COUNTER', () => {

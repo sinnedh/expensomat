@@ -23,6 +23,9 @@ const getRequest = (url) => ( applyRequest('GET', url) )
 
 const deleteRequest = (url) => ( applyRequest('DELETE', url) )
 
+const putRequest = (url, body) => ( applyRequest('PUT', url, body) )
+
+
 export const createCalculation = (calculation) => (
   postRequest(`${baseurl}/calculations/`, JSON.stringify({ calculation }))
 )
@@ -33,6 +36,10 @@ export const fetchCalculation = (token) => (
 
 export const deleteCalculation = (token) => (
   deleteRequest(`${baseurl}/calculations/${token}`)
+)
+
+export const updateCalculation = (token, calculation) => (
+  putRequest(`${baseurl}/calculations/${token}`, JSON.stringify({ calculation }))
 )
 
 export const fetchExpenses = (token) => (
