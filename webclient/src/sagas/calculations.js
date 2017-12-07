@@ -60,3 +60,22 @@ export function* fetchCalculation(action) {
     yield put(decrementLoadingCounter())
   }
 }
+
+export function* updateCalculation(action) {
+  yield put(incrementLoadingCounter())
+  try {
+    const calculation = yield call(api.updateCalculation, action.token, action.changes)
+    yield put({
+      type: "CALCULATION:UPDATE_SUCCESS",
+      name: calculation.data.name,
+      members: calculation.data.members,
+      description: calculation.data.description,
+    })
+    yield put(setInfoNotification('Calculation updated succesfully'))
+  } catch (e) {
+    yield put({type: "CALCULATION:UPDATE_FAILURE", message: e.message})
+    yield put(setErrorNotification(`Could not update calculation ("${e.message}")`))
+  } finally {
+    yield put(decrementLoadingCounter())
+  }
+}
