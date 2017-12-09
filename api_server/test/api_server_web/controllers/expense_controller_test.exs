@@ -99,8 +99,29 @@ defmodule ApiServerWeb.ExpenseControllerTest do
       }
     end
 
-    test "renders errors when data is invalid", %{conn: conn, calculation: calculation} do
-      expense = fixture(calculation, :expense)
+    test "works when only description is updated", %{conn: conn, calculation: calculation, member1: member1, member2: member2} do
+      expense = fixture(calculation, member1, member2, :expense)
+
+      id = expense.id
+      conn = put conn,
+        calculation_expense_path(conn, :update, calculation, expense),
+        expense: %{"description" => "the updated description"}
+
+      assert %{"id" => ^id} = json_response(conn, 200)["data"]
+
+      conn = get conn, calculation_expense_path(conn, :show, calculation, expense)
+      assert json_response(conn, 200)["data"] == %{
+        "id" => expense.id,
+        "amount" => 42,
+        "description" => "the updated description",
+        "paid_by" => [%{"id" => member1.id, "name" => member1.name}],
+        "paid_for" => [%{"id" => member2.id, "name" => member2.name}],
+        "paid_at" => "2010-04-17T14:00:00Z",
+      }
+    end
+
+    test "renders errors when data is invalid", %{conn: conn, calculation: calculation, member1: member1, member2: member2} do
+      expense = fixture(calculation, member1, member2, :expense)
       conn = put conn, calculation_expense_path(conn, :update, calculation, expense), expense: @invalid_attrs
       assert json_response(conn, 422)["errors"] != %{}
     end
