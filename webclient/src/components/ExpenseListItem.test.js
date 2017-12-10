@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { MemoryRouter } from 'react-router'
 import ExpenseListItem from './ExpenseListItem';
 
 it('renders with all params', () => {
@@ -11,5 +12,8 @@ it('renders with all params', () => {
     amount: 800,
     paid_at: "2017-11-11 15:28",
   }
-  ReactDOM.render(<ExpenseListItem expense={expense} />, div);
+  ReactDOM.render(
+    <MemoryRouter location="someLocation">
+      <ExpenseListItem expense={expense} />
+    </MemoryRouter>, div);
 });
