@@ -11,9 +11,6 @@ class CreateCalculation extends React.Component {
     }
   }
 
-  componentDidMount() {
-  }
-
   createCalculation = (calculation) => {
     this.props.dispatch(createCalculation(calculation));
   }

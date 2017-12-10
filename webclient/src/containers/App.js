@@ -9,7 +9,8 @@ const mapStateToProps = (state, ownProps) => ({
   isLoading: state.application.loadingCounter > 0,
 })
 
-const mapDispatchToProps = (dispatch, ownProps) => ({})
+const mapDispatchToProps = (dispatch, ownProps) => ({
+})
 
 export default connect(
   mapStateToProps,
