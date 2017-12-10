@@ -1,13 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import EditableInput from '../components/EditableInput'
-import { updateCalculation, updateMember, setToken } from '../actions'
+import { updateCalculation, updateMember } from '../actions'
 
 class ManageCalculation extends React.Component {
-  componentDidMount() {
-    this.props.onComponentDidMount()
-  }
-
   render() {
     return (
       <div>
@@ -29,9 +25,8 @@ class ManageCalculation extends React.Component {
         <h2>Members</h2>
         <ul>
           {this.props.members.map((m, i) =>
-            <li>
+            <li key={i}>
               <EditableInput
-                key={i}
                 value={m.name}
                 onClickSave={value => this.props.onUpdateMemberName(this.props.members, m, value)}
                 />
@@ -44,23 +39,21 @@ class ManageCalculation extends React.Component {
 }
 
 const mapStateToProps = (state, ownProps) => ({
+  token: state.application.token,
   name: state.calculations.name,
   description: state.calculations.description,
   members: state.calculations.members,
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  onComponentDidMount: () => {
-    dispatch(setToken(ownProps.match.params.token))
-  },
   onUpdateName: (name) => {
-    dispatch(updateCalculation(ownProps.match.params.token, {name}))
+    dispatch(updateCalculation(ownProps.token, {name}))
   },
   onUpdateDescription: (description) => {
-    dispatch(updateCalculation(ownProps.match.params.token, {description}))
+    dispatch(updateCalculation(ownProps.token, {description}))
   },
   onUpdateMemberName: (members, member, name) => {
-    dispatch(updateMember(ownProps.match.params.token, members, member, {name}))
+    dispatch(updateMember(ownProps.token, members, member, {name}))
   },
 })
 

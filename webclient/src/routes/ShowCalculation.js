@@ -1,17 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {
-  createExpense, deleteExpense, getCalculation, getExpenses, setToken
-} from '../actions';
+import { createExpense, deleteExpense } from '../actions';
 import ExpenseForm from '../components/ExpenseForm';
 import ExpenseList from '../components/ExpenseList';
 import ExpenseMatrix from '../components/ExpenseMatrix';
 
 class ShowCalculation extends React.Component {
-  componentDidMount() {
-    this.props.onComponentDidMount();
-  }
-
   render() {
     return (
       <div>
@@ -28,6 +22,7 @@ class ShowCalculation extends React.Component {
 }
 
 const mapStateToProps = (state, ownProps) => ({
+  token: state.application.token,
   expenses: state.expenses.items,
   name: state.calculations.name,
   description: state.calculations.description,
@@ -36,20 +31,12 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  onComponentDidMount: () => {
-    const token = ownProps.match.params.token;
-    dispatch(setToken(token));
-    dispatch(getCalculation(token));
-    dispatch(getExpenses(token));
-  },
   onSubmitExpenseForm: (expense) => {
-    const token = ownProps.match.params.token;
-    dispatch(createExpense(token, expense));
+    dispatch(createExpense(ownProps.token, expense));
   },
   onClickDelete: (event, expense) => {
     event.preventDefault();
-    const token = ownProps.match.params.token;
-    dispatch(deleteExpense(token, expense));
+    dispatch(deleteExpense(ownProps.token, expense));
   },
 })
 
