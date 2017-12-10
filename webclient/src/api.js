@@ -53,3 +53,10 @@ export const createExpense = (token, expense) => (
 export const deleteExpense = (token, expenseId) => (
   deleteRequest(`${baseurl}/calculations/${token}/expenses/${expenseId}`)
 )
+
+export const updateExpense = (token, expenseId, expense) => (
+  putRequest(
+    `${baseurl}/calculations/${token}/expenses/${expenseId}`,
+    JSON.stringify({ expense })
+  )
+)
