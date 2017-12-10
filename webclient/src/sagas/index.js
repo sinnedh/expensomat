@@ -1,6 +1,6 @@
 import { takeLatest } from 'redux-saga/effects'
 import { createCalculation, deleteCalculation, fetchCalculation, updateCalculation } from './calculations'
-import { createExpense, deleteExpense, fetchExpenses } from './expenses'
+import { createExpense, deleteExpense, fetchExpenses, updateExpense } from './expenses'
 
 function* appSaga() {
   yield takeLatest("CALCULATION:CREATE_REQUEST", createCalculation)
@@ -11,6 +11,7 @@ function* appSaga() {
   yield takeLatest("EXPENSES:CREATE_REQUEST", createExpense)
   yield takeLatest("EXPENSES:DELETE_REQUEST", deleteExpense)
   yield takeLatest("EXPENSES:LOAD_REQUEST", fetchExpenses)
+  yield takeLatest("EXPENSES:UPDATE_REQUEST", updateExpense)
 }
 
 export default appSaga;

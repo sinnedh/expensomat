@@ -20,6 +20,26 @@ export function* createExpense(action) {
   }
 }
 
+export function* updateExpense(action) {
+  yield put(incrementLoadingCounter())
+  try {
+    const expense = yield call(api.updateExpense, action.token, action.id, action.changes)
+
+    yield put({
+      type: "EXPENSES:UPDATE_SUCCESS",
+      description: expense.data.description,
+      amount: expense.data.amount,
+      paid_at: expense.data.paid_at,
+    })
+    yield put(setInfoNotification('Expense updated succesfully'))
+  } catch (e) {
+    yield put({type: "EXPENSES:UPDATE_FAILURE", message: e.message})
+    yield put(setErrorNotification(`Could not update expense ("${e.message}")`))
+  } finally {
+    yield put(decrementLoadingCounter())
+  }
+}
+
 export function* deleteExpense(action) {
   yield put(incrementLoadingCounter())
   try {

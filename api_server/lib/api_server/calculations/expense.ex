@@ -2,7 +2,7 @@ defmodule ApiServer.Calculations.Expense do
   use Ecto.Schema
   import Ecto.Changeset
   import Ecto.Query
-  alias ApiServer.Calculations.Expense
+  alias ApiServer.Calculations.{Expense, Member}
   alias ApiServer.Repo
 
 
@@ -38,25 +38,21 @@ defmodule ApiServer.Calculations.Expense do
     expense
     |> Repo.preload([:paid_by, :paid_for])
     |> cast(attrs, [:calculation_id, :description, :amount, :paid_at, :deleted_at])
-    |> validate_required([:calculation_id, :description, :amount, :paid_at, :paid_by, :paid_for])
-    |> put_assoc(:paid_for, get_paid_for(attrs))
-    |> put_assoc(:paid_by, get_paid_by(attrs))
+    |> validate_required([:calculation_id, :description, :amount, :paid_at])
+    |> put_paid_for(attrs)
+    |> put_paid_by(attrs)
   end
 
-  defp get_paid_for(%{"paid_for" => paid_for}) do
-    Repo.all(from m in ApiServer.Calculations.Member, where: m.id in ^paid_for)
+  defp put_paid_for(changeset, %{"paid_for" => paid_for}) do
+    members = Repo.all(from m in Member, where: m.id in ^paid_for)
+    changeset |> put_assoc(:paid_for, members)
   end
+  defp put_paid_for(changeset, _), do: changeset
 
-  defp get_paid_for(_) do
-    []
+  defp put_paid_by(changeset, %{"paid_by" => paid_by}) do
+    members = Repo.all(from m in Member, where: m.id in ^paid_by)
+    changeset |> put_assoc(:paid_by, members)
   end
-
-  defp get_paid_by(%{"paid_by" => paid_by}) do
-    Repo.all(from m in ApiServer.Calculations.Member, where: m.id in ^paid_by)
-  end
-
-  defp get_paid_by(_) do
-    []
-  end
+  defp put_paid_by(changeset, _), do: changeset
 
 end
