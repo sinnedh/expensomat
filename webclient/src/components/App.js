@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import CreateCalculation from '../routes/CreateCalculation';
 import ShowCalculation from '../routes/ShowCalculation';
+import EditExpense from '../routes/EditExpense';
 import ManageCalculation from '../routes/ManageCalculation';
 import LoadingIndicator from './LoadingIndicator';
 import NotificationMessage from './NotificationMessage';
@@ -24,6 +25,7 @@ class App extends React.Component {
             type={this.props.notificationType}
           />
           <Route exact path="/calculation" component={CreateCalculation} />
+          <Route exact path="/calculation/:token/expense/:id" component={EditExpense} />
           <Route exact path="/calculation/:token/manage" component={ManageCalculation} />
           <Route exact path="/calculation/:token" component={ShowCalculation} />
         </div>
