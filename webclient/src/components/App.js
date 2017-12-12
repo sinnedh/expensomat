@@ -1,19 +1,12 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import CreateCalculation from '../routes/CreateCalculation';
-import ShowCalculation from '../routes/ShowCalculation';
-import EditExpense from '../routes/EditExpense';
-import ManageCalculation from '../routes/ManageCalculation';
 import LoadingIndicator from './LoadingIndicator';
 import NotificationMessage from './NotificationMessage';
 import Navigation from './Navigation';
+import AppWithToken from '../containers/AppWithToken';
 
 class App extends React.Component {
-  getChildContext() {
-    return {token: this.props.token};
-  }
-
   render() {
     return (
       <Router>
@@ -25,17 +18,11 @@ class App extends React.Component {
             type={this.props.notificationType}
           />
           <Route exact path="/calculation" component={CreateCalculation} />
-          <Route exact path="/calculation/:token/expense/:id" component={EditExpense} />
-          <Route exact path="/calculation/:token/manage" component={ManageCalculation} />
-          <Route exact path="/calculation/:token" component={ShowCalculation} />
+          <Route path="/calculation/:token" component={AppWithToken} />
         </div>
       </Router>
     )
   }
-}
-
-App.childContextTypes = {
-  token: PropTypes.string
 }
 
 export default App
