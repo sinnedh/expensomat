@@ -1,8 +1,11 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
 class EditableInput extends React.Component {
-  state = {initialValue: '', value: '', editMode: false}
+  state = {
+    initialValue: this.props.value,
+    value: this.props.value,
+    editMode: false
+  }
 
   componentWillReceiveProps(nextProps) {
     if (this.state.value === '') {

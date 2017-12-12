@@ -37,12 +37,11 @@ class EditExpense extends React.Component {
 const mapStateToProps = (state, ownProps) => {
   const expenseId = parseInt(ownProps.match.params.id, 10)
   const expense = state.expenses.items.find(e => e.id === expenseId)
-
   return {
     token: state.application.token,
-    description: expense.description,
-    amount: expense.amount,
-    paid_at: expense.paid_at,
+    description: expense ? expense.description : '',
+    amount: expense ? expense.amount : 0,
+    paid_at: expense ? expense.paid_at : '',
   }
 }
 
