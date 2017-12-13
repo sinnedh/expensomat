@@ -40,7 +40,7 @@ class CalculationForm extends React.Component {
     const name = event.target.name;
 
     this.setState({
-      [name]: getFormFieldValue(event.target, name)
+      [name]: getFormFieldValue(event.target)
     });
   }
 
