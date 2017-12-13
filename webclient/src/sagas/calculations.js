@@ -6,7 +6,7 @@ import * as api from '../api'
 export function* createCalculation(action) {
   yield put(incrementLoadingCounter())
   try {
-    const calculation = yield call(api.createCalculation, action.token, action.calculation)
+    const calculation = yield call(api.createCalculation, action.calculation)
     yield put({
       type: "CALCULATION:CREATE_SUCCESS",
       name: calculation.data.name,

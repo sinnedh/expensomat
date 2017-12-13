@@ -10,7 +10,7 @@ describe('CALCULATIONS', () => {
   })
 
   it('handles createCalculation', () => {
-    const action = actions.createCalculation(token, calculation)
+    const action = actions.createCalculation(calculation)
     expect(action).toMatchSnapshot()
   })
 
