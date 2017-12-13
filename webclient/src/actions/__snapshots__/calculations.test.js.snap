@@ -1,0 +1,62 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CALCULATIONS handles createCalculation 1`] = `
+Object {
+  "calculation": Object {
+    "id": 1,
+    "name": "Calculation",
+  },
+  "type": "CALCULATION:CREATE_REQUEST",
+}
+`;
+
+exports[`CALCULATIONS handles deleteCalculation 1`] = `
+Object {
+  "calculation": Object {
+    "id": 1,
+    "name": "Calculation",
+  },
+  "token": "ABCD123",
+  "type": "CALCULATION:DELETE_REQUEST",
+}
+`;
+
+exports[`CALCULATIONS handles getCalculation 1`] = `
+Object {
+  "token": "ABCD123",
+  "type": "CALCULATION:LOAD_REQUEST",
+}
+`;
+
+exports[`CALCULATIONS handles updateCalculation 1`] = `
+Object {
+  "changes": Object {
+    "name": "Calculation",
+  },
+  "token": "ABCD123",
+  "type": "CALCULATION:UPDATE_REQUEST",
+}
+`;
+
+exports[`CALCULATIONS handles updateMember 1`] = `
+Object {
+  "changes": Object {
+    "members": Array [
+      Object {
+        "id": 1,
+        "name": "Horst",
+      },
+      Object {
+        "id": 2,
+        "name": "Keek",
+      },
+      Object {
+        "id": 3,
+        "name": "Kalle",
+      },
+    ],
+  },
+  "token": "ABCD123",
+  "type": "CALCULATION:UPDATE_REQUEST",
+}
+`;
