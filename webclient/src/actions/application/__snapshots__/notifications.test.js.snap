@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`APPLICATION handles resetNotification 1`] = `
+Object {
+  "type": "APPLICATION:NOTIFICATION_RESET",
+}
+`;
+
+exports[`APPLICATION handles setErrorNotification 1`] = `
+Object {
+  "notificationText": "This is an error.",
+  "notificationType": "error",
+  "type": "APPLICATION:NOTIFICATION_SET",
+}
+`;
+
+exports[`APPLICATION handles setInfoNotification 1`] = `
+Object {
+  "notificationText": "This is an info.",
+  "notificationType": "info",
+  "type": "APPLICATION:NOTIFICATION_SET",
+}
+`;
+
+exports[`APPLICATION handles setSuccessNotification 1`] = `
+Object {
+  "notificationText": "This is a success.",
+  "notificationType": "success",
+  "type": "APPLICATION:NOTIFICATION_SET",
+}
+`;
+
+exports[`APPLICATION handles setWarningNotification 1`] = `
+Object {
+  "notificationText": "This is a warning.",
+  "notificationType": "warning",
+  "type": "APPLICATION:NOTIFICATION_SET",
+}
+`;
