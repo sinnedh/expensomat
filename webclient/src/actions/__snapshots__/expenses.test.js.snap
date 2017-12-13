@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EXPENSES handles createExpense 1`] = `
+Object {
+  "expense": Object {
+    "id": 1,
+    "name": "Expense",
+  },
+  "token": "ABCD123",
+  "type": "EXPENSES:CREATE_REQUEST",
+}
+`;
+
+exports[`EXPENSES handles deleteExpense 1`] = `
+Object {
+  "expense": Object {
+    "id": 1,
+    "name": "Expense",
+  },
+  "token": "ABCD123",
+  "type": "EXPENSES:DELETE_REQUEST",
+}
+`;
+
+exports[`EXPENSES handles getExpenses 1`] = `
+Object {
+  "token": "ABCD123",
+  "type": "EXPENSES:LOAD_REQUEST",
+}
+`;
+
+exports[`EXPENSES handles updateExpense 1`] = `
+Object {
+  "changes": Object {
+    "name": "Expense",
+  },
+  "id": 11,
+  "token": "ABCD123",
+  "type": "EXPENSES:UPDATE_REQUEST",
+}
+`;
