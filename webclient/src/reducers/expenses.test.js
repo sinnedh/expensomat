@@ -1,11 +1,31 @@
 import expenses from './expenses';
 
-describe('EXPENSES:LOAD_FAILURE', () => {
-  const action = {type: 'EXPENSES:LOAD_FAILURE'};
+describe('EXPENSES:*_FAILURE', () => {
+  const state = {items: [{id: 1, name: 'An item'}]};
 
-  it('does not change state', () => {
-    const beforeState = {items: [{name: 'An item'}]};
-    expect(expenses(beforeState, action)).toEqual(beforeState);
+  it('UNKNOWN_TYPE does not change state', () => {
+    const action = {type: 'EXPENSES:UNKNOWN_TYPE'};
+    expect(expenses(state, action)).toEqual(state);
+  });
+
+  it('LOAD_FAILURE does not change state', () => {
+    const action = {type: 'EXPENSES:LOAD_FAILURE'};
+    expect(expenses(state, action)).toEqual(state);
+  });
+
+  it('CREATE_FAILURE does not change state', () => {
+    const action = {type: 'EXPENSES:CREATE_FAILURE'}
+    expect(expenses(state, action)).toEqual(state);
+  });
+
+  it('DELETE_FAILURE does not change state', () => {
+    const action = {type: 'EXPENSES:DELETE_FAILURE'};
+    expect(expenses(state, action)).toEqual(state);
+  });
+
+  it('UPDATE_FAILURE does not change state', () => {
+    const action = {type: 'EXPENSES:UPDATE_FAILURE'};
+    expect(expenses(state, action)).toEqual(state);
   });
 });
 
@@ -21,15 +41,6 @@ describe('EXPENSES:LOAD_SUCCESS', () => {
     const afterState = {items};
 
     expect(expenses(beforeState, action(items))).toEqual(afterState);
-  });
-});
-
-describe('EXPENSES:CREATE_FAILURE', () => {
-  const action = {type: 'EXPENSES:CREATE_FAILURE'};
-
-  it('does not change state', () => {
-    const beforeState = {items: [{name: 'An item'}]};
-    expect(expenses(beforeState, action)).toEqual(beforeState);
   });
 });
 
@@ -56,17 +67,6 @@ describe('EXPENSES:CREATE_SUCCESS', () => {
   });
 });
 
-
-describe('EXPENSES:DELETE_FAILURE', () => {
-  const action = {type: 'EXPENSES:DELETE_FAILURE'};
-
-  it('does not delete the expenses', () => {
-    const beforeState = {items: [{id: 1, name: 'An item'}]};
-
-    expect(expenses(beforeState, action)).toEqual(beforeState);
-  });
-});
-
 describe('EXPENSES:DELETE_SUCCESS', () => {
   const action = (items) => ({
     type: 'EXPENSES:DELETE_SUCCESS',
@@ -79,16 +79,6 @@ describe('EXPENSES:DELETE_SUCCESS', () => {
     const afterState = {items: [{id: 1, name: 'An item'}, {id: 3, name: 'Yet one more item'}]};
 
     expect(expenses(beforeState, action(items))).toEqual(afterState);
-  });
-});
-
-
-describe('EXPENSES:UPDATE_FAILURE', () => {
-  const action = {type: 'EXPENSES:UPDATE_FAILURE'};
-
-  it('does not change the state', () => {
-    const beforeState = {items: [{id: 1, name: 'An item'}]};
-    expect(expenses(beforeState, action)).toEqual(beforeState);
   });
 });
 
