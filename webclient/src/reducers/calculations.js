@@ -3,7 +3,6 @@ const initialState = {
   description: '',
   members: [],
   matrix: {},
-  expenses: [],
 }
 
 const calculations = (state = initialState, action) => {
