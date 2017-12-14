@@ -6,7 +6,7 @@ function formatDate(datetime) {
   return datetime.substr(0, 10)
 }
 
-function getFormFieldValue(target, name) {
+function getFormFieldValue(target) {
   if (target.type === 'checkbox') {
     return target.checked;
   }

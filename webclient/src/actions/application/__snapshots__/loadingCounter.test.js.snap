@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`APPLICATION handles decrementLoadingCounter 1`] = `
+Object {
+  "type": "APPLICATION:DECREMEMT_LOADING_COUNTER",
+}
+`;
+
+exports[`APPLICATION handles incrementLoadingCounter 1`] = `
+Object {
+  "type": "APPLICATION:INCREMEMT_LOADING_COUNTER",
+}
+`;
+
+exports[`APPLICATION handles resetLoadingCounter 1`] = `
+Object {
+  "type": "APPLICATION:RESET_LOADING_COUNTER",
+}
+`;
