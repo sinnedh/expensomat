@@ -7,6 +7,18 @@ const initialState = {
   token: null,
 };
 
+describe('APPLICATION:SET_TOKEN', () => {
+  const token = 'ABCD1234';
+  const action = {type: 'APPLICATION:SET_TOKEN', token};
+
+  it('increments counter when is 0', () => {
+    const beforeState = {...initialState};
+    const afterState = {...initialState, token};
+
+    expect(application(beforeState, action)).toEqual(afterState);
+  });
+});
+
 describe('APPLICATION:INCREMENT_LOADING_COUNTER', () => {
   const action = {type: 'APPLICATION:INCREMENT_LOADING_COUNTER'};
 
