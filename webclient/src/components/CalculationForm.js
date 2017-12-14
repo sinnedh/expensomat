@@ -90,9 +90,9 @@ class CalculationForm extends React.Component {
           </p>
         )}
 
-        <input type="button" value="Add member" onClick={this.addMember} />
+        <input className="add-member" type="button" value="Add member" onClick={this.addMember} />
 
-        <input type="button" value="Create calculation" onClick={this.handleSubmit} />
+        <input className="submit" type="button" value="Create calculation" onClick={this.handleSubmit} />
       </form>
     );
   }
