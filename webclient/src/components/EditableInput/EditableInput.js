@@ -30,7 +30,6 @@ class EditableInput extends React.Component {
   }
 
   handleChangeValue(event) {
-    event.preventDefault()
     this.setState({value: event.target.value})
   }
 

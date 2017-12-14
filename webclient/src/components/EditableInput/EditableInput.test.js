@@ -4,8 +4,22 @@ import { shallow } from 'enzyme'
 import EditableInput from './EditableInput'
 
 it('renders when in show mode', () => {
-  const div = document.createElement('div')
-  ReactDOM.render(<EditableInput value={"Hallo"} />, div)
+  const wrapper = shallow(<EditableInput value={"Hello"} />)
+  wrapper.setState({editMode: false})
+  expect(wrapper).toMatchSnapshot()
+})
+
+it('renders when in edit mode', () => {
+  const wrapper = shallow(<EditableInput value={"Hello"} />)
+  wrapper.setState({editMode: true})
+  expect(wrapper).toMatchSnapshot()
+})
+
+it('calls onUpdateInput when input is updated', () => {
+  const wrapper = shallow(<EditableInput value={"Hello"} />)
+  wrapper.setState({editMode: true})
+  wrapper.find('input.value').simulate('change', { target: { value: 'Hell' } })
+  expect(wrapper.find('input.value').props().value).toBe('Hell')
 })
 
 it('shows edit mode when edit button is clicked', () => {
