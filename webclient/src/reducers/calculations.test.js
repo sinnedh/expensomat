@@ -1,9 +1,10 @@
+import { List, Map } from 'immutable'
 import calculations from './calculations';
 
-const initialState = {name: '', description: '', matrix: {}, members: []};
+const initialState = Map({name: '', description: '', members: List([]), matrix: Map({})});
 
 describe('CALCULATION:*_FAILURE', () => {
-  const state = {name: 'A calculation', description: 'Bla', members: []};
+  const state = Map({name: 'A calculation', description: 'Bla', members: List([])});
 
   it('UNKNOWN_TYPE does not change state', () => {
     const action = {type: 'CALCULATION:UNKNOWN_TYPE'};
@@ -38,10 +39,10 @@ describe('CALCULATION:LOAD_SUCCESS', () => {
   });
 
   it('sets the expenses', () => {
-    const calculation = {name: 'Calculation', description: 'bla', matrix: {}, members: []};
+    const calculation = {name: 'Calculation', description: 'bla', members: List([]), matrix: Map({})};
 
-    const beforeState = {...initialState};
-    const afterState = {...calculation};
+    const beforeState = initialState;
+    const afterState = Map(calculation);
 
     expect(calculations(beforeState, action(calculation))).toEqual(afterState);
   });
@@ -52,11 +53,11 @@ describe('CALCULATION:CREATE_SUCCESS', () => {
     type: 'CALCULATION:CREATE_SUCCESS',
     ...calculation,
   });
-  const calculation = {name: 'A calculation', description: '', members: []};
+  const calculation = {name: 'A calculation', description: '', members: List([])};
 
   it('creates the calculation', () => {
-    const beforeState = {};
-    const afterState = {...calculation};
+    const beforeState = Map({});
+    const afterState = Map(calculation);
 
     expect(calculations(beforeState, action(calculation))).toEqual(afterState);
   });
@@ -66,10 +67,10 @@ describe('CALCULATION:DELETE_SUCCESS', () => {
   const action = (calculation) => ({
     type: 'CALCULATION:DELETE_SUCCESS',
   });
-  const calculation = {name: 'A calculation', description: '', members: []};
+  const calculation = {name: 'A calculation', description: '', members: List([])};
 
   it('updates the calculation', () => {
-    const beforeState = calculation;
+    const beforeState = Map(calculation);
     const afterState = initialState;
 
     expect(calculations(beforeState, action(calculation))).toEqual(afterState);
@@ -81,13 +82,13 @@ describe('CALCULATION:UPDATE_SUCCESS', () => {
     type: 'CALCULATION:UPDATE_SUCCESS',
     name: 'A new name',
     description: '',
-    members: [],
+    members: List([]),
   });
-  const calculation = {name: 'A calculation', description: '', members: []};
+  const calculation = {name: 'A calculation', description: '', members: List([])};
 
   it('updates the calculation', () => {
-    const beforeState = {...calculation};
-    const afterState = {...calculation, name: 'A new name'};
+    const beforeState = Map(calculation);
+    const afterState = Map(calculation).merge({name: 'A new name'});
 
     expect(calculations(beforeState, action(calculation))).toEqual(afterState);
   });
