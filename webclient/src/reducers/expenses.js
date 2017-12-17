@@ -1,38 +1,23 @@
-const initialState = {
-  items: [],
-}
+import { List, Map } from 'immutable'
+
+const initialState = Map()
 
 const expenses = (state = initialState, action) => {
   switch (action.type) {
     case 'EXPENSES:LOAD_SUCCESS':
-      return {
-        ...state,
-        items: action.items
-      };
+      return List(action.items).reduce(
+        (result, value) => result.set(value['id'].toString(), Map(value)),
+        Map()
+      );
 
     case 'EXPENSES:CREATE_SUCCESS':
-      return {
-        ...state,
-        items: [action.expense, ...state.items]
-      };
+      return state.merge({[action.expense.id]: Map({...action.expense})})
 
     case 'EXPENSES:DELETE_SUCCESS':
-      return {
-        ...state,
-        items: state.items.filter(item => item.id !== action.id)
-      };
+      return state.delete(action.id.toString())
 
     case 'EXPENSES:UPDATE_SUCCESS':
-      const items = state.items.map( (item, index) => {
-            if(item.id !== action.id) {
-                return item;
-            }
-            return {...item, ...action.changes}
-        })
-      return {
-        ...state,
-        items
-      };
+      return state.mergeIn(action.id.toString(), {...action.changes})
 
     case 'EXPENSES:LOAD_REQUEST':
     case 'EXPENSES:LOAD_FAILURE':
