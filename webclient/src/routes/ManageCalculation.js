@@ -39,10 +39,10 @@ class ManageCalculation extends React.Component {
 }
 
 const mapStateToProps = (state, ownProps) => ({
-  token: state.application.token,
-  name: state.calculations.name,
-  description: state.calculations.description,
-  members: state.calculations.members,
+  token: state.getIn(['application', 'token']),
+  name: state.getIn(['calculations', 'name']),
+  description: state.getIn(['calculations', 'description']),
+  members: state.getIn(['calculations', 'members']).toJS(),
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => ({

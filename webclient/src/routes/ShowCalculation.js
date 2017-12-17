@@ -22,12 +22,12 @@ class ShowCalculation extends React.Component {
 }
 
 const mapStateToProps = (state, ownProps) => ({
-  token: state.application.token,
-  expenses: state.expenses.items,
-  name: state.calculations.name,
-  description: state.calculations.description,
-  members: state.calculations.members,
-  matrix: state.calculations.matrix,
+  token: state.getIn(['application', 'token']),
+  expenses: state.get('expenses').toJS(),
+  name: state.getIn(['calculations', 'name']),
+  description: state.getIn(['calculations', 'description']),
+  members: state.getIn(['calculations', 'members']).toJS(),
+  matrix: state.getIn(['calculations', 'matrix']).toJS(),
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({

@@ -3,10 +3,10 @@ import App from '../components/App';
 import './App.css';
 
 const mapStateToProps = (state, ownProps) => ({
-  token: state.application.token,
-  notificationText: state.application.notificationText,
-  notificationType: state.application.notificationType,
-  isLoading: state.application.loadingCounter > 0,
+  token: state.getIn(['application', 'token']),
+  notificationText: state.getIn(['application', 'notificationText']),
+  notificationType: state.getIn(['application', 'notificationType']),
+  isLoading: state.getIn(['application', 'loadingCounter']) > 0,
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
