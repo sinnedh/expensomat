@@ -53,7 +53,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     dispatch(updateCalculation(ownProps.token, {description}))
   },
   onUpdateMemberName: (members, member, name) => {
-    dispatch(updateMember(ownProps.token, members, member, {name}))
+    dispatch(updateMember(ownProps.token, members, member.id, {name}))
   },
 })
 
