@@ -16,7 +16,12 @@ describe('ManageCalculation', () => {
     })
     const mockStore = configureStore()
     const store = mockStore(initialState)
-    const wrapper = shallow(<ManageCalculation store={store} />)
+    const wrapper = shallow(
+      <ManageCalculation
+        match={{params: {token: 'ABCD1234'}}}
+        store={store}
+        />
+    )
     expect(wrapper.dive()).toMatchSnapshot()
   })
 })

@@ -46,16 +46,17 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   const expenseId = parseInt(ownProps.match.params.id, 10)
+  const token = ownProps.match.params.token
 
   return {
     onUpdateDescription: (description) => {
-      dispatch(updateExpense(ownProps.token, expenseId, {description}))
+      dispatch(updateExpense(token, expenseId, {description}))
     },
     onUpdateAmount: (amount) => {
-      dispatch(updateExpense(ownProps.token, expenseId, {amount}))
+      dispatch(updateExpense(token, expenseId, {amount}))
     },
     onUpdatePaidAt: (paid_at) => {
-      dispatch(updateExpense(ownProps.token, expenseId, {paid_at}))
+      dispatch(updateExpense(token, expenseId, {paid_at}))
     },
   }
 }

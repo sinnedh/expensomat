@@ -11,6 +11,7 @@ ShallowWrapper {
         Object {
             "params": Object {
               "id": 1,
+              "token": "ABCD1234",
             },
           }
     }

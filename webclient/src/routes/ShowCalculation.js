@@ -30,14 +30,18 @@ const mapStateToProps = (state, ownProps) => ({
   matrix: state.getIn(['calculations', 'matrix']).toJS(),
 });
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
-  onSubmitExpenseForm: (expense) => {
-    dispatch(createExpense(ownProps.token, expense));
-  },
-  onClickDelete: (event, expense) => {
-    event.preventDefault();
-    dispatch(deleteExpense(ownProps.token, expense));
-  },
-})
+const mapDispatchToProps = (dispatch, ownProps) => {
+  const token = ownProps.match.params.token
+
+  return {
+    onSubmitExpenseForm: (expense) => {
+      dispatch(createExpense(token, expense));
+    },
+    onClickDelete: (event, expense) => {
+      event.preventDefault();
+      dispatch(deleteExpense(token, expense.id));
+    },
+  }
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(ShowCalculation);

@@ -15,7 +15,12 @@ describe('EditExpense', () => {
     })
     const mockStore = configureStore()
     const store = mockStore(initialState)
-    const wrapper = shallow(<EditExpense match={{params: {id: 1}}} store={store} />)
+    const wrapper = shallow(
+      <EditExpense
+        match={{params: {id: 1, token: 'ABCD1234'}}}
+        store={store}
+        />
+    )
     expect(wrapper.dive()).toMatchSnapshot()
   })
 })

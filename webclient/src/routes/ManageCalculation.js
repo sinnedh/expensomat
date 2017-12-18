@@ -45,16 +45,20 @@ const mapStateToProps = (state, ownProps) => ({
   members: state.getIn(['calculations', 'members']).toJS(),
 })
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
-  onUpdateName: (name) => {
-    dispatch(updateCalculation(ownProps.token, {name}))
-  },
-  onUpdateDescription: (description) => {
-    dispatch(updateCalculation(ownProps.token, {description}))
-  },
-  onUpdateMemberName: (members, member, name) => {
-    dispatch(updateMember(ownProps.token, members, member.id, {name}))
-  },
-})
+const mapDispatchToProps = (dispatch, ownProps) => {
+  const token = ownProps.match.params.token
+
+  return {
+    onUpdateName: (name) => {
+      dispatch(updateCalculation(token, {name}))
+    },
+    onUpdateDescription: (description) => {
+      dispatch(updateCalculation(token, {description}))
+    },
+    onUpdateMemberName: (members, member, name) => {
+      dispatch(updateMember(token, members, member.id, {name}))
+    }
+  }
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(ManageCalculation)
