@@ -15,7 +15,7 @@ describe('EXPENSES', () => {
   })
 
   it('handles deleteExpense', () => {
-    const action = actions.deleteExpense(token, expense)
+    const action = actions.deleteExpense(token, expense.id)
     expect(action).toMatchSnapshot()
   })
 

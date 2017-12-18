@@ -13,10 +13,7 @@ Object {
 
 exports[`EXPENSES handles deleteExpense 1`] = `
 Object {
-  "expense": Object {
-    "id": 1,
-    "name": "Expense",
-  },
+  "id": 1,
   "token": "ABCD123",
   "type": "EXPENSES:DELETE_REQUEST",
 }

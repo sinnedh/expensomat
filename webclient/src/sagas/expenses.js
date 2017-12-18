@@ -43,10 +43,10 @@ export function* updateExpense(action) {
 export function* deleteExpense(action) {
   yield put(incrementLoadingCounter())
   try {
-    yield call(api.deleteExpense, action.token, action.expense.id)
+    yield call(api.deleteExpense, action.token, action.id)
     yield put({
       type: "EXPENSES:DELETE_SUCCESS",
-      id: action.expense.id,
+      id: action.id,
     })
     yield put(setInfoNotification('Expense deleted succesfully'))
   } catch (e) {
