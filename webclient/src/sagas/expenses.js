@@ -27,9 +27,8 @@ export function* updateExpense(action) {
 
     yield put({
       type: "EXPENSES:UPDATE_SUCCESS",
-      description: expense.data.description,
-      amount: expense.data.amount,
-      paid_at: expense.data.paid_at,
+      id: expense.data.id,
+      expense: expense.data,
     })
     yield put(setInfoNotification('Expense updated succesfully'))
   } catch (e) {

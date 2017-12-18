@@ -102,7 +102,7 @@ describe('EXPENSES:UPDATE_SUCCESS', () => {
   const action = {
     type: 'EXPENSES:UPDATE_SUCCESS',
     id: 2,
-    changes: {name: 'A new name'}
+    expense: {id: 2, name: 'A new name'}
   };
 
   it('updates the description of the expense', () => {

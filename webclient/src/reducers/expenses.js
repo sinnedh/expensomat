@@ -17,7 +17,7 @@ const expenses = (state = initialState, action) => {
       return state.delete(action.id.toString())
 
     case 'EXPENSES:UPDATE_SUCCESS':
-      return state.mergeIn(action.id.toString(), {...action.changes})
+      return state.merge({[action.id]: action.expense})
 
     case 'EXPENSES:LOAD_REQUEST':
     case 'EXPENSES:LOAD_FAILURE':
