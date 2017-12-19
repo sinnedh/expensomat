@@ -24,6 +24,7 @@ defmodule ApiServerWeb.Router do
 
     resources "/calculations", CalculationController, except: [:new, :edit], param: "token" do
       resources "/expenses", ExpenseController, except: [:new, :edit]
+      resources "/members", MemberController, except: [:new, :edit]
     end
 
     get "/expenses", ExpenseController, :show
