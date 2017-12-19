@@ -126,10 +126,45 @@ defmodule ApiServerWeb.MemberControllerTest do
   end
 
   describe "update member" do
-    test "renders member when data is valid"
-    test "renders errors when data is invalid"
-    test "ignores a possible token in request"
-    test "updates member only when token is valid"
+    setup [:create_calculation]
+
+    test "renders new member when data is valid", %{conn: conn, calculation: calculation} do
+      {:ok, member: member1} = create_member(calculation)
+
+      assert %{"id" => member1.id, "name" => "Martin"} == conn
+      |> put(calculation_member_path(conn, :update, member1.token, member1), member: @update_attrs)
+      |> json_response(200)
+      |> Map.fetch!("data")
+
+      assert Calculations.get_member!(member1.id).name == "Martin"
+    end
+
+    test "renders errors when data is invalid", %{conn: conn, calculation: calculation} do
+      {:ok, member: member1} = create_member(calculation)
+
+      assert %{} != conn
+      |> put(calculation_member_path(conn, :update, member1.token, member1), member: @invalid_attrs)
+      |> json_response(422)
+      |> Map.fetch!("errors")
+
+      assert Calculations.get_member!(member1.id).name == "Kalle"
+      assert length(Calculations.get_calculation!(calculation.id).members) == 1
+    end
+
+    test "ignores a possible token in request", %{conn: conn, calculation: calculation} do
+      {:ok, member: member1} = create_member(calculation)
+
+      update_attrs = @update_attrs |> Map.put("token", "XYZ999")
+      conn
+      |> put(calculation_member_path(conn, :update, member1.token, member1), member: update_attrs)
+      |> json_response(200)
+
+      assert Calculations.get_member!(member1.id).token != "XYZ999"
+      assert String.length(Calculations.get_member!(member1.id).token) == 24
+    end
+
+    # TODO: test "updates member only when token is valid"
+    # TODO: test "updates member only when admin token is given"
   end
 
   describe "delete member" do
