@@ -376,10 +376,16 @@ defmodule ApiServer.Calculations do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_member(attrs \\ %{}) do
+
+  def create_member(%{"calculation_id" => _} = attrs) do
     %Member{}
     |> Member.changeset(attrs)
     |> Repo.insert()
+  end
+
+  def create_member(calculation, attrs \\ %{}) do
+    attrs = attrs |> Map.put("calculation_id", calculation.id)
+    create_member(attrs)
   end
 
   @doc """

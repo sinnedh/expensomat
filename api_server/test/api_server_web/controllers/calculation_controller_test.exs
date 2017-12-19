@@ -25,7 +25,7 @@ defmodule ApiServerWeb.CalculationControllerTest do
       conn = post conn, calculation_path(conn, :create), calculation: @create_attrs
       assert %{"id" => id} = json_response(conn, 201)["data"]
 
-      {:ok, member} = Calculations.create_member(%{calculation_id: id, name: "A member", token: "ABCD"})
+      {:ok, member} = Calculations.create_member(%{"calculation_id" => id, "name" => "A member", "token" => "ABCD"})
 
       conn = get conn, calculation_path(conn, :show, member.token)
       assert json_response(conn, 200)["data"] == %{
@@ -111,7 +111,7 @@ defmodule ApiServerWeb.CalculationControllerTest do
 
   defp create_calculation_and_member(_) do
     {:ok, calculation} = Calculations.create_calculation(@create_attrs)
-    {:ok, member} = Calculations.create_member(%{calculation_id: calculation.id, name: "A member", token: "ABCD"})
+    {:ok, member} = Calculations.create_member(calculation, %{"name" => "A member", "token" => "ABCD"})
     {:ok, member: member}
   end
 end

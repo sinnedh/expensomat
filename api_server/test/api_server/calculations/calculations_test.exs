@@ -247,13 +247,13 @@ defmodule ApiServer.CalculationsTest do
 
     test "create_member/1 with valid data creates a member" do
       calculation = calculation_fixture()
-      valid_attrs = @valid_attrs |> Map.put("calculation_id", calculation.id)
-      assert {:ok, %Member{} = member} = Calculations.create_member(valid_attrs)
+      assert {:ok, %Member{} = member} = Calculations.create_member(calculation, @valid_attrs)
       assert member.name == "some name"
     end
 
     test "create_member/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Calculations.create_member(@invalid_attrs)
+      calculation = calculation_fixture()
+      assert {:error, %Ecto.Changeset{}} = Calculations.create_member(calculation, @invalid_attrs)
     end
 
     test "update_member/2 with valid data updates the member" do
