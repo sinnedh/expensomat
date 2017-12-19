@@ -3,6 +3,9 @@ defmodule ApiServerWeb.MemberControllerTest do
 
   alias ApiServer.Calculations
 
+  @valid_attrs %{"name" => "Schlucke"}
+  @invalid_attrs %{"name" => 22}
+
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
   end
@@ -17,11 +20,10 @@ defmodule ApiServerWeb.MemberControllerTest do
     create_member(calculation, %{name: "Kalle", token: "ABCD"})
   end
   defp create_member(calculation, %{name: name, token: token}) do
-    {:ok, member} = Calculations.create_member(%{
-      "calculation_id" => calculation.id,
-      "name" => name,
-      "token" => token,
-    })
+    {:ok, member} = Calculations.create_member(
+      calculation,
+      %{"name" => name, "token" => token}
+    )
     {:ok, member: member}
   end
 
@@ -73,11 +75,54 @@ defmodule ApiServerWeb.MemberControllerTest do
   end
 
   describe "create member" do
-    test "renders member when data is valid"
-    test "renders errors when data is invalid"
-    test "creates a new token for this member"
-    test "ignores a possible token in request"
     test "creates member only when token is valid"
+    setup [:create_calculation]
+
+    test "renders new member when data is valid", %{conn: conn, calculation: calculation} do
+      {:ok, member: member1} = create_member(calculation)
+
+      assert %{"id" => _, "name" => "Schlucke"} = conn
+      |> post(calculation_member_path(conn, :create, member1.token), member: @valid_attrs)
+      |> json_response(201)
+      |> Map.fetch!("data")
+
+      assert length(Calculations.get_calculation!(calculation.id).members) == 2
+    end
+
+    test "renders errors when data is invalid", %{conn: conn, calculation: calculation} do
+      {:ok, member: member1} = create_member(calculation)
+
+      assert %{} != conn
+      |> post(calculation_member_path(conn, :create, member1.token), member: @invalid_attrs)
+      |> json_response(422)
+      |> Map.fetch!("errors")
+
+      assert length(Calculations.get_calculation!(calculation.id).members) == 1
+    end
+
+    test "creates a new token for this member", %{conn: conn, calculation: calculation} do
+      {:ok, member: member1} = create_member(calculation)
+
+      assert %{"id" => id, "name" => "Schlucke"} = conn
+      |> post(calculation_member_path(conn, :create, member1.token), member: @valid_attrs)
+      |> json_response(201)
+      |> Map.fetch!("data")
+
+      assert String.length(Calculations.get_member!(id).token) == 24
+    end
+
+    test "ignores a possible token in request", %{conn: conn, calculation: calculation} do
+      {:ok, member: member1} = create_member(calculation)
+
+      attrs = @valid_attrs |> Map.put("token", "ABCD1234")
+      assert %{"id" => id, "name" => "Schlucke"} = conn
+      |> post(calculation_member_path(conn, :create, member1.token), member: attrs)
+      |> json_response(201)
+      |> Map.fetch!("data")
+
+      assert Calculations.get_member!(id).token != "ABCD1234"
+      assert String.length(Calculations.get_member!(member1.id).token) == 24
+    end
   end
 
   describe "update member" do
