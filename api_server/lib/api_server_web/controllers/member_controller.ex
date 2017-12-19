@@ -30,4 +30,14 @@ defmodule ApiServerWeb.MemberController do
       render(conn, "show.json", member: member)
     end
   end
+
+  def delete(conn, %{"calculation_token" => calculation_token, "id" => id}) do
+    calculation = Calculations.get_calculation_for_token!(calculation_token)
+    member = Calculations.get_member!(id)
+    # TODO: check if member is in same calculation here!
+
+    with {:ok, %Member{}} <- Calculations.delete_member(member) do
+      send_resp(conn, :no_content, "")
+    end
+  end
 end
