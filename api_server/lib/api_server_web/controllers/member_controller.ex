@@ -20,4 +20,14 @@ defmodule ApiServerWeb.MemberController do
       |> render("show.json", member: member)
     end
   end
+
+  def update(conn, %{"calculation_token" => calculation_token, "id" => id, "member" => member_params}) do
+    calculation = Calculations.get_calculation_for_token!(calculation_token)
+    member = Calculations.get_member!(id)
+    # TODO: check if member is in same calculation here!
+
+    with {:ok, %Member{} = member} <- Calculations.update_member(member, member_params) do
+      render(conn, "show.json", member: member)
+    end
+  end
 end
