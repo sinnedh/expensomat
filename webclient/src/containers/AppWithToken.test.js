@@ -1,14 +1,15 @@
 import React from 'react';
+import { Map } from 'immutable'
 import configureStore from 'redux-mock-store';
 import { shallow } from 'enzyme';
 import AppWithToken from './AppWithToken';
 
 describe('AppWithToken', () => {
-  const initialState = {
-    application: {
+  const initialState = Map({
+    application: Map({
       token: null,
-    },
-  };
+    }),
+  });
   const mockStore = configureStore();
   let store, container;
 

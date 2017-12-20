@@ -35,28 +35,28 @@ class EditExpense extends React.Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  const expenseId = parseInt(ownProps.match.params.id, 10)
-  const expense = state.expenses.items.find(e => e.id === expenseId)
+  const expense = state.getIn(['expenses', ownProps.match.params.id.toString()])
   return {
-    token: state.application.token,
-    description: expense ? expense.description : '',
-    amount: expense ? expense.amount : 0,
-    paid_at: expense ? expense.paid_at : '',
+    token: state.getIn(['application', 'token']),
+    description: expense ? expense.get('description') : '',
+    amount: expense ? expense.get('amount') : 0,
+    paid_at: expense ? expense.get('paid_at') : '',
   }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   const expenseId = parseInt(ownProps.match.params.id, 10)
+  const token = ownProps.match.params.token
 
   return {
     onUpdateDescription: (description) => {
-      dispatch(updateExpense(ownProps.token, expenseId, {description}))
+      dispatch(updateExpense(token, expenseId, {description}))
     },
     onUpdateAmount: (amount) => {
-      dispatch(updateExpense(ownProps.token, expenseId, {amount}))
+      dispatch(updateExpense(token, expenseId, {amount}))
     },
     onUpdatePaidAt: (paid_at) => {
-      dispatch(updateExpense(ownProps.token, expenseId, {paid_at}))
+      dispatch(updateExpense(token, expenseId, {paid_at}))
     },
   }
 }

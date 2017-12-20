@@ -27,9 +27,8 @@ export function* updateExpense(action) {
 
     yield put({
       type: "EXPENSES:UPDATE_SUCCESS",
-      description: expense.data.description,
-      amount: expense.data.amount,
-      paid_at: expense.data.paid_at,
+      id: expense.data.id,
+      expense: expense.data,
     })
     yield put(setInfoNotification('Expense updated succesfully'))
   } catch (e) {
@@ -43,10 +42,10 @@ export function* updateExpense(action) {
 export function* deleteExpense(action) {
   yield put(incrementLoadingCounter())
   try {
-    yield call(api.deleteExpense, action.token, action.expense.id)
+    yield call(api.deleteExpense, action.token, action.id)
     yield put({
       type: "EXPENSES:DELETE_SUCCESS",
-      id: action.expense.id,
+      id: action.id,
     })
     yield put(setInfoNotification('Expense deleted succesfully'))
   } catch (e) {

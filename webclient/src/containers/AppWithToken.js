@@ -3,7 +3,7 @@ import { getCalculation, getExpenses, setToken } from '../actions'
 import AppWithToken from '../components/AppWithToken';
 
 const mapStateToProps = (state, ownProps) => ({
-  token: state.application.token,
+  token: state.getIn(['application', 'token']),
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => ({

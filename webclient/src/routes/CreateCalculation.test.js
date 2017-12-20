@@ -1,11 +1,12 @@
 import React from 'react'
+import { Map } from 'immutable'
 import { mount, shallow } from 'enzyme'
 import configureStore from 'redux-mock-store'
 import CreateCalculation from './CreateCalculation'
 
 describe('CreateCalculation', () => {
   it('renders properly', () => {
-    const initialState = {}
+    const initialState = Map()
     const mockStore = configureStore()
     const store = mockStore(initialState)
     const wrapper = shallow(<CreateCalculation store={store} />)

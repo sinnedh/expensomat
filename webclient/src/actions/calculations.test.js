@@ -25,10 +25,13 @@ describe('CALCULATIONS', () => {
   })
 
   it('handles updateMember', () => {
-    const members = [{id: 1, name: 'Horst'}, {id: 2, name: 'Dirk'}, {id: 3, name: 'Kalle'}]
-    const member = {id: 2, name: 'Dirk'}
-    const changes = {name: 'Keek'}
-    const action = actions.updateMember(token, members, member, changes)
+    const members = Map({
+      1: Map({id: 1, name: 'Horst'}),
+      2: Map({id: 2, name: 'Dirk'}),
+      3: Map({id: 3, name: 'Kalle'}),
+    })
+    const changes = Map({name: 'Keek'})
+    const action = actions.updateMember(token, members, 2, changes)
     expect(action).toMatchSnapshot()
   })
 })

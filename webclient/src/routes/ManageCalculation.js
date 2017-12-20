@@ -39,22 +39,26 @@ class ManageCalculation extends React.Component {
 }
 
 const mapStateToProps = (state, ownProps) => ({
-  token: state.application.token,
-  name: state.calculations.name,
-  description: state.calculations.description,
-  members: state.calculations.members,
+  token: state.getIn(['application', 'token']),
+  name: state.getIn(['calculations', 'name']),
+  description: state.getIn(['calculations', 'description']),
+  members: state.getIn(['calculations', 'members']).toJS(),
 })
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
-  onUpdateName: (name) => {
-    dispatch(updateCalculation(ownProps.token, {name}))
-  },
-  onUpdateDescription: (description) => {
-    dispatch(updateCalculation(ownProps.token, {description}))
-  },
-  onUpdateMemberName: (members, member, name) => {
-    dispatch(updateMember(ownProps.token, members, member, {name}))
-  },
-})
+const mapDispatchToProps = (dispatch, ownProps) => {
+  const token = ownProps.match.params.token
+
+  return {
+    onUpdateName: (name) => {
+      dispatch(updateCalculation(token, {name}))
+    },
+    onUpdateDescription: (description) => {
+      dispatch(updateCalculation(token, {description}))
+    },
+    onUpdateMemberName: (members, member, name) => {
+      dispatch(updateMember(token, members, member.id, {name}))
+    }
+  }
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(ManageCalculation)
