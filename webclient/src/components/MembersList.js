@@ -2,8 +2,8 @@ import React from 'react';
 
 export default (props) => (
   <ul>
-    {props.members.map((m, i) =>
-      <li key={i}>{m.name}</li>
+    {Object.keys(props.members).map((id) =>
+      <li key={id}>{props.members[id].name}</li>
     )}
   </ul>
 )

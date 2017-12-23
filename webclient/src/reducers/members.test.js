@@ -105,7 +105,7 @@ describe('MEMBERS:UPDATE_SUCCESS', () => {
     member: {id: 2, name: 'Dirk'}
   };
 
-  it('updates the description of the member', () => {
+  it('updates the name of the member', () => {
     const beforeState = testState3;
     const newItem2 = Map({id: 2, name: 'Dirk'})
     const afterState = Map({1: item1, 2: newItem2, 3: item3});

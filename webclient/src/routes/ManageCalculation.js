@@ -24,11 +24,11 @@ class ManageCalculation extends React.Component {
         </div>
         <h2>Members</h2>
         <ul>
-          {this.props.members.map((m, i) =>
-            <li key={i}>
+          {Object.keys(this.props.members).map((id) =>
+            <li key={id}>
               <EditableInput
-                value={m.name}
-                onClickSave={value => this.props.onUpdateMemberName(this.props.members, m, value)}
+                value={this.props.members[id].name}
+                onClickSave={value => this.props.onUpdateMemberName(id, value)}
                 />
             </li>
           )}
@@ -42,7 +42,7 @@ const mapStateToProps = (state, ownProps) => ({
   token: state.getIn(['application', 'token']),
   name: state.getIn(['calculations', 'name']),
   description: state.getIn(['calculations', 'description']),
-  members: state.getIn(['calculations', 'members']).toJS(),
+  members: state.getIn(['members']).toJS(),
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => {
@@ -55,8 +55,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     onUpdateDescription: (description) => {
       dispatch(updateCalculation(token, {description}))
     },
-    onUpdateMemberName: (members, member, name) => {
-      dispatch(updateMember(token, members, member.id, {name}))
+    onUpdateMemberName: (id, name) => {
+      dispatch(updateMember(token, id, {name}))
     }
   }
 }

@@ -14,14 +14,16 @@ ShallowWrapper {
           }
     }
     members={
-        Array [
-            Object {
+        Object {
+            "1": Object {
+              "id": 1,
               "name": "A guy",
             },
-            Object {
+            "2": Object {
+              "id": 2,
               "name": "Another guy",
             },
-          ]
+          }
     }
     name="My calculation"
     onUpdateDescription={[Function]}
@@ -253,7 +255,7 @@ ShallowWrapper {
         "rendered": Array [
           Object {
             "instance": null,
-            "key": "0",
+            "key": "1",
             "nodeType": "host",
             "props": Object {
               "children": <EditableInput
@@ -278,7 +280,7 @@ ShallowWrapper {
           },
           Object {
             "instance": null,
-            "key": "1",
+            "key": "2",
             "nodeType": "host",
             "props": Object {
               "children": <EditableInput
@@ -494,7 +496,7 @@ ShallowWrapper {
           "rendered": Array [
             Object {
               "instance": null,
-              "key": "0",
+              "key": "1",
               "nodeType": "host",
               "props": Object {
                 "children": <EditableInput
@@ -519,7 +521,7 @@ ShallowWrapper {
             },
             Object {
               "instance": null,
-              "key": "1",
+              "key": "2",
               "nodeType": "host",
               "props": Object {
                 "children": <EditableInput

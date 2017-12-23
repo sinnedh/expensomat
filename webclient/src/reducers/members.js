@@ -17,7 +17,7 @@ const members = (state = initialState, action) => {
       return state.delete(action.id.toString())
 
     case 'MEMBERS:UPDATE_SUCCESS':
-      return state.merge({[action.id]: {name: action.name}})
+      return state.merge({[action.id]: action.member})
 
     case 'MEMBERS:LOAD_REQUEST':
     case 'MEMBERS:LOAD_FAILURE':

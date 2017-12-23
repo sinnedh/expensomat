@@ -13,9 +13,9 @@ it('renders with elements', () => {
     "30_29": 4150.0,
     "29_30": 1278.0,
   }
-  const members = [
-    { id: 29, name: "Micha", },
-    { id: 30, name: "Dennis", },
-  ]
+  const members = {
+    29: { id: 29, name: "Micha", },
+    30: { id: 30, name: "Dennis", },
+  }
   ReactDOM.render(<ExpenseMatrix elements={elements} members={members} />, div);
 });

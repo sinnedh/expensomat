@@ -11,9 +11,9 @@ it('renders without members', () => {
 it('renders with members', () => {
   const div = document.createElement('div');
   const onSubmit = (x) => {};
-  const members = [
-    { id: 1, name: "Micha", },
-    { id: 2, name: "Dennis", },
-  ]
+  const members = {
+    1: { id: 1, name: "Micha", },
+    2: { id: 2, name: "Dennis", },
+  }
   ReactDOM.render(<ExpenseForm members={members} onSubmit={onSubmit} />, div);
 });

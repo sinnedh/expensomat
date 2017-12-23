@@ -11,8 +11,11 @@ describe('ManageCalculation', () => {
       calculations: Map({
         name: 'My calculation',
         description: 'Blabla',
-        members: List([{name: 'A guy'}, {name: 'Another guy'}]),
-      })
+      }),
+      members: Map({
+        1: Map({id: 1, name: 'A guy'}),
+        2: Map({id: 2, name: 'Another guy'}),
+      }),
     })
     const mockStore = configureStore()
     const store = mockStore(initialState)

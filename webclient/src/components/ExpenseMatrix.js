@@ -11,8 +11,8 @@ export default (props) => (
   <ul>
     {Object.keys(props.elements).map((key, index) => item(
       index,
-      props.members.find(e => e.id.toString() === key.split("_")[0]),
-      props.members.find(e => e.id.toString() === key.split("_")[1]),
+      props.members[key.split("_")[0]],
+      props.members[key.split("_")[1]],
       props.elements[key],
     ))}
   </ul>
