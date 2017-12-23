@@ -6,8 +6,8 @@ export const createMember = (token, member) => {
   return {type: 'MEMBERS:CREATE_REQUEST', token, member}
 }
 
-export const deleteMember = (token, member) => {
-  return {type: 'MEMBERS:DELETE_REQUEST', token, member}
+export const deleteMember = (token, memberId) => {
+  return {type: 'MEMBERS:DELETE_REQUEST', token, memberId}
 }
 
 export const updateMember = (token, id, changes) => {

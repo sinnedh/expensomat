@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import EditableInput from '../components/EditableInput'
-import { updateCalculation, updateMember } from '../actions'
+import { deleteMember, updateCalculation, updateMember } from '../actions'
 
 class ManageCalculation extends React.Component {
   render() {
@@ -26,6 +26,7 @@ class ManageCalculation extends React.Component {
         <ul>
           {Object.keys(this.props.members).map((id) =>
             <li key={id}>
+              <button onClick={(e) => this.props.onClickDeleteMember(e, id)}>X</button>
               <EditableInput
                 value={this.props.members[id].name}
                 onClickSave={value => this.props.onUpdateMemberName(id, value)}
@@ -57,7 +58,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     onUpdateMemberName: (id, name) => {
       dispatch(updateMember(token, id, {name}))
-    }
+    },
+    onClickDeleteMember: (event, memberId) => {
+      event.preventDefault();
+      dispatch(deleteMember(token, memberId));
+    },
   }
 }
 

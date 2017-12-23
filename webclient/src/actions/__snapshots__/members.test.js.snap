@@ -13,7 +13,7 @@ Object {
 
 exports[`MEMBERS handles deleteMember 1`] = `
 Object {
-  "member": Object {
+  "memberId": Object {
     "id": 1,
     "name": "Member",
   },

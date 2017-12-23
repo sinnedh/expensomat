@@ -41,10 +41,10 @@ export function* updateMember(action) {
 export function* deleteMember(action) {
   yield put(incrementLoadingCounter())
   try {
-    yield call(api.deleteMember, action.token, action.member.id)
+    yield call(api.deleteMember, action.token, action.memberId)
     yield put({
       type: "MEMBERS:DELETE_SUCCESS",
-      id: action.member.id,
+      id: action.memberId,
     })
     yield put(setInfoNotification('Member deleted succesfully'))
   } catch (e) {
