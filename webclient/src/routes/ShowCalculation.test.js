@@ -11,8 +11,11 @@ describe('ShowCalculation', () => {
       calculations: Map({
         name: 'My calculation',
         description: 'Blabla',
-        members: List([Map({name: 'A guy'}), Map({name: 'Another guy'})]),
         matrix: Map(),
+      }),
+      members: Map({
+        1: Map({id: 1, name: 'A guy'}),
+        2: Map({id: 2, name: 'Another guy'}),
       }),
       expenses: Map({
         1: Map({id: 1, description: 'Expense 1', amount: 999, paid_at: '2017-11-11'}),

@@ -1,7 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import EditableInput from '../components/EditableInput'
-import { updateCalculation, updateMember } from '../actions'
+import MemberList from '../components/MemberList'
+import MemberForm from '../components/MemberForm'
+import { createMember, deleteMember, updateCalculation, updateMember } from '../actions'
 
 class ManageCalculation extends React.Component {
   render() {
@@ -23,16 +25,14 @@ class ManageCalculation extends React.Component {
             />
         </div>
         <h2>Members</h2>
-        <ul>
-          {this.props.members.map((m, i) =>
-            <li key={i}>
-              <EditableInput
-                value={m.name}
-                onClickSave={value => this.props.onUpdateMemberName(this.props.members, m, value)}
-                />
-            </li>
-          )}
-        </ul>
+        <MemberForm
+          onSubmit={this.props.onClickCreateMember}
+          />
+        <MemberList
+          members={this.props.members}
+          onClickDelete={this.props.onClickDeleteMember}
+          onUpdateName={this.props.onUpdateMemberName}
+          />
       </div>
     )
   }
@@ -42,7 +42,7 @@ const mapStateToProps = (state, ownProps) => ({
   token: state.getIn(['application', 'token']),
   name: state.getIn(['calculations', 'name']),
   description: state.getIn(['calculations', 'description']),
-  members: state.getIn(['calculations', 'members']).toJS(),
+  members: state.getIn(['members']).toJS(),
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => {
@@ -55,9 +55,16 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     onUpdateDescription: (description) => {
       dispatch(updateCalculation(token, {description}))
     },
-    onUpdateMemberName: (members, member, name) => {
-      dispatch(updateMember(token, members, member.id, {name}))
-    }
+    onUpdateMemberName: (id, name) => {
+      dispatch(updateMember(token, id, {name}))
+    },
+    onClickDeleteMember: (event, memberId) => {
+      event.preventDefault();
+      dispatch(deleteMember(token, memberId));
+    },
+    onClickCreateMember: (member) => {
+      dispatch(createMember(token, member));
+    },
   }
 }
 

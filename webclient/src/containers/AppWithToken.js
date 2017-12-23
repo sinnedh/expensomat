@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { getCalculation, getExpenses, setToken } from '../actions'
+import { getCalculation, getExpenses, getMembers, setToken } from '../actions'
 import AppWithToken from '../components/AppWithToken';
 
 const mapStateToProps = (state, ownProps) => ({
@@ -12,6 +12,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     dispatch(setToken(token));
     dispatch(getCalculation(token));
     dispatch(getExpenses(token));
+    dispatch(getMembers(token));
   }
 })
 

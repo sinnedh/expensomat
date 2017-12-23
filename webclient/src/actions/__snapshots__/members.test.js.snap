@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MEMBERS handles createMember 1`] = `
+Object {
+  "member": Object {
+    "id": 1,
+    "name": "Member",
+  },
+  "token": "ABCD123",
+  "type": "MEMBERS:CREATE_REQUEST",
+}
+`;
+
+exports[`MEMBERS handles deleteMember 1`] = `
+Object {
+  "memberId": Object {
+    "id": 1,
+    "name": "Member",
+  },
+  "token": "ABCD123",
+  "type": "MEMBERS:DELETE_REQUEST",
+}
+`;
+
+exports[`MEMBERS handles getExpenses 1`] = `
+Object {
+  "token": "ABCD123",
+  "type": "MEMBERS:LOAD_REQUEST",
+}
+`;
+
+exports[`MEMBERS handles updateMember 1`] = `
+Object {
+  "changes": Object {
+    "name": "Member",
+  },
+  "id": 11,
+  "token": "ABCD123",
+  "type": "MEMBERS:UPDATE_REQUEST",
+}
+`;

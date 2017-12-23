@@ -6,10 +6,10 @@ import * as api from '../api'
 export function* createExpense(action) {
   yield put(incrementLoadingCounter())
   try {
-    yield call(api.createExpense, action.token, action.expense)
+    const expense = yield call(api.createExpense, action.token, action.expense)
     yield put({
       type: "EXPENSES:CREATE_SUCCESS",
-      expense: action.expense,
+      expense: expense.data,
     })
     yield put(setInfoNotification('Expense created succesfully'))
   } catch (e) {

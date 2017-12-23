@@ -31,14 +31,16 @@ ShallowWrapper {
     }
     matrix={Object {}}
     members={
-        Array [
-            Object {
+        Object {
+            "1": Object {
+              "id": 1,
               "name": "A guy",
             },
-            Object {
+            "2": Object {
+              "id": 2,
               "name": "Another guy",
             },
-          ]
+          }
     }
     name="My calculation"
     onClickDelete={[Function]}
@@ -101,14 +103,16 @@ ShallowWrapper {
         <Unknown
           elements={Object {}}
           members={
-                    Array [
-                              Object {
+                    Object {
+                              "1": Object {
+                                "id": 1,
                                 "name": "A guy",
                               },
-                              Object {
+                              "2": Object {
+                                "id": 2,
                                 "name": "Another guy",
                               },
-                            ]
+                            }
           }
 />,
         <h2>
@@ -117,14 +121,16 @@ ShallowWrapper {
         <ExpenseForm
           handleSubmit={[Function]}
           members={
-                    Array [
-                              Object {
+                    Object {
+                              "1": Object {
+                                "id": 1,
                                 "name": "A guy",
                               },
-                              Object {
+                              "2": Object {
+                                "id": 2,
                                 "name": "Another guy",
                               },
-                            ]
+                            }
           }
 />,
         <Unknown
@@ -189,14 +195,16 @@ ShallowWrapper {
         "nodeType": "function",
         "props": Object {
           "elements": Object {},
-          "members": Array [
-            Object {
+          "members": Object {
+            "1": Object {
+              "id": 1,
               "name": "A guy",
             },
-            Object {
+            "2": Object {
+              "id": 2,
               "name": "Another guy",
             },
-          ],
+          },
         },
         "ref": null,
         "rendered": null,
@@ -219,14 +227,16 @@ ShallowWrapper {
         "nodeType": "class",
         "props": Object {
           "handleSubmit": [Function],
-          "members": Array [
-            Object {
+          "members": Object {
+            "1": Object {
+              "id": 1,
               "name": "A guy",
             },
-            Object {
+            "2": Object {
+              "id": 2,
               "name": "Another guy",
             },
-          ],
+          },
         },
         "ref": null,
         "rendered": null,
@@ -279,14 +289,16 @@ ShallowWrapper {
           <Unknown
             elements={Object {}}
             members={
-                        Array [
-                                    Object {
+                        Object {
+                                    "1": Object {
+                                      "id": 1,
                                       "name": "A guy",
                                     },
-                                    Object {
+                                    "2": Object {
+                                      "id": 2,
                                       "name": "Another guy",
                                     },
-                                  ]
+                                  }
             }
 />,
           <h2>
@@ -295,14 +307,16 @@ ShallowWrapper {
           <ExpenseForm
             handleSubmit={[Function]}
             members={
-                        Array [
-                                    Object {
+                        Object {
+                                    "1": Object {
+                                      "id": 1,
                                       "name": "A guy",
                                     },
-                                    Object {
+                                    "2": Object {
+                                      "id": 2,
                                       "name": "Another guy",
                                     },
-                                  ]
+                                  }
             }
 />,
           <Unknown
@@ -367,14 +381,16 @@ ShallowWrapper {
           "nodeType": "function",
           "props": Object {
             "elements": Object {},
-            "members": Array [
-              Object {
+            "members": Object {
+              "1": Object {
+                "id": 1,
                 "name": "A guy",
               },
-              Object {
+              "2": Object {
+                "id": 2,
                 "name": "Another guy",
               },
-            ],
+            },
           },
           "ref": null,
           "rendered": null,
@@ -397,14 +413,16 @@ ShallowWrapper {
           "nodeType": "class",
           "props": Object {
             "handleSubmit": [Function],
-            "members": Array [
-              Object {
+            "members": Object {
+              "1": Object {
+                "id": 1,
                 "name": "A guy",
               },
-              Object {
+              "2": Object {
+                "id": 2,
                 "name": "Another guy",
               },
-            ],
+            },
           },
           "ref": null,
           "rendered": null,

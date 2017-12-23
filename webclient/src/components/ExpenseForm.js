@@ -39,8 +39,8 @@ class ExpenseForm extends React.Component {
           multiple={true}
           onChange={this.handleInputChange}
           value={this.state.paid_by}>
-          {this.props.members.map((m, i) =>
-            <option key={i} value={m.id}>{m.name}</option>
+          {Object.keys(this.props.members).map((id) =>
+            <option key={id} value={id}>{this.props.members[id].name}</option>
           )}
         </select>
       </label>
@@ -52,8 +52,8 @@ class ExpenseForm extends React.Component {
             multiple={true}
             onChange={this.handleInputChange}
             value={this.state.paid_for}>
-            {this.props.members.map((m, i) =>
-              <option key={i} value={m.id}>{m.name}</option>
+            {Object.keys(this.props.members).map((id) =>
+              <option key={id} value={id}>{this.props.members[id].name}</option>
             )}
           </select>
         </label>

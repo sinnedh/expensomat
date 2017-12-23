@@ -26,7 +26,7 @@ const mapStateToProps = (state, ownProps) => ({
   expenses: state.get('expenses').toJS(),
   name: state.getIn(['calculations', 'name']),
   description: state.getIn(['calculations', 'description']),
-  members: state.getIn(['calculations', 'members']).toJS(),
+  members: state.getIn(['members']).toJS(),
   matrix: state.getIn(['calculations', 'matrix']).toJS(),
 });
 

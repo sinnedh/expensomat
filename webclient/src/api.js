@@ -60,3 +60,22 @@ export const updateExpense = (token, expenseId, expense) => (
     JSON.stringify({ expense })
   )
 )
+
+export const fetchMembers = (token) => (
+  getRequest(`${baseurl}/calculations/${token}/members`)
+)
+
+export const createMember = (token, member) => (
+  postRequest(`${baseurl}/calculations/${token}/members`, JSON.stringify({ member }))
+)
+
+export const deleteMember = (token, memberId) => (
+  deleteRequest(`${baseurl}/calculations/${token}/members/${memberId}`)
+)
+
+export const updateMember = (token, memberId, member) => (
+  putRequest(
+    `${baseurl}/calculations/${token}/members/${memberId}`,
+    JSON.stringify({ member })
+  )
+)
