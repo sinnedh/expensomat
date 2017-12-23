@@ -26,6 +26,7 @@ ShallowWrapper {
           }
     }
     name="My calculation"
+    onClickCreateMember={[Function]}
     onClickDeleteMember={[Function]}
     onUpdateDescription={[Function]}
     onUpdateMemberName={[Function]}
@@ -102,30 +103,25 @@ ShallowWrapper {
         <h2>
           Members
 </h2>,
-        <ul>
-          <li>
-                    <button
-                              onClick={[Function]}
-                    >
-                              X
-                    </button>
-                    <EditableInput
-                              onClickSave={[Function]}
-                              value="A guy"
-                    />
-          </li>
-          <li>
-                    <button
-                              onClick={[Function]}
-                    >
-                              X
-                    </button>
-                    <EditableInput
-                              onClickSave={[Function]}
-                              value="Another guy"
-                    />
-          </li>
-</ul>,
+        <MemberForm
+          onSubmit={[Function]}
+/>,
+        <Unknown
+          members={
+                    Object {
+                              "1": Object {
+                                "id": 1,
+                                "name": "A guy",
+                              },
+                              "2": Object {
+                                "id": 2,
+                                "name": "Another guy",
+                              },
+                            }
+          }
+          onClickDelete={[Function]}
+          onUpdateName={[Function]}
+/>,
       ],
     },
     "ref": null,
@@ -245,129 +241,35 @@ ShallowWrapper {
       Object {
         "instance": null,
         "key": undefined,
-        "nodeType": "host",
+        "nodeType": "class",
         "props": Object {
-          "children": Array [
-            <li>
-              <button
-                            onClick={[Function]}
-              >
-                            X
-              </button>
-              <EditableInput
-                            onClickSave={[Function]}
-                            value="A guy"
-              />
-</li>,
-            <li>
-              <button
-                            onClick={[Function]}
-              >
-                            X
-              </button>
-              <EditableInput
-                            onClickSave={[Function]}
-                            value="Another guy"
-              />
-</li>,
-          ],
+          "onSubmit": [Function],
         },
         "ref": null,
-        "rendered": Array [
-          Object {
-            "instance": null,
-            "key": "1",
-            "nodeType": "host",
-            "props": Object {
-              "children": Array [
-                <button
-                  onClick={[Function]}
->
-                  X
-</button>,
-                <EditableInput
-                  onClickSave={[Function]}
-                  value="A guy"
-/>,
-              ],
+        "rendered": null,
+        "type": [Function],
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "function",
+        "props": Object {
+          "members": Object {
+            "1": Object {
+              "id": 1,
+              "name": "A guy",
             },
-            "ref": null,
-            "rendered": Array [
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "host",
-                "props": Object {
-                  "children": "X",
-                  "onClick": [Function],
-                },
-                "ref": null,
-                "rendered": "X",
-                "type": "button",
-              },
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "class",
-                "props": Object {
-                  "onClickSave": [Function],
-                  "value": "A guy",
-                },
-                "ref": null,
-                "rendered": null,
-                "type": [Function],
-              },
-            ],
-            "type": "li",
-          },
-          Object {
-            "instance": null,
-            "key": "2",
-            "nodeType": "host",
-            "props": Object {
-              "children": Array [
-                <button
-                  onClick={[Function]}
->
-                  X
-</button>,
-                <EditableInput
-                  onClickSave={[Function]}
-                  value="Another guy"
-/>,
-              ],
+            "2": Object {
+              "id": 2,
+              "name": "Another guy",
             },
-            "ref": null,
-            "rendered": Array [
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "host",
-                "props": Object {
-                  "children": "X",
-                  "onClick": [Function],
-                },
-                "ref": null,
-                "rendered": "X",
-                "type": "button",
-              },
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "class",
-                "props": Object {
-                  "onClickSave": [Function],
-                  "value": "Another guy",
-                },
-                "ref": null,
-                "rendered": null,
-                "type": [Function],
-              },
-            ],
-            "type": "li",
           },
-        ],
-        "type": "ul",
+          "onClickDelete": [Function],
+          "onUpdateName": [Function],
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
       },
     ],
     "type": "div",
@@ -405,30 +307,25 @@ ShallowWrapper {
           <h2>
             Members
 </h2>,
-          <ul>
-            <li>
-                        <button
-                                    onClick={[Function]}
-                        >
-                                    X
-                        </button>
-                        <EditableInput
-                                    onClickSave={[Function]}
-                                    value="A guy"
-                        />
-            </li>
-            <li>
-                        <button
-                                    onClick={[Function]}
-                        >
-                                    X
-                        </button>
-                        <EditableInput
-                                    onClickSave={[Function]}
-                                    value="Another guy"
-                        />
-            </li>
-</ul>,
+          <MemberForm
+            onSubmit={[Function]}
+/>,
+          <Unknown
+            members={
+                        Object {
+                                    "1": Object {
+                                      "id": 1,
+                                      "name": "A guy",
+                                    },
+                                    "2": Object {
+                                      "id": 2,
+                                      "name": "Another guy",
+                                    },
+                                  }
+            }
+            onClickDelete={[Function]}
+            onUpdateName={[Function]}
+/>,
         ],
       },
       "ref": null,
@@ -548,129 +445,35 @@ ShallowWrapper {
         Object {
           "instance": null,
           "key": undefined,
-          "nodeType": "host",
+          "nodeType": "class",
           "props": Object {
-            "children": Array [
-              <li>
-                <button
-                                onClick={[Function]}
-                >
-                                X
-                </button>
-                <EditableInput
-                                onClickSave={[Function]}
-                                value="A guy"
-                />
-</li>,
-              <li>
-                <button
-                                onClick={[Function]}
-                >
-                                X
-                </button>
-                <EditableInput
-                                onClickSave={[Function]}
-                                value="Another guy"
-                />
-</li>,
-            ],
+            "onSubmit": [Function],
           },
           "ref": null,
-          "rendered": Array [
-            Object {
-              "instance": null,
-              "key": "1",
-              "nodeType": "host",
-              "props": Object {
-                "children": Array [
-                  <button
-                    onClick={[Function]}
->
-                    X
-</button>,
-                  <EditableInput
-                    onClickSave={[Function]}
-                    value="A guy"
-/>,
-                ],
+          "rendered": null,
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "function",
+          "props": Object {
+            "members": Object {
+              "1": Object {
+                "id": 1,
+                "name": "A guy",
               },
-              "ref": null,
-              "rendered": Array [
-                Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "host",
-                  "props": Object {
-                    "children": "X",
-                    "onClick": [Function],
-                  },
-                  "ref": null,
-                  "rendered": "X",
-                  "type": "button",
-                },
-                Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "class",
-                  "props": Object {
-                    "onClickSave": [Function],
-                    "value": "A guy",
-                  },
-                  "ref": null,
-                  "rendered": null,
-                  "type": [Function],
-                },
-              ],
-              "type": "li",
-            },
-            Object {
-              "instance": null,
-              "key": "2",
-              "nodeType": "host",
-              "props": Object {
-                "children": Array [
-                  <button
-                    onClick={[Function]}
->
-                    X
-</button>,
-                  <EditableInput
-                    onClickSave={[Function]}
-                    value="Another guy"
-/>,
-                ],
+              "2": Object {
+                "id": 2,
+                "name": "Another guy",
               },
-              "ref": null,
-              "rendered": Array [
-                Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "host",
-                  "props": Object {
-                    "children": "X",
-                    "onClick": [Function],
-                  },
-                  "ref": null,
-                  "rendered": "X",
-                  "type": "button",
-                },
-                Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "class",
-                  "props": Object {
-                    "onClickSave": [Function],
-                    "value": "Another guy",
-                  },
-                  "ref": null,
-                  "rendered": null,
-                  "type": [Function],
-                },
-              ],
-              "type": "li",
             },
-          ],
-          "type": "ul",
+            "onClickDelete": [Function],
+            "onUpdateName": [Function],
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
         },
       ],
       "type": "div",

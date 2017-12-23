@@ -1,8 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import EditableInput from '../components/EditableInput'
-import { deleteMember, updateCalculation, updateMember } from '../actions'
 import MemberList from '../components/MemberList'
+import MemberForm from '../components/MemberForm'
+import { createMember, deleteMember, updateCalculation, updateMember } from '../actions'
 
 class ManageCalculation extends React.Component {
   render() {
@@ -24,6 +25,9 @@ class ManageCalculation extends React.Component {
             />
         </div>
         <h2>Members</h2>
+        <MemberForm
+          onSubmit={this.props.onClickCreateMember}
+          />
         <MemberList
           members={this.props.members}
           onClickDelete={this.props.onClickDeleteMember}
@@ -57,6 +61,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     onClickDeleteMember: (event, memberId) => {
       event.preventDefault();
       dispatch(deleteMember(token, memberId));
+    },
+    onClickCreateMember: (member) => {
+      dispatch(createMember(token, member));
     },
   }
 }
