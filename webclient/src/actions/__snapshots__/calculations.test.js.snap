@@ -37,26 +37,3 @@ Object {
   "type": "CALCULATION:UPDATE_REQUEST",
 }
 `;
-
-exports[`CALCULATIONS handles updateMember 1`] = `
-Object {
-  "changes": Object {
-    "members": Array [
-      Object {
-        "id": 1,
-        "name": "Horst",
-      },
-      Object {
-        "id": 2,
-        "name": "Keek",
-      },
-      Object {
-        "id": 3,
-        "name": "Kalle",
-      },
-    ],
-  },
-  "token": "ABCD123",
-  "type": "CALCULATION:UPDATE_REQUEST",
-}
-`;
