@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import MembersList from './MembersList';
+import MemberList from './MemberList';
 
 it('renders without members', () => {
   const div = document.createElement('div');
-  ReactDOM.render(<MembersList members={{}} />, div);
+  ReactDOM.render(<MemberList members={{}} />, div);
 });
 
 it('renders with members', () => {
@@ -13,5 +13,5 @@ it('renders with members', () => {
     1: { id: 1, name: "Micha", },
     2: { id: 2, name: "Dennis", },
   }
-  ReactDOM.render(<MembersList members={members} />, div);
+  ReactDOM.render(<MemberList members={members} />, div);
 });

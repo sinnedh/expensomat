@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import EditableInput from '../components/EditableInput'
 import { deleteMember, updateCalculation, updateMember } from '../actions'
+import MemberList from '../components/MemberList'
 
 class ManageCalculation extends React.Component {
   render() {
@@ -23,17 +24,11 @@ class ManageCalculation extends React.Component {
             />
         </div>
         <h2>Members</h2>
-        <ul>
-          {Object.keys(this.props.members).map((id) =>
-            <li key={id}>
-              <button onClick={(e) => this.props.onClickDeleteMember(e, id)}>X</button>
-              <EditableInput
-                value={this.props.members[id].name}
-                onClickSave={value => this.props.onUpdateMemberName(id, value)}
-                />
-            </li>
-          )}
-        </ul>
+        <MemberList
+          members={this.props.members}
+          onClickDelete={this.props.onClickDeleteMember}
+          onUpdateName={this.props.onUpdateMemberName}
+          />
       </div>
     )
   }
