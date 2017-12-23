@@ -6,10 +6,10 @@ import * as api from '../api'
 export function* createMember(action) {
   yield put(incrementLoadingCounter())
   try {
-    yield call(api.createMember, action.token, action.member)
+    const member = yield call(api.createMember, action.token, action.member)
     yield put({
       type: "MEMBERS:CREATE_SUCCESS",
-      member: action.member,
+      member: member.data,
     })
     yield put(setInfoNotification('Member created succesfully'))
   } catch (e) {
