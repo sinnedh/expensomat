@@ -13,13 +13,3 @@ export const deleteCalculation = (token, calculation) => {
 export const updateCalculation = (token, changes) => {
   return {type: 'CALCULATION:UPDATE_REQUEST', token, changes}
 }
-
-export const updateMember = (token, members, memberId, changes) => {
-  const updatedMembers = Map(members).mergeIn([memberId.toString()], changes)
-
-  return Map({
-    type: 'CALCULATION:UPDATE_REQUEST',
-    token,
-    changes: Map({ members: updatedMembers })
-  })
-}
