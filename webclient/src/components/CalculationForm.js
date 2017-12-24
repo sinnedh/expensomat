@@ -5,30 +5,14 @@ class CalculationForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: "",
-      description: "",
-      members: [{name: ""}],
+      name: '',
+      description: '',
+      members: [{name: ''}],
     };
 
-    this.addMember = this.addMember.bind(this);
-    this.deleteMember = this.deleteMember.bind(this);
     this.handleMemberNameChange = this.handleMemberNameChange.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  addMember(event) {
-    event.preventDefault();
-    this.setState({"members": [...this.state.members, {name: ""}]});
-  }
-
-  deleteMember(event, index) {
-    event.preventDefault();
-
-    let members = this.state.members;
-    members.splice(index, 1)
-
-    this.setState({members});
   }
 
   handleSubmit(event) {
@@ -38,18 +22,15 @@ class CalculationForm extends React.Component {
 
   handleInputChange(event) {
     const name = event.target.name;
-
     this.setState({
       [name]: getFormFieldValue(event.target)
     });
   }
 
-  handleMemberNameChange(event, index) {
-    const value = event.target.value;
-
-    let members = this.state.members;
-    members[index] = {"name": value};
-
+  handleMemberNameChange(event) {
+    // Theoretically multiple members could be handled. Therefore the array.
+    const name = getFormFieldValue(event.target);
+    const members = [{...this.state.members[0], name}];
     this.setState({members});
   }
 
@@ -57,7 +38,7 @@ class CalculationForm extends React.Component {
     return (
       <form>
         <label>
-          Name:
+          Calculation Name:
           <input
             name="name"
             value={this.state.name}
@@ -73,24 +54,14 @@ class CalculationForm extends React.Component {
         </label>
         <br />
 
-        <h2>Members</h2>
-        {this.state.members.map((member, i) =>
-          <p key={i}>
-            <label key={i}>
-              Name:
-              <input
-                name={"member" + i + "-name"}
-                value={member.name}
-                onChange={(e) => this.handleMemberNameChange(e, i)} />
-            </label>
-            <input
-              type="button"
-              value="Delete"
-              onClick={(e) => this.deleteMember(e, i)} />
-          </p>
-        )}
-
-        <input className="add-member" type="button" value="Add member" onClick={this.addMember} />
+        <label>
+          Your Name:
+          <input
+            name="member-name"
+            value={this.state.members.name}
+            onChange={this.handleMemberNameChange} />
+        </label>
+        <br />
 
         <input className="submit" type="button" value="Create calculation" onClick={this.handleSubmit} />
       </form>

@@ -3,7 +3,7 @@
 exports[`renders 1`] = `
 <form>
   <label>
-    Name:
+    Calculation Name:
     <input
       name="name"
       onChange={[Function]}
@@ -20,34 +20,14 @@ exports[`renders 1`] = `
     />
   </label>
   <br />
-  <h2>
-    Members
-  </h2>
-  <p
-    key="0"
-  >
-    <label
-      key="0"
-    >
-      Name:
-      <input
-        name="member0-name"
-        onChange={[Function]}
-        value=""
-      />
-    </label>
+  <label>
+    Your Name:
     <input
-      onClick={[Function]}
-      type="button"
-      value="Delete"
+      name="member-name"
+      onChange={[Function]}
     />
-  </p>
-  <input
-    className="add-member"
-    onClick={[Function]}
-    type="button"
-    value="Add member"
-  />
+  </label>
+  <br />
   <input
     className="submit"
     onClick={[Function]}
