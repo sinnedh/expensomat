@@ -5,12 +5,11 @@ import { createCalculation } from '../actions';
 import CalculationForm from '../components/CalculationForm';
 
 class CreateCalculation extends React.Component {
-  state = { redirect_to: '' }
 
   render() {
     return (
       <div>
-        {this.state.redirect_to !== '' && <Redirect to={this.state.redirect_to} />}
+        {this.props.redirect_to !== '' && <Redirect to={this.props.redirect_to} />}
         <h1>Create new calculation</h1>
         <CalculationForm handleSubmit={this.props.createCalculation}/>
       </div>
@@ -18,7 +17,12 @@ class CreateCalculation extends React.Component {
   }
 }
 
-const mapStateToProps = (state, ownProps) => ({})
+const mapStateToProps = (state, ownProps) => {
+  const token = state.getIn(['application', 'token'])
+  return {
+    redirect_to: token ? `/calculation/${token}/manage` : ''
+  }
+}
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   createCalculation: (calculation) => {
