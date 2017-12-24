@@ -1,6 +1,5 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { shallow } from 'enzyme'
 import EditableInput from './EditableInput'
 
 it('renders when in show mode', () => {

@@ -8,7 +8,7 @@ it('renders with token', () => {
   const div = document.createElement('div')
   const onComponentDidMount = jest.fn()
   ReactDOM.render(
-    <MemoryRouter location="someLocation">
+    <MemoryRouter initialEntries={[{key: 'testKey'}]} location="someLocation">
       <AppWithToken token={'123'} onComponentDidMount={onComponentDidMount} />
     </MemoryRouter>, div)
 
@@ -17,7 +17,7 @@ it('renders with token', () => {
 
 it('renders properly', () => {
   const wrapper = shallow(
-    <MemoryRouter location="someLocation">
+    <MemoryRouter initialEntries={[{key: 'testKey'}]} location="someLocation">
       <AppWithToken token={'123'} />
     </MemoryRouter>
   )
