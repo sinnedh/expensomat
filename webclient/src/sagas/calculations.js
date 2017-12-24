@@ -13,6 +13,10 @@ export function* createCalculation(action) {
       members: calculation.data.members,
       description: calculation.data.description,
     })
+    yield put({
+      type: "APPLICATION:SET_TOKEN",
+      token: calculation.data.members[0].token,
+    })
     yield put(setInfoNotification('Calculation created succesfully'))
   } catch (e) {
     yield put({type: "CALCULATION:CREATE_FAILURE", message: e.message})
