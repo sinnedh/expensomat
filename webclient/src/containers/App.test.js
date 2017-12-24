@@ -1,7 +1,6 @@
 import React from 'react';
 import { Map } from 'immutable';
 import configureStore from 'redux-mock-store';
-import { shallow } from 'enzyme';
 import App from './App';
 
 describe('App', () => {
