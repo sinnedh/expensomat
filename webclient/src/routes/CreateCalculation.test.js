@@ -1,6 +1,5 @@
 import React from 'react'
 import { Map } from 'immutable'
-import { mount, shallow } from 'enzyme'
 import configureStore from 'redux-mock-store'
 import CreateCalculation from './CreateCalculation'
 
