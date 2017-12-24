@@ -22,5 +22,5 @@ it('renders properly', () => {
     </MemoryRouter>
   )
 
-  expect(wrapper).toMatchSnapshot()
+  expect(wrapper.find('AppWithToken')).toMatchSnapshot()
 })
