@@ -3,9 +3,9 @@ defmodule ApiServerWeb.MemberControllerTest do
 
   alias ApiServer.Calculations
 
-  @valid_attrs %{"name" => "Schlucke"}
-  @update_attrs %{"name" => "Martin"}
-  @invalid_attrs %{"name" => 22}
+  @valid_attrs %{"name" => "Schlucke", "role" => "admin"}
+  @update_attrs %{"name" => "Martin", "role" => "editor"}
+  @invalid_attrs %{"name" => 22, "role" => "invalid"}
 
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
@@ -18,12 +18,12 @@ defmodule ApiServerWeb.MemberControllerTest do
   end
 
   defp create_member(calculation) do
-    create_member(calculation, %{name: "Kalle", token: "ABCD"})
+    create_member(calculation, %{name: "Kalle", token: "ABCD", role: "admin"})
   end
-  defp create_member(calculation, %{name: name, token: token}) do
+  defp create_member(calculation, %{name: name, token: token, role: role}) do
     {:ok, member} = Calculations.create_member(
       calculation,
-      %{"name" => name, "token" => token}
+      %{"name" => name, "token" => token, "role" => role}
     )
     {:ok, member: member}
   end
@@ -33,11 +33,11 @@ defmodule ApiServerWeb.MemberControllerTest do
 
     test "list all members of calculation for all members", %{conn: conn, calculation: calculation} do
       {:ok, member: member1} = create_member(calculation)
-      {:ok, member: member2} = create_member(calculation, %{name: "Keek", token: "EFGH"})
+      {:ok, member: member2} = create_member(calculation, %{name: "Keek", token: "EFGH", role: "editor"})
 
       expected_response = [
-        %{"id" => member1.id, "name" => "Kalle"},
-        %{"id" => member2.id, "name" => "Keek"},
+        %{"id" => member1.id, "name" => "Kalle", "role" => "admin"},
+        %{"id" => member2.id, "name" => "Keek", "role" => "editor"},
       ]
 
       assert expected_response == conn
@@ -53,21 +53,21 @@ defmodule ApiServerWeb.MemberControllerTest do
 
     test "does not list members of other calculations", %{conn: conn, calculation: calculation} do
       {:ok, member: member1} = create_member(calculation)
-      {:ok, member: member2} = create_member(calculation, %{name: "Keek", token: "EFGH"})
+      {:ok, member: member2} = create_member(calculation, %{name: "Keek", token: "EFGH", role: "editor"})
 
       {:ok, calculation: other_calculation} = create_calculation(%{name: "Other calculation"})
-      {:ok, member: other_member} = create_member(other_calculation, %{name: "Franky", token: "IJKL"})
+      {:ok, member: other_member} = create_member(other_calculation, %{name: "Franky", token: "IJKL", role: "editor"})
 
       expected_response = [
-        %{"id" => member1.id, "name" => "Kalle"},
-        %{"id" => member2.id, "name" => "Keek"},
+        %{"id" => member1.id, "name" => "Kalle", "role" => "admin"},
+        %{"id" => member2.id, "name" => "Keek", "role" => "editor"},
       ]
       assert expected_response == conn
       |> get(calculation_member_path(conn, :index, member1.token))
       |> json_response(200)
       |> Map.fetch!("data")
 
-      expected_response = [%{"id" => other_member.id, "name" => "Franky"}]
+      expected_response = [%{"id" => other_member.id, "name" => "Franky", "role" => "editor"}]
       assert expected_response == conn
       |> get(calculation_member_path(conn, :index, other_member.token))
       |> json_response(200)
@@ -118,7 +118,7 @@ defmodule ApiServerWeb.MemberControllerTest do
       {:ok, member: member1} = create_member(calculation)
 
       attrs = @valid_attrs |> Map.put("token", "ABCD1234")
-      assert %{"id" => id, "name" => "Schlucke"} = conn
+      assert %{"id" => id, "name" => "Schlucke", "role" => "admin"} = conn
       |> post(calculation_member_path(conn, :create, member1.token), member: attrs)
       |> json_response(201)
       |> Map.fetch!("data")
@@ -146,7 +146,7 @@ defmodule ApiServerWeb.MemberControllerTest do
     test "renders new member when data is valid", %{conn: conn, calculation: calculation} do
       {:ok, member: member1} = create_member(calculation)
 
-      assert %{"id" => member1.id, "name" => "Martin"} == conn
+      assert %{"id" => member1.id, "name" => "Martin", "role" => "editor"} == conn
       |> put(calculation_member_path(conn, :update, member1.token, member1), member: @update_attrs)
       |> json_response(200)
       |> Map.fetch!("data")
@@ -187,7 +187,7 @@ defmodule ApiServerWeb.MemberControllerTest do
 
     test "deletes chosen member", %{conn: conn, calculation: calculation} do
       {:ok, member: member1} = create_member(calculation)
-      {:ok, member: member2} = create_member(calculation, %{name: "Keek", token: "EFGH"})
+      {:ok, member: member2} = create_member(calculation, %{name: "Keek", token: "EFGH", role: "editor"})
 
       assert "" == conn
       |> delete(calculation_member_path(conn, :delete, member1.token, member2))

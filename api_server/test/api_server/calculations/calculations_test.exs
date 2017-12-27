@@ -220,8 +220,8 @@ defmodule ApiServer.CalculationsTest do
   describe "members" do
     alias ApiServer.Calculations.Member
 
-    @valid_attrs %{"name" => "some name", "token" => "ABCD"}
-    @update_attrs %{"name" => "some updated name"}
+    @valid_attrs %{"name" => "some name", "token" => "ABCD", "role" => "admin"}
+    @update_attrs %{"name" => "some updated name", "role" => "editor"}
     @invalid_attrs %{"name" => nil}
 
     def member_fixture(attrs \\ %{}) do
@@ -262,6 +262,7 @@ defmodule ApiServer.CalculationsTest do
       assert {:ok, member} = Calculations.update_member(member, @update_attrs)
       assert %Member{} = member
       assert member.name == "some updated name"
+      assert member.role == "editor"
     end
 
     test "update_member/2 with invalid data returns error changeset" do

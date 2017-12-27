@@ -9,8 +9,8 @@ defmodule ApiServerWeb.ExpenseControllerTest do
 
   setup %{conn: conn} do
     {:ok, calculation} = Calculations.create_calculation(%{name: "Main calculation"})
-    {:ok, member1} = Calculations.create_member(%{"name" => "Paul", "calculation_id" => calculation.id, "token" => "ABCD"})
-    {:ok, member2} = Calculations.create_member(%{"name" => "Paula", "calculation_id" => calculation.id, "token" => "EFGH"})
+    {:ok, member1} = Calculations.create_member(%{"name" => "Paul", "calculation_id" => calculation.id, "token" => "ABCD", "role" => "admin"})
+    {:ok, member2} = Calculations.create_member(%{"name" => "Paula", "calculation_id" => calculation.id, "token" => "EFGH", "role" => "editor"})
 
     {
       :ok,
@@ -69,8 +69,8 @@ defmodule ApiServerWeb.ExpenseControllerTest do
         "id" => id,
         "amount" => 42,
         "description" => "some description",
-        "paid_by" => [%{"id" => member1.id, "name" => member1.name}],
-        "paid_for" => [%{"id" => member2.id, "name" => member2.name}],
+        "paid_by" => [%{"id" => member1.id, "name" => member1.name, "role" => member1.role}],
+        "paid_for" => [%{"id" => member2.id, "name" => member2.name, "role" => member2.role}],
         "paid_at" => "2010-04-17T14:00:00Z",
       }
     end
@@ -93,8 +93,8 @@ defmodule ApiServerWeb.ExpenseControllerTest do
         "id" => expense.id,
         "amount" => 43,
         "description" => "some updated description",
-        "paid_by" => [%{"id" => member1.id, "name" => member1.name}],
-        "paid_for" => [%{"id" => member2.id, "name" => member2.name}],
+        "paid_by" => [%{"id" => member1.id, "name" => member1.name, "role" => member1.role}],
+        "paid_for" => [%{"id" => member2.id, "name" => member2.name, "role" => member2.role}],
         "paid_at" => "2011-05-18T15:01:01Z",
       }
     end
@@ -114,8 +114,8 @@ defmodule ApiServerWeb.ExpenseControllerTest do
         "id" => expense.id,
         "amount" => 42,
         "description" => "the updated description",
-        "paid_by" => [%{"id" => member1.id, "name" => member1.name}],
-        "paid_for" => [%{"id" => member2.id, "name" => member2.name}],
+        "paid_by" => [%{"id" => member1.id, "name" => member1.name, "role" => member1.role}],
+        "paid_for" => [%{"id" => member2.id, "name" => member2.name, "role" => member2.role}],
         "paid_at" => "2010-04-17T14:00:00Z",
       }
     end
