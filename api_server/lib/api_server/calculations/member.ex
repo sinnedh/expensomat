@@ -8,6 +8,7 @@ defmodule ApiServer.Calculations.Member do
     field :token, :string  # TODO: at least hash this token when being stored (e.g. using comeonin/bcrypt)
     field :name, :string
     field :calculation_id, :id
+    field :role, :string
 
     timestamps()
   end
