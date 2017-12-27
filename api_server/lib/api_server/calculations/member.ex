@@ -16,8 +16,9 @@ defmodule ApiServer.Calculations.Member do
   @doc false
   def changeset(%Member{} = member, attrs) do
     member
-    |> cast(attrs, [:name, :calculation_id])
-    |> validate_required([:name])
+    |> cast(attrs, [:name, :calculation_id, :role])
+    |> validate_required([:name, :role])
+    |> validate_inclusion(:role, ["admin", "editor", "observer"])
     |> create_token_if_not_exists
     |> unique_constraint(:token)
   end
