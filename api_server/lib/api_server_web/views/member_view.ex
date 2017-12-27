@@ -13,12 +13,14 @@ defmodule ApiServerWeb.MemberView do
   def render("member.json", %{member: member}) do
     %{id: member.id,
       name: member.name,
+      role: member.role,
     }
   end
 
   def render("member_with_token.json", %{member: member}) do
     %{id: member.id,
       name: member.name,
+      role: member.role,
       token: member.token,
     }
   end
