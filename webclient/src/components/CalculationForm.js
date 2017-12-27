@@ -7,7 +7,7 @@ class CalculationForm extends React.Component {
     this.state = {
       name: '',
       description: '',
-      members: [{name: ''}],
+      members: [{name: '', role: 'admin'}],
     };
 
     this.handleMemberNameChange = this.handleMemberNameChange.bind(this);

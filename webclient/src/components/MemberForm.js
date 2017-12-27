@@ -6,6 +6,7 @@ class MemberForm extends React.Component {
     super(props);
     this.state = {
       name: '',
+      role: '',
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -34,6 +35,13 @@ class MemberForm extends React.Component {
           <input
             name="name"
             value={this.state.name}
+            onChange={this.handleInputChange} />
+        </label>
+        <label>
+          Role:
+          <input
+            name="role"
+            value={this.state.role}
             onChange={this.handleInputChange} />
         </label>
         <input type="button" value="Add" onClick={this.handleSubmit} />
