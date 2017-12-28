@@ -1,0 +1,65 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Navigation renders properly with admin-user 1`] = `
+<ul>
+  <li>
+    Hello 
+    Keek
+    !
+  </li>
+  <li>
+    <Link
+      replace={false}
+      to="/calculation/1234"
+    >
+      Show calculation
+    </Link>
+  </li>
+  <li>
+    <Link
+      replace={false}
+      to="/calculation/1234/manage"
+    >
+      Manage calculation
+    </Link>
+  </li>
+</ul>
+`;
+
+exports[`Navigation renders properly with editor-user 1`] = `
+<ul>
+  <li>
+    Hello 
+    Keek
+    !
+  </li>
+  <li>
+    <Link
+      replace={false}
+      to="/calculation/1234"
+    >
+      Show calculation
+    </Link>
+  </li>
+</ul>
+`;
+
+exports[`Navigation renders properly with observer-user 1`] = `
+<ul>
+  <li>
+    Hello 
+    Keek
+    !
+  </li>
+  <li>
+    <Link
+      replace={false}
+      to="/calculation/1234"
+    >
+      Show calculation
+    </Link>
+  </li>
+</ul>
+`;
+
+exports[`Navigation renders properly without user 1`] = `<ul />`;

@@ -10,6 +10,7 @@ describe('App', () => {
       notificationText: null,
       notificationType: null,
       token: null,
+      user: Map(),
     }),
   });
   const mockStore = configureStore();

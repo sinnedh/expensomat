@@ -11,7 +11,7 @@ class App extends React.Component {
     return (
       <Router>
         <div className="App">
-          <Navigation token={this.props.token} />
+          <Navigation token={this.props.token} user={this.props.user}/>
           <LoadingIndicator isLoading={this.props.isLoading} />
           <NotificationMessage
             text={this.props.notificationText}
