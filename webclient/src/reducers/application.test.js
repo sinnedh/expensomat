@@ -6,6 +6,31 @@ const initialState = Map({
   notificationText: null,
   notificationType: null,
   token: null,
+  user: null,
+});
+
+describe('APPLICATION:SET_USER', () => {
+  const user = {name: 'Keek', role: 'admin'};
+  const action = {type: 'APPLICATION:SET_USER', user};
+
+  it('sets the user', () => {
+    const beforeState = initialState
+    const afterState = initialState.merge({'user': Map(user)})
+
+    expect(application(beforeState, action)).toEqual(afterState);
+  });
+});
+
+describe('APPLICATION:RESET_USER', () => {
+  const action = {type: 'APPLICATION:RESET_USER'};
+
+  it('resets the user', () => {
+    const user = {name: 'Keek', role: 'admin'};
+    const beforeState = initialState.merge({user: Map(user), token: 'ABC'})
+    const afterState = initialState.merge({token: 'ABC'})
+
+    expect(application(beforeState, action)).toEqual(afterState);
+  });
 });
 
 describe('APPLICATION:SET_TOKEN', () => {
@@ -90,6 +115,16 @@ describe('APPLICATION:NOTIFICATION_RESET', () => {
       notificationType: 'something',
     })
     const afterState = initialState;
+
+    expect(application(beforeState, action)).toEqual(afterState);
+  });
+
+  it('does not change other state properties', () => {
+    const beforeState = initialState.merge({
+      user: {name: 'Keek', role: 'admin'},
+      token: 'ABCD1234'
+    })
+    const afterState = beforeState;
 
     expect(application(beforeState, action)).toEqual(afterState);
   });

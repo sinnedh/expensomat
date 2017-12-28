@@ -1,8 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`APPLICATION handles setToken 1`] = `
-Object {
-  "token": "ABCD123",
-  "type": "APPLICATION:SET_TOKEN",
-}
-`;

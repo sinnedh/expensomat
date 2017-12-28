@@ -21,8 +21,9 @@ defmodule ApiServerWeb.CalculationController do
   end
 
   def show(conn, %{"token" => token}) do
-    calculation = Calculations.get_calculation_for_token!(token)
-    render(conn, "show.json", calculation: calculation)
+    member = Calculations.get_member_for_token!(token)
+    calculation = Calculations.get_calculation!(member.calculation_id)
+    render(conn, "show.json", calculation: calculation, member: member)
   end
 
   def update(conn, %{"token" => token, "calculation" => calculation_params}) do

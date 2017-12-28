@@ -6,16 +6,16 @@ import * as api from '../api'
 export function* createCalculation(action) {
   yield put(incrementLoadingCounter())
   try {
-    const calculation = yield call(api.createCalculation, action.calculation)
+    const response = yield call(api.createCalculation, action.calculation)
     yield put({
       type: "CALCULATION:CREATE_SUCCESS",
-      name: calculation.data.name,
-      members: calculation.data.members,
-      description: calculation.data.description,
+      name: response.data.name,
+      members: response.data.members,
+      description: response.data.description,
     })
     yield put({
       type: "APPLICATION:SET_TOKEN",
-      token: calculation.data.members[0].token,
+      token: response.data.members[0].token,
     })
     yield put(setInfoNotification('Calculation created succesfully'))
   } catch (e) {
@@ -47,15 +47,21 @@ export function* fetchCalculation(action) {
   yield put(incrementLoadingCounter())
 
   try {
-    const calculation = yield call(api.fetchCalculation, action.token)
+    const response = yield call(api.fetchCalculation, action.token)
 
     yield put({
       type: "CALCULATION:LOAD_SUCCESS",
-      name: calculation.data.name,
-      members: calculation.data.members,
-      description: calculation.data.description,
-      matrix: calculation.data.matrix,
+      name: response.data.name,
+      members: response.data.members,
+      description: response.data.description,
+      matrix: response.data.matrix,
     })
+
+    yield put({
+      type: "APPLICATION:SET_USER",
+      user: response.user,
+    })
+
     yield put(setInfoNotification('Calculation loaded succesfully'))
   } catch (e) {
     yield put({type: "CALCULATION:LOAD_FAILURE", message: e.message})
@@ -68,12 +74,12 @@ export function* fetchCalculation(action) {
 export function* updateCalculation(action) {
   yield put(incrementLoadingCounter())
   try {
-    const calculation = yield call(api.updateCalculation, action.token, action.changes)
+    const response = yield call(api.updateCalculation, action.token, action.changes)
     yield put({
       type: "CALCULATION:UPDATE_SUCCESS",
-      name: calculation.data.name,
-      members: calculation.data.members,
-      description: calculation.data.description,
+      name: response.data.name,
+      members: response.data.members,
+      description: response.data.description,
     })
     yield put(setInfoNotification('Calculation updated succesfully'))
   } catch (e) {
