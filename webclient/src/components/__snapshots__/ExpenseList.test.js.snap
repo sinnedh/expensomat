@@ -1,0 +1,59 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ExpenseListItem matches snapshop when canEditExpenses=false 1`] = `
+<ul>
+  <ExpenseListItem
+    expense={
+      Object {
+        "amount": 800,
+        "description": "Pasta",
+        "paid_at": "2017-11-11 15:28",
+        "paid_by": Array [],
+        "paid_for": Array [],
+      }
+    }
+    key="0"
+  />
+  <ExpenseListItem
+    expense={
+      Object {
+        "amount": 1200,
+        "description": "Pizza",
+        "paid_at": "2016-09-14 12:18",
+        "paid_by": Array [],
+        "paid_for": Array [],
+      }
+    }
+    key="1"
+  />
+</ul>
+`;
+
+exports[`ExpenseListItem matches snapshop when canEditExpenses=true 1`] = `
+<ul>
+  <ExpenseListItem
+    expense={
+      Object {
+        "amount": 800,
+        "description": "Pasta",
+        "paid_at": "2017-11-11 15:28",
+        "paid_by": Array [],
+        "paid_for": Array [],
+      }
+    }
+    key="0"
+  />
+  <ExpenseListItem
+    expense={
+      Object {
+        "amount": 1200,
+        "description": "Pizza",
+        "paid_at": "2016-09-14 12:18",
+        "paid_by": Array [],
+        "paid_for": Array [],
+      }
+    }
+    key="1"
+  />
+</ul>
+`;

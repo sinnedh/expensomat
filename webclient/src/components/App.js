@@ -13,6 +13,7 @@ class App extends React.Component {
       token: this.props.token,
       user: {
         ...this.props.user,
+        canEditExpenses: ['editor', 'admin'].includes(this.props.user.role),
       },
     };
   }
@@ -40,6 +41,7 @@ App.childContextTypes = {
   user: PropTypes.shape({
     name: PropTypes.string,
     role: PropTypes.string,
+    canEditExpenses: PropTypes.bool,
   }),
 }
 

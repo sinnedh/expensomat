@@ -1,0 +1,72 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ExpenseListItem matches snapshot when canEditExpense=false 1`] = `
+<li>
+  2017-11-11
+  :
+   
+  <strong>
+    Pasta beim Italiener
+  </strong>
+   
+  8 Euro
+   paid by 
+  <span
+    key="0"
+  >
+    Micha
+  </span>
+  <span
+    key="1"
+  >
+    Achim
+  </span>
+   for 
+  <span
+    key="0"
+  >
+    Dennis
+  </span>
+</li>
+`;
+
+exports[`ExpenseListItem matches snapshot when canEditExpense=true 1`] = `
+<li>
+  <button
+    onClick={[Function]}
+  >
+    X
+  </button>
+  2017-11-11
+  :
+   
+  <strong>
+    Pasta beim Italiener
+  </strong>
+   
+  8 Euro
+   paid by 
+  <span
+    key="0"
+  >
+    Micha
+  </span>
+  <span
+    key="1"
+  >
+    Achim
+  </span>
+   for 
+  <span
+    key="0"
+  >
+    Dennis
+  </span>
+  <Link
+    replace={false}
+    to="/calculation/ABCD1234/expense/undefined"
+  >
+    Edit
+  </Link>
+</li>
+`;
