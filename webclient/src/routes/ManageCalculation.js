@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import EditableInput from '../components/EditableInput'
+import { EditableInput } from '../components/EditableField'
 import MemberList from '../components/MemberList'
 import MemberForm from '../components/MemberForm'
 import { createMember, deleteMember, updateCalculation, updateMember } from '../actions'

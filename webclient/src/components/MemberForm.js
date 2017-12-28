@@ -1,5 +1,6 @@
 import React from 'react';
 import {getFormFieldValue} from '../utils';
+import { roleOptions } from './MemberList'
 
 class MemberForm extends React.Component {
   constructor(props) {
@@ -39,10 +40,11 @@ class MemberForm extends React.Component {
         </label>
         <label>
           Role:
-          <input
-            name="role"
-            value={this.state.role}
-            onChange={this.handleInputChange} />
+          <select name="role" value={this.state.role} onChange={this.handleInputChange}>
+            {Object.keys(roleOptions).map((key) =>
+              <option key={key} value={key}>{roleOptions[key]}</option>
+            )}
+          </select>
         </label>
         <input type="button" value="Add" onClick={this.handleSubmit} />
       </form>

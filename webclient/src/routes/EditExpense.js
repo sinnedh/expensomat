@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import EditableInput from '../components/EditableInput'
+import { EditableInput } from '../components/EditableField'
 import { updateExpense } from '../actions'
 
 class EditExpense extends React.Component {
