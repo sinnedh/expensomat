@@ -6,18 +6,42 @@ const initialState = Map({
   notificationText: null,
   notificationType: null,
   token: null,
-  user: null,
+  user: Map(),
 });
 
 describe('APPLICATION:SET_USER', () => {
-  const user = {name: 'Keek', role: 'admin'};
-  const action = {type: 'APPLICATION:SET_USER', user};
 
   it('sets the user', () => {
+    const user = {name: 'Keek', role: 'admin'};
+    const action = {type: 'APPLICATION:SET_USER', user};
     const beforeState = initialState
-    const afterState = initialState.merge({'user': Map(user)})
+    const afterState = initialState.merge({'user': Map({...user, canEditExpenses: true})})
 
     expect(application(beforeState, action)).toEqual(afterState);
+  });
+
+  it('set canEditExpenses to true for admin users', () => {
+    const user = {name: 'Keek', role: 'admin'};
+    const action = {type: 'APPLICATION:SET_USER', user};
+    const reducedState = application(initialState, action)
+
+    expect(reducedState.getIn(['user', 'canEditExpenses'])).toEqual(true);
+  });
+
+  it('set canEditExpenses to true for editor users', () => {
+    const user = {name: 'Keek', role: 'editor'};
+    const action = {type: 'APPLICATION:SET_USER', user};
+    const reducedState = application(initialState, action)
+
+    expect(reducedState.getIn(['user', 'canEditExpenses'])).toEqual(true);
+  });
+
+  it('set canEditExpenses to false for observer users', () => {
+    const user = {name: 'Keek', role: 'observer'};
+    const action = {type: 'APPLICATION:SET_USER', user};
+    const reducedState = application(initialState, action)
+
+    expect(reducedState.getIn(['user', 'canEditExpenses'])).toEqual(false);
   });
 });
 

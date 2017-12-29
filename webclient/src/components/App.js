@@ -11,10 +11,7 @@ class App extends React.Component {
   getChildContext() {
     return {
       token: this.props.token,
-      user: {
-        ...this.props.user,
-        canEditExpenses: ['editor', 'admin'].includes(this.props.user.role),
-      },
+      user: this.props.user,
     };
   }
 

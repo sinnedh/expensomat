@@ -15,10 +15,13 @@ export default (state = initialState, action) => {
       return state.update('token', token => action.token)
 
     case 'APPLICATION:SET_USER':
-      return state.update('user', user => Map(action.user))
+      return state.update('user', user => Map({
+        ...action.user,
+        canEditExpenses: ['editor', 'admin'].includes(action.user.role),
+      }))
 
     case 'APPLICATION:RESET_USER':
-      return state.update('user', user => null)
+      return state.update('user', user => Map())
 
     case 'APPLICATION:INCREMENT_LOADING_COUNTER':
       return state.update('loadingCounter', l => l + 1)
