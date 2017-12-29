@@ -14,7 +14,12 @@ class ShowCalculation extends React.Component {
         <h2>Matrix</h2>
         <ExpenseMatrix members={this.props.members} elements={this.props.matrix} />
         <h2>Expenses</h2>
-        <ExpenseForm handleSubmit={this.props.onSubmitExpenseForm} members={this.props.members} />
+        {this.props.canEditExpenses &&
+          <ExpenseForm
+            handleSubmit={this.props.onSubmitExpenseForm}
+            members={this.props.members}
+            />
+        }
         <ExpenseList onClickDelete={this.props.onClickDelete} expenses={this.props.expenses} />
       </div>
     );
@@ -22,6 +27,7 @@ class ShowCalculation extends React.Component {
 }
 
 const mapStateToProps = (state, ownProps) => ({
+  canEditExpenses: state.getIn(['application', 'user', 'canEditExpenses']),
   token: state.getIn(['application', 'token']),
   expenses: state.get('expenses').toJS(),
   name: state.getIn(['calculations', 'name']),
