@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 class EditableInput extends React.Component {
   state = {
@@ -44,6 +45,19 @@ class EditableInput extends React.Component {
       )
     }
   }
+}
+
+EditableInput.propTypes = {
+  value: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
+  ]),
+  onClickSave: PropTypes.func.isRequired,
+}
+
+EditableInput.defaultProps = {
+  value: '',
+  onClickSave: (value) => {},
 }
 
 export default EditableInput
