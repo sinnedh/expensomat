@@ -22,8 +22,3 @@ ExpenseListItem.contextTypes = {
 };
 
 export default ExpenseListItem
-  user: PropTypes.shape({
-    name: PropTypes.string,
-    role: PropTypes.string,
-    canEditExpenses: PropTypes.bool,
-  }),

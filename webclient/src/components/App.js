@@ -11,7 +11,6 @@ class App extends React.Component {
   getChildContext() {
     return {
       token: this.props.token,
-      user: this.props.user,
     };
   }
 
@@ -35,11 +34,6 @@ class App extends React.Component {
 
 App.childContextTypes = {
   token: PropTypes.string,
-  user: PropTypes.shape({
-    name: PropTypes.string,
-    role: PropTypes.string,
-    canEditExpenses: PropTypes.bool,
-  }),
 }
 
 export default App
