@@ -6,9 +6,6 @@ import {formatAmount} from '../utils';
 
 const ExpenseListItem = (props, context) => (
   <li>
-    {context.user.canEditExpenses &&
-      <button onClick={(e) => props.onClickDelete(e, props.expense)}>X</button>
-    }
     {formatDate(props.expense.paid_at)}:
     { } <strong>{props.expense.description}</strong>
     { } {formatAmount(props.expense.amount)}
@@ -22,11 +19,11 @@ const ExpenseListItem = (props, context) => (
 
 ExpenseListItem.contextTypes = {
   token: PropTypes.string,
+};
+
+export default ExpenseListItem
   user: PropTypes.shape({
     name: PropTypes.string,
     role: PropTypes.string,
     canEditExpenses: PropTypes.bool,
   }),
-};
-
-export default ExpenseListItem

@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { createExpense, deleteExpense } from '../actions';
+import { createExpense } from '../actions';
 import ExpenseForm from '../components/ExpenseForm';
 import ExpenseList from '../components/ExpenseList';
 import ExpenseMatrix from '../components/ExpenseMatrix';
@@ -20,7 +20,7 @@ class ShowCalculation extends React.Component {
             members={this.props.members}
             />
         }
-        <ExpenseList onClickDelete={this.props.onClickDelete} expenses={this.props.expenses} />
+        <ExpenseList expenses={this.props.expenses} />
       </div>
     );
   }
@@ -42,10 +42,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onSubmitExpenseForm: (expense) => {
       dispatch(createExpense(token, expense));
-    },
-    onClickDelete: (event, expense) => {
-      event.preventDefault();
-      dispatch(deleteExpense(token, expense.id));
     },
   }
 }

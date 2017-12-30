@@ -46,7 +46,6 @@ exports[`ShowCalculation matches snapshot when canEditExpenses is false 1`] = `
         },
       }
     }
-    onClickDelete={[Function]}
   />
 </div>
 `;
@@ -112,7 +111,6 @@ exports[`ShowCalculation matches snapshot when canEditExpenses is true 1`] = `
         },
       }
     }
-    onClickDelete={[Function]}
   />
 </div>
 `;

@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { EditableInput } from '../components/EditableField'
-import { updateExpense } from '../actions'
+import { deleteExpense, updateExpense } from '../actions'
 
 class ExpenseDetails extends React.Component {
   render() {
@@ -32,6 +32,11 @@ class ExpenseDetails extends React.Component {
             onClickSave={value => this.props.onUpdatePaidAt(value)}
             />
         </div>
+        {this.props.canEditExpenses && this.props.expenseId != null && 
+          <button onClick={(e) => this.props.onClickDelete(e, this.props.expenseId)}>
+            Delete
+          </button>
+        }
       </div>
     )
   }
@@ -42,6 +47,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     canEditExpenses: state.getIn(['application', 'user', 'canEditExpenses']),
     token: state.getIn(['application', 'token']),
+    expenseId: expense ? expense.get('id') : null,
     description: expense ? expense.get('description') : '',
     amount: expense ? expense.get('amount') : 0,
     paid_at: expense ? expense.get('paid_at') : '',
@@ -53,6 +59,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   const token = ownProps.match.params.token
 
   return {
+    onClickDelete: (event, expenseId) => {
+      event.preventDefault();
+      dispatch(deleteExpense(token, expenseId));
+    },
     onUpdateDescription: (description) => {
       dispatch(updateExpense(token, expenseId, {description}))
     },

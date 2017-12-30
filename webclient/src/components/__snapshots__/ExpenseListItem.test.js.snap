@@ -38,11 +38,6 @@ exports[`ExpenseListItem matches snapshot when canEditExpense=false 1`] = `
 
 exports[`ExpenseListItem matches snapshot when canEditExpense=true 1`] = `
 <li>
-  <button
-    onClick={[Function]}
-  >
-    X
-  </button>
   2017-11-11
   :
    
