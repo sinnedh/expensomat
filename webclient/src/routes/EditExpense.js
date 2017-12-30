@@ -11,6 +11,7 @@ class EditExpense extends React.Component {
         <div>
           <label>Description:</label>{' '}
           <EditableInput
+            isEditable={this.props.canEditExpenses}
             value={this.props.description}
             onClickSave={value => this.props.onUpdateDescription(value)}
             />
@@ -18,6 +19,7 @@ class EditExpense extends React.Component {
         <div>
           <label>Amount:</label>{' '}
           <EditableInput
+            isEditable={this.props.canEditExpenses}
             value={this.props.amount}
             onClickSave={value => this.props.onUpdateAmount(value)}
             />
@@ -25,6 +27,7 @@ class EditExpense extends React.Component {
         <div>
           <label>Paid at:</label>{' '}
           <EditableInput
+            isEditable={this.props.canEditExpenses}
             value={this.props.paid_at}
             onClickSave={value => this.props.onUpdatePaidAt(value)}
             />
@@ -37,6 +40,7 @@ class EditExpense extends React.Component {
 const mapStateToProps = (state, ownProps) => {
   const expense = state.getIn(['expenses', ownProps.match.params.id.toString()])
   return {
+    canEditExpenses: state.getIn(['application', 'user', 'canEditExpenses']),
     token: state.getIn(['application', 'token']),
     description: expense ? expense.get('description') : '',
     amount: expense ? expense.get('amount') : 0,
