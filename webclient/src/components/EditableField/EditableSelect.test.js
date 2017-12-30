@@ -4,15 +4,20 @@ import EditableSelect from './EditableSelect'
 
 const options = {hello: "Hallo", ciao: "Ciao"}
 
-it('renders when in show mode', () => {
+it('matches snapshot when in show mode', () => {
   const wrapper = shallow(<EditableSelect value={"hello"} options={options} />)
   wrapper.setState({editMode: false})
   expect(wrapper).toMatchSnapshot()
 })
 
-it('renders when in edit mode', () => {
+it('matches snapshot when in edit mode', () => {
   const wrapper = shallow(<EditableSelect value={"ciao"}  options={options} />)
   wrapper.setState({editMode: true})
+  expect(wrapper).toMatchSnapshot()
+})
+
+it('matches snapshot when not isEditable', () => {
+  const wrapper = shallow(<EditableSelect value={"hello"} options={options} isEditable={false} />)
   expect(wrapper).toMatchSnapshot()
 })
 

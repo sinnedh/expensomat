@@ -2,15 +2,20 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import EditableInput from './EditableInput'
 
-it('renders when in show mode', () => {
+it('matches snapshot when in show mode', () => {
   const wrapper = shallow(<EditableInput value={"Hello"} />)
   wrapper.setState({editMode: false})
   expect(wrapper).toMatchSnapshot()
 })
 
-it('renders when in edit mode', () => {
+it('matches snapshot when in edit mode', () => {
   const wrapper = shallow(<EditableInput value={"Hello"} />)
   wrapper.setState({editMode: true})
+  expect(wrapper).toMatchSnapshot()
+})
+
+it('matches snapshot when not isEditable', () => {
+  const wrapper = shallow(<EditableInput value={"Hello"} isEditable={false} />)
   expect(wrapper).toMatchSnapshot()
 })
 

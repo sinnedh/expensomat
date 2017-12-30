@@ -28,22 +28,29 @@ class EditableInput extends React.Component {
   }
 
   render() {
-    if(this.state.editMode) {
+    if(this.state.editMode && this.props.isEditable) {
       return (
-        <span>
+        <React.Fragment>
           <input className="value" type="text" value={this.state.editValue} onChange={e => this.handleChangeValue(e)} />
           <input className="save-button" type="button" value="Save" onClick={e => this.handleClickSave(e)} />
           <input className="cancel-button" type="button" value="Cancel" onClick={e => this.handleClickCancel(e)} />
-        </span>
-      )
-    } else {
-      return (
-        <span>
-          {this.props.value}
-          <input className="edit-button" type="button" value="Edit" onClick={e => this.handleClickEdit(e)} />
-        </span>
+        </React.Fragment>
       )
     }
+
+    return (
+      <React.Fragment>
+        {this.props.value}
+        {this.props.isEditable &&
+          <input
+            className="edit-button"
+            type="button"
+            value="Edit"
+            onClick={e => this.handleClickEdit(e)}
+          />
+        }
+      </React.Fragment>
+    )
   }
 }
 
@@ -52,11 +59,13 @@ EditableInput.propTypes = {
     PropTypes.string,
     PropTypes.number
   ]),
+  isEditable: PropTypes.bool,
   onClickSave: PropTypes.func.isRequired,
 }
 
 EditableInput.defaultProps = {
   value: '',
+  isEditable: true,
   onClickSave: (value) => {},
 }
 
