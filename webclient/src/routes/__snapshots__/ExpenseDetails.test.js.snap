@@ -1,9 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`EditExpense renders properly 1`] = `
+exports[`ExpenseDetails renders properly 1`] = `
 <div>
   <h1>
-    Edit expense:
+    Expense details:
   </h1>
   <div>
     <label>

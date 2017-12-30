@@ -3,11 +3,11 @@ import { connect } from 'react-redux'
 import { EditableInput } from '../components/EditableField'
 import { updateExpense } from '../actions'
 
-class EditExpense extends React.Component {
+class ExpenseDetails extends React.Component {
   render() {
     return (
       <div>
-        <h1>Edit expense:</h1>
+        <h1>Expense details:</h1>
         <div>
           <label>Description:</label>{' '}
           <EditableInput
@@ -65,4 +65,4 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(EditExpense)
+export default connect(mapStateToProps, mapDispatchToProps)(ExpenseDetails)

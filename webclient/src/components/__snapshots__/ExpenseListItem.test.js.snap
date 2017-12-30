@@ -27,6 +27,12 @@ exports[`ExpenseListItem matches snapshot when canEditExpense=false 1`] = `
   >
     Dennis
   </span>
+  <Link
+    replace={false}
+    to="/calculation/ABCD1234/expense/undefined"
+  >
+    Details
+  </Link>
 </li>
 `;
 
@@ -66,7 +72,7 @@ exports[`ExpenseListItem matches snapshot when canEditExpense=true 1`] = `
     replace={false}
     to="/calculation/ABCD1234/expense/undefined"
   >
-    Edit
+    Details
   </Link>
 </li>
 `;

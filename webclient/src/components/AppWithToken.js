@@ -1,7 +1,7 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import ShowCalculation from '../routes/ShowCalculation';
-import EditExpense from '../routes/EditExpense';
+import ExpenseDetails from '../routes/ExpenseDetails';
 import ManageCalculation from '../routes/ManageCalculation';
 
 class AppWithToken extends React.Component {
@@ -12,7 +12,7 @@ class AppWithToken extends React.Component {
   render() {
     return (
       <Switch>
-        <Route exact path="/calculation/:token/expense/:id" component={EditExpense} />
+        <Route exact path="/calculation/:token/expense/:id" component={ExpenseDetails} />
         <Route exact path="/calculation/:token/manage" component={ManageCalculation} />
         <Route exact path="/calculation/:token" component={ShowCalculation} />
       </Switch>

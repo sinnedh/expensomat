@@ -14,11 +14,9 @@ const ExpenseListItem = (props, context) => (
     { } {formatAmount(props.expense.amount)}
     { } paid by {props.expense.paid_by.map((m, i) => <span key={i}>{m.name}</span>)}
     { } for {props.expense.paid_for.map((m, i) => <span key={i}>{m.name}</span>)}
-    {context.user.canEditExpenses &&
-      <Link to={`/calculation/${context.token}/expense/${props.expense.id}`}>
-        Edit
-      </Link>
-    }
+    <Link to={`/calculation/${context.token}/expense/${props.expense.id}`}>
+      Details
+    </Link>
   </li>
 )
 
