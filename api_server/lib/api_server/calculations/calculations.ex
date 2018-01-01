@@ -364,6 +364,15 @@ defmodule ApiServer.Calculations do
   def get_member!(id), do: Repo.get!(Member, id)
   def get_member_for_token!(token), do: Repo.get_by!(Member, token: token)
 
+  def verify_token_with_role(token, allowed_roles) do
+    member = Repo.get_by(Member, token: token)
+    cond do
+      member == nil -> {:error, :forbidden}
+      Enum.member?(allowed_roles, member.role ) -> {:ok, member}
+      true -> {:error, :forbidden}
+    end
+  end
+
   @doc """
   Creates a member.
 
