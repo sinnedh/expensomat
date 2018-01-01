@@ -86,6 +86,33 @@ defmodule ApiServerWeb.CalculationControllerTest do
       conn = put conn, calculation_path(conn, :update, member.token), calculation: @invalid_attrs
       assert json_response(conn, 422)["errors"] != %{}
     end
+
+    test "forbidden when no valid token", %{conn: conn} do
+      assert "Forbidden" == conn
+      |> put(calculation_path(conn, :update, "NVLD_TKN"), calculation: @update_attrs)
+      |> json_response(403)
+    end
+
+    test "forbidden when user is observer", %{conn: conn, calculation: calculation} do
+      {:ok, user} = Calculations.create_member(calculation, %{"name" => "Observer", "token" => "ABCD", "role" => "observer"})
+      assert "Forbidden" == conn
+      |> put(calculation_path(conn, :update, user.token), calculation: @update_attrs)
+      |> json_response(403)
+    end
+
+    test "forbidden when user is editor", %{conn: conn, calculation: calculation} do
+      {:ok, user} = Calculations.create_member(calculation, %{"name" => "Editor", "token" => "ABCD", "role" => "editor"})
+      assert "Forbidden" == conn
+      |> put(calculation_path(conn, :update, user.token), calculation: @update_attrs)
+      |> json_response(403)
+    end
+
+    test "allowed when user is admin", %{conn: conn, calculation: calculation} do
+      {:ok, user} = Calculations.create_member(calculation, %{"name" => "Admin", "token" => "ABCD", "role" => "admin"})
+      conn
+      |> put(calculation_path(conn, :update, user.token), calculation: @update_attrs)
+      |> response(200)
+    end
   end
 
   describe "delete calculation" do
@@ -107,11 +134,38 @@ defmodule ApiServerWeb.CalculationControllerTest do
         get conn, calculation_path(conn, :show, member.token)
       end
     end
+
+    test "forbidden when no valid token", %{conn: conn} do
+      assert "Forbidden" == conn
+      |> delete(calculation_path(conn, :delete, "NVLD_TKN"))
+      |> json_response(403)
+    end
+
+    test "forbidden when user is observer", %{conn: conn, calculation: calculation} do
+      {:ok, user} = Calculations.create_member(calculation, %{"name" => "Observer", "token" => "ABCD", "role" => "observer"})
+      assert "Forbidden" == conn
+      |> delete(calculation_path(conn, :delete, user.token))
+      |> json_response(403)
+    end
+
+    test "forbidden when user is editor", %{conn: conn, calculation: calculation} do
+      {:ok, user} = Calculations.create_member(calculation, %{"name" => "Editor", "token" => "ABCD", "role" => "editor"})
+      assert "Forbidden" == conn
+      |> delete(calculation_path(conn, :delete, user.token))
+      |> json_response(403)
+    end
+
+    test "allowed when user is admin", %{conn: conn, calculation: calculation} do
+      {:ok, user} = Calculations.create_member(calculation, %{"name" => "Admin", "token" => "ABCD", "role" => "admin"})
+      conn
+      |> delete(calculation_path(conn, :delete, user.token))
+      |> response(204)
+    end
   end
 
   defp create_calculation_and_member(_) do
     {:ok, calculation} = Calculations.create_calculation(@create_attrs)
     {:ok, member} = Calculations.create_member(calculation, %{"name" => "A member", "token" => "ABCD", "role" => "admin"})
-    {:ok, member: member}
+    {:ok, member: member, calculation: calculation}
   end
 end
