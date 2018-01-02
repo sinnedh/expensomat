@@ -54,6 +54,13 @@ defmodule ApiServerWeb.ExpenseControllerTest do
       conn = get conn, calculation_expense_path(conn, :index, member1.token)
       assert json_response(conn, 200)["data"] == []
     end
+
+
+    test "forbidden when no valid token", %{conn: conn} do
+      assert "Forbidden" == conn
+      |> get(calculation_expense_path(conn, :index, "NVLD_TKN"))
+      |> json_response(403)
+    end
   end
 
   describe "create expense" do
@@ -79,16 +86,43 @@ defmodule ApiServerWeb.ExpenseControllerTest do
       conn = post conn, calculation_expense_path(conn, :create, member1.token), expense: @invalid_attrs
       assert json_response(conn, 422)["errors"] != %{}
     end
+
+    test "forbidden when no valid token", %{conn: conn} do
+      assert "Forbidden" == conn
+      |> post(calculation_expense_path(conn, :create, "NVLD_TKN"), expense: @create_attrs)
+      |> json_response(403)
+    end
+
+    test "forbidden when user is observer", %{conn: conn, calculation: calculation} do
+      {:ok, observer} = Calculations.create_member(calculation, %{"name" => "Observer", "token" => "ABCD", "role" => "observer"})
+      assert "Forbidden" == conn
+      |> post(calculation_expense_path(conn, :create, observer.token), expense: @create_attrs)
+      |> json_response(403)
+    end
+
+    test "allowed when user is editor", %{conn: conn, calculation: calculation} do
+      {:ok, editor} = Calculations.create_member(calculation, %{"name" => "Editor", "token" => "ABCD", "role" => "editor"})
+      conn
+      |> post(calculation_expense_path(conn, :create, editor.token), expense: @create_attrs)
+      |> json_response(201)
+    end
+
+    test "allowed when user is admin", %{conn: conn, calculation: calculation} do
+      {:ok, admin} = Calculations.create_member(calculation, %{"name" => "Admin", "token" => "ABCD", "role" => "admin"})
+      conn
+      |> post(calculation_expense_path(conn, :create, admin.token), expense: @create_attrs)
+      |> response(201)
+    end
   end
 
   describe "update expense" do
     test "renders expense when data is valid", %{conn: conn, calculation: calculation, member1: member1, member2: member2} do
       expense = fixture(calculation, member1, member2, :expense)
       id = expense.id
-      conn = put conn, calculation_expense_path(conn, :update, calculation, expense), expense: @update_attrs
+      conn = put conn, calculation_expense_path(conn, :update, member1.token, expense), expense: @update_attrs
       assert %{"id" => ^id} = json_response(conn, 200)["data"]
 
-      conn = get conn, calculation_expense_path(conn, :show, calculation, expense)
+      conn = get conn, calculation_expense_path(conn, :show, member1.token, expense)
       assert json_response(conn, 200)["data"] == %{
         "id" => expense.id,
         "amount" => 43,
@@ -104,12 +138,12 @@ defmodule ApiServerWeb.ExpenseControllerTest do
 
       id = expense.id
       conn = put conn,
-        calculation_expense_path(conn, :update, calculation, expense),
+        calculation_expense_path(conn, :update, member1.token, expense),
         expense: %{"description" => "the updated description"}
 
       assert %{"id" => ^id} = json_response(conn, 200)["data"]
 
-      conn = get conn, calculation_expense_path(conn, :show, calculation, expense)
+      conn = get conn, calculation_expense_path(conn, :show, member1.token, expense)
       assert json_response(conn, 200)["data"] == %{
         "id" => expense.id,
         "amount" => 42,
@@ -122,15 +156,46 @@ defmodule ApiServerWeb.ExpenseControllerTest do
 
     test "renders errors when data is invalid", %{conn: conn, calculation: calculation, member1: member1, member2: member2} do
       expense = fixture(calculation, member1, member2, :expense)
-      conn = put conn, calculation_expense_path(conn, :update, calculation, expense), expense: @invalid_attrs
+      conn = put conn, calculation_expense_path(conn, :update, member1.token, expense), expense: @invalid_attrs
       assert json_response(conn, 422)["errors"] != %{}
+    end
+
+    test "forbidden when no valid token", %{conn: conn, calculation: calculation, member1: member1, member2: member2} do
+      expense = fixture(calculation, member1, member2, :expense)
+      assert "Forbidden" == conn
+      |> put(calculation_expense_path(conn, :update, "NVLD_TKN", expense), expense: @update_attrs)
+      |> json_response(403)
+    end
+
+    test "forbidden when user is observer", %{conn: conn, calculation: calculation, member1: member1, member2: member2} do
+      expense = fixture(calculation, member1, member2, :expense)
+      {:ok, observer} = Calculations.create_member(calculation, %{"name" => "Observer", "token" => "ABCD", "role" => "observer"})
+      assert "Forbidden" == conn
+      |> put(calculation_expense_path(conn, :update, observer.token, expense), expense: @update_attrs)
+      |> json_response(403)
+    end
+
+    test "allowed when user is editor", %{conn: conn, calculation: calculation, member1: member1, member2: member2} do
+      expense = fixture(calculation, member1, member2, :expense)
+      {:ok, editor} = Calculations.create_member(calculation, %{"name" => "Editor", "token" => "ABCD", "role" => "editor"})
+      conn
+      |> put(calculation_expense_path(conn, :update, editor.token, expense), expense: @update_attrs)
+      |> json_response(200)
+    end
+
+    test "allowed when user is admin", %{conn: conn, calculation: calculation, member1: member1, member2: member2} do
+      expense = fixture(calculation, member1, member2, :expense)
+      {:ok, admin} = Calculations.create_member(calculation, %{"name" => "Admin", "token" => "ABCD", "role" => "admin"})
+      conn
+      |> put(calculation_expense_path(conn, :update, admin.token, expense), expense: @update_attrs)
+      |> response(200)
     end
   end
 
   describe "delete expense" do
     test "deleted expense sets deleted_at", %{conn: conn, calculation: calculation, member1: member1, member2: member2} do
       expense = fixture(calculation, member1, member2, :expense)
-      conn = delete conn, calculation_expense_path(conn, :delete, calculation, expense)
+      conn = delete conn, calculation_expense_path(conn, :delete, member1.token, expense)
       assert response(conn, 204)
 
       deleted_expense = Calculations.get_deleted_expense!(expense.id)
@@ -139,12 +204,43 @@ defmodule ApiServerWeb.ExpenseControllerTest do
 
     test "deleted calculation results in get with 404", %{conn: conn, calculation: calculation, member1: member1, member2: member2} do
       expense = fixture(calculation, member1, member2, :expense)
-      conn = delete conn, calculation_expense_path(conn, :delete, calculation, expense)
+      conn = delete conn, calculation_expense_path(conn, :delete, member1.token, expense)
       assert response(conn, 204)
 
       assert_error_sent 404, fn ->
-        get conn, calculation_expense_path(conn, :show, calculation, expense)
+        get conn, calculation_expense_path(conn, :show, member1.token, expense)
       end
+    end
+
+    test "forbidden when no valid token", %{conn: conn, calculation: calculation, member1: member1, member2: member2} do
+      expense = fixture(calculation, member1, member2, :expense)
+      assert "Forbidden" == conn
+      |> delete(calculation_expense_path(conn, :delete, "NVLD_TKN", expense))
+      |> json_response(403)
+    end
+
+    test "forbidden when user is observer", %{conn: conn, calculation: calculation, member1: member1, member2: member2} do
+      expense = fixture(calculation, member1, member2, :expense)
+      {:ok, observer} = Calculations.create_member(calculation, %{"name" => "Observer", "token" => "ABCD", "role" => "observer"})
+      assert "Forbidden" == conn
+      |> delete(calculation_expense_path(conn, :delete, observer.token, expense))
+      |> json_response(403)
+    end
+
+    test "allowed when user is editor", %{conn: conn, calculation: calculation, member1: member1, member2: member2} do
+      expense = fixture(calculation, member1, member2, :expense)
+      {:ok, editor} = Calculations.create_member(calculation, %{"name" => "Editor", "token" => "ABCD", "role" => "editor"})
+      conn
+      |> delete(calculation_expense_path(conn, :delete, editor.token, expense))
+      |> response(204)
+    end
+
+    test "allowed when user is admin", %{conn: conn, calculation: calculation, member1: member1, member2: member2} do
+      expense = fixture(calculation, member1, member2, :expense)
+      {:ok, admin} = Calculations.create_member(calculation, %{"name" => "Admin", "token" => "ABCD", "role" => "admin"})
+      conn
+      |> delete(calculation_expense_path(conn, :delete, admin.token, expense))
+      |> response(204)
     end
   end
 end
