@@ -8,6 +8,7 @@ it('renders without notification', () => {
     <App
       loadingCounter={0}
       token={'123'}
+      user={{name: 'Keek', role: 'admin'}}
     />, div);
 });
 
@@ -19,6 +20,7 @@ it('renders with empty notification', () => {
       notificationType={null}
       loadingCounter={0}
       token={'123'}
+      user={{name: 'Keek', role: 'admin'}}
     />, div);
 });
 
@@ -30,5 +32,6 @@ it('renders with notification', () => {
       notificationType={'warning'}
       loadingCounter={0}
       token={'123'}
+      user={{name: 'Keek', role: 'admin'}}
     />, div);
 });

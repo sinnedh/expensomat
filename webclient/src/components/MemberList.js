@@ -1,5 +1,13 @@
 import React from 'react';
-import EditableInput from './EditableInput'
+import { EditableInput, EditableSelect } from './EditableField'
+
+const roleOptions = {
+  admin: 'Admin',
+  editor: 'Editor',
+  observer: 'Observer',
+}
+// TODO: move to central config
+export { roleOptions }
 
 export default (props) => (
   <ul>
@@ -8,7 +16,12 @@ export default (props) => (
         <button onClick={(e) => props.onClickDelete(e, id)}>X</button>
         <EditableInput
           value={props.members[id].name}
-          onClickSave={value => this.props.onUpdateMember(id, value)}
+          onClickSave={value => props.onUpdateName(id, value)}
+          />
+        <EditableSelect
+          value={props.members[id].role}
+          options={roleOptions}
+          onClickSave={value => props.onUpdateRole(id, value)}
           />
       </li>
     )}

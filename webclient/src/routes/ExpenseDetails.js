@@ -1,16 +1,17 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import EditableInput from '../components/EditableInput'
-import { updateExpense } from '../actions'
+import { EditableInput } from '../components/EditableField'
+import { deleteExpense, updateExpense } from '../actions'
 
-class EditExpense extends React.Component {
+class ExpenseDetails extends React.Component {
   render() {
     return (
       <div>
-        <h1>Edit expense:</h1>
+        <h1>Expense details:</h1>
         <div>
           <label>Description:</label>{' '}
           <EditableInput
+            isEditable={this.props.canEditExpenses}
             value={this.props.description}
             onClickSave={value => this.props.onUpdateDescription(value)}
             />
@@ -18,6 +19,7 @@ class EditExpense extends React.Component {
         <div>
           <label>Amount:</label>{' '}
           <EditableInput
+            isEditable={this.props.canEditExpenses}
             value={this.props.amount}
             onClickSave={value => this.props.onUpdateAmount(value)}
             />
@@ -25,10 +27,16 @@ class EditExpense extends React.Component {
         <div>
           <label>Paid at:</label>{' '}
           <EditableInput
+            isEditable={this.props.canEditExpenses}
             value={this.props.paid_at}
             onClickSave={value => this.props.onUpdatePaidAt(value)}
             />
         </div>
+        {this.props.canEditExpenses && this.props.expenseId != null && 
+          <button onClick={(e) => this.props.onClickDelete(e, this.props.expenseId)}>
+            Delete
+          </button>
+        }
       </div>
     )
   }
@@ -37,7 +45,9 @@ class EditExpense extends React.Component {
 const mapStateToProps = (state, ownProps) => {
   const expense = state.getIn(['expenses', ownProps.match.params.id.toString()])
   return {
+    canEditExpenses: state.getIn(['application', 'user', 'canEditExpenses']),
     token: state.getIn(['application', 'token']),
+    expenseId: expense ? expense.get('id') : null,
     description: expense ? expense.get('description') : '',
     amount: expense ? expense.get('amount') : 0,
     paid_at: expense ? expense.get('paid_at') : '',
@@ -49,6 +59,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   const token = ownProps.match.params.token
 
   return {
+    onClickDelete: (event, expenseId) => {
+      event.preventDefault();
+      dispatch(deleteExpense(token, expenseId));
+    },
     onUpdateDescription: (description) => {
       dispatch(updateExpense(token, expenseId, {description}))
     },
@@ -61,4 +75,4 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(EditExpense)
+export default connect(mapStateToProps, mapDispatchToProps)(ExpenseDetails)

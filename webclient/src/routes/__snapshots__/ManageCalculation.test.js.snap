@@ -11,6 +11,7 @@ exports[`ManageCalculation renders properly 1`] = `
     </label>
      
     <EditableInput
+      isEditable={true}
       onClickSave={[Function]}
       value="My calculation"
     />
@@ -21,6 +22,7 @@ exports[`ManageCalculation renders properly 1`] = `
     </label>
      
     <EditableInput
+      isEditable={true}
       onClickSave={[Function]}
       value="Blabla"
     />
@@ -46,6 +48,7 @@ exports[`ManageCalculation renders properly 1`] = `
     }
     onClickDelete={[Function]}
     onUpdateName={[Function]}
+    onUpdateRole={[Function]}
   />
 </div>
 `;

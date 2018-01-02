@@ -1,0 +1,54 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`matches snapshot when in edit mode 1`] = `
+<React.Fragment>
+  <select
+    className="value"
+    onChange={[Function]}
+    value="ciao"
+  >
+    <option
+      key="hello"
+      value="hello"
+    >
+      Hallo
+    </option>
+    <option
+      key="ciao"
+      value="ciao"
+    >
+      Ciao
+    </option>
+  </select>
+  <input
+    className="save-button"
+    onClick={[Function]}
+    type="button"
+    value="Save"
+  />
+  <input
+    className="cancel-button"
+    onClick={[Function]}
+    type="button"
+    value="Cancel"
+  />
+</React.Fragment>
+`;
+
+exports[`matches snapshot when in show mode 1`] = `
+<React.Fragment>
+  Hallo
+  <input
+    className="edit-button"
+    onClick={[Function]}
+    type="button"
+    value="Edit"
+  />
+</React.Fragment>
+`;
+
+exports[`matches snapshot when not isEditable 1`] = `
+<React.Fragment>
+  Hallo
+</React.Fragment>
+`;

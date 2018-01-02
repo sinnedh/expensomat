@@ -10,8 +10,8 @@ it('renders without members', () => {
 it('renders with members', () => {
   const div = document.createElement('div');
   const members = {
-    1: { id: 1, name: "Micha", },
-    2: { id: 2, name: "Dennis", },
+    1: { id: 1, name: "Micha", role: "admin"},
+    2: { id: 2, name: "Dennis", role: "editor"},
   }
   ReactDOM.render(<MemberList members={members} />, div);
 });

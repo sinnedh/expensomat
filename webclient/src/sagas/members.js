@@ -27,7 +27,7 @@ export function* updateMember(action) {
     yield put({
       type: "MEMBERS:UPDATE_SUCCESS",
       id: member.data.id,
-      name: member.data.name,
+      member: member.data,
     })
     yield put(setInfoNotification('Member updated succesfully'))
   } catch (e) {

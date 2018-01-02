@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { createExpense, deleteExpense } from '../actions';
+import { createExpense } from '../actions';
 import ExpenseForm from '../components/ExpenseForm';
 import ExpenseList from '../components/ExpenseList';
 import ExpenseMatrix from '../components/ExpenseMatrix';
@@ -14,14 +14,20 @@ class ShowCalculation extends React.Component {
         <h2>Matrix</h2>
         <ExpenseMatrix members={this.props.members} elements={this.props.matrix} />
         <h2>Expenses</h2>
-        <ExpenseForm handleSubmit={this.props.onSubmitExpenseForm} members={this.props.members} />
-        <ExpenseList onClickDelete={this.props.onClickDelete} expenses={this.props.expenses} />
+        {this.props.canEditExpenses &&
+          <ExpenseForm
+            handleSubmit={this.props.onSubmitExpenseForm}
+            members={this.props.members}
+            />
+        }
+        <ExpenseList expenses={this.props.expenses} />
       </div>
     );
   }
 }
 
 const mapStateToProps = (state, ownProps) => ({
+  canEditExpenses: state.getIn(['application', 'user', 'canEditExpenses']),
   token: state.getIn(['application', 'token']),
   expenses: state.get('expenses').toJS(),
   name: state.getIn(['calculations', 'name']),
@@ -36,10 +42,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onSubmitExpenseForm: (expense) => {
       dispatch(createExpense(token, expense));
-    },
-    onClickDelete: (event, expense) => {
-      event.preventDefault();
-      dispatch(deleteExpense(token, expense.id));
     },
   }
 }

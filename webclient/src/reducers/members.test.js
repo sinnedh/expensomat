@@ -1,10 +1,10 @@
 import { List, Map } from 'immutable'
 import members from './members';
 
-const item1 = Map({id: 1, name: 'Kalle'})
-const item2 = Map({id: 2, name: 'Keek'})
-const item3 = Map({id: 3, name: 'Werner'})
-const item4 = Map({id: 4, name: 'Schlucke'})
+const item1 = Map({id: 1, name: 'Kalle', role: 'admin'})
+const item2 = Map({id: 2, name: 'Keek', role: 'editor'})
+const item3 = Map({id: 3, name: 'Werner', role: 'editor'})
+const item4 = Map({id: 4, name: 'Schlucke', role: 'observer'})
 
 const initialState = Map()
 const testState1 = Map({1: item1})

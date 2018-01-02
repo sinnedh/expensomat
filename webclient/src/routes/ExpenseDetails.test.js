@@ -1,9 +1,9 @@
 import React from 'react'
 import { Map } from 'immutable'
 import configureStore from 'redux-mock-store'
-import EditExpense from './EditExpense'
+import ExpenseDetails from './ExpenseDetails'
 
-describe('EditExpense', () => {
+describe('ExpenseDetails', () => {
   it('renders properly', () => {
     const initialState = Map({
       application: Map({ token: 'ABCD1234' }),
@@ -15,7 +15,7 @@ describe('EditExpense', () => {
     const mockStore = configureStore()
     const store = mockStore(initialState)
     const wrapper = shallow(
-      <EditExpense
+      <ExpenseDetails
         match={{params: {id: 1, token: 'ABCD1234'}}}
         store={store}
         />

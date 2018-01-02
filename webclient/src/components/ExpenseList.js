@@ -7,7 +7,6 @@ export default (props) => (
       <ExpenseListItem
         key={id}
         expense={props.expenses[id]}
-        onClickDelete={props.onClickDelete}
         />
       )
     }

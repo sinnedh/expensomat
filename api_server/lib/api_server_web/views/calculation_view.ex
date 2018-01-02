@@ -6,8 +6,11 @@ defmodule ApiServerWeb.CalculationView do
     %{data: render_many(calculations, CalculationView, "calculation.json")}
   end
 
-  def render("show.json", %{calculation: calculation}) do
-    %{data: render_one(calculation, CalculationView, "calculation.json")}
+  def render("show.json", %{calculation: calculation, member: member}) do
+    %{
+      user: render_one(member, ApiServerWeb.MemberView, "member.json"),
+      data: render_one(calculation, CalculationView, "calculation.json")
+    }
   end
 
   def render("calculation.json", %{calculation: calculation}) do

@@ -25,14 +25,14 @@ defmodule ApiServerWeb.CalculationControllerTest do
       conn = post conn, calculation_path(conn, :create), calculation: @create_attrs
       assert %{"id" => id} = json_response(conn, 201)["data"]
 
-      {:ok, member} = Calculations.create_member(%{"calculation_id" => id, "name" => "A member", "token" => "ABCD"})
+      {:ok, member} = Calculations.create_member(%{"calculation_id" => id, "name" => "A member", "token" => "ABCD", "role" => "admin" })
 
       conn = get conn, calculation_path(conn, :show, member.token)
       assert json_response(conn, 200)["data"] == %{
         "id" => id,
         "description" => "some description",
         "name" => "some name",
-        "members" => [%{"name" => "A member", "id" => member.id, "token" => member.token}],
+        "members" => [%{"name" => "A member", "id" => member.id, "token" => member.token, "role" => "admin"}],
         "matrix" => %{}
       }
     end
@@ -44,7 +44,7 @@ defmodule ApiServerWeb.CalculationControllerTest do
 
     test "new members are created and assoiciated to calculation", %{conn: conn} do
       create_attrs = @create_attrs
-      |> Map.put("members", [%{name: "First member"}, %{name: "Second member"}])
+      |> Map.put("members", [%{role: "admin", name: "First member"}, %{role: "editor", name: "Second member"}])
 
       assert length(Repo.all(Member)) == 0
 
@@ -58,8 +58,8 @@ defmodule ApiServerWeb.CalculationControllerTest do
       member1 = Repo.get_by!(Member, name: "Second member")
 
       assert response["data"]["members"] == [
-        %{"id" => member0.id, "token" => member0.token, "name" => "First member"},
-        %{"id" => member1.id, "token" => member1.token, "name" => "Second member"},
+        %{"id" => member0.id, "token" => member0.token, "name" => "First member", "role" => "admin"},
+        %{"id" => member1.id, "token" => member1.token, "name" => "Second member", "role" => "editor"},
       ]
     end
   end
@@ -77,7 +77,7 @@ defmodule ApiServerWeb.CalculationControllerTest do
         "id" => id,
         "description" => "some updated description",
         "name" => "some updated name",
-        "members" => [%{"name" => "A member", "id" => member.id, "token" => member.token}],
+        "members" => [%{"name" => "A member", "id" => member.id, "token" => member.token, "role" => "admin"}],
         "matrix" => %{}
       }
     end
@@ -85,6 +85,33 @@ defmodule ApiServerWeb.CalculationControllerTest do
     test "renders errors when data is invalid", %{conn: conn, member: member} do
       conn = put conn, calculation_path(conn, :update, member.token), calculation: @invalid_attrs
       assert json_response(conn, 422)["errors"] != %{}
+    end
+
+    test "forbidden when no valid token", %{conn: conn} do
+      assert "Forbidden" == conn
+      |> put(calculation_path(conn, :update, "NVLD_TKN"), calculation: @update_attrs)
+      |> json_response(403)
+    end
+
+    test "forbidden when user is observer", %{conn: conn, calculation: calculation} do
+      {:ok, user} = Calculations.create_member(calculation, %{"name" => "Observer", "token" => "ABCD", "role" => "observer"})
+      assert "Forbidden" == conn
+      |> put(calculation_path(conn, :update, user.token), calculation: @update_attrs)
+      |> json_response(403)
+    end
+
+    test "forbidden when user is editor", %{conn: conn, calculation: calculation} do
+      {:ok, user} = Calculations.create_member(calculation, %{"name" => "Editor", "token" => "ABCD", "role" => "editor"})
+      assert "Forbidden" == conn
+      |> put(calculation_path(conn, :update, user.token), calculation: @update_attrs)
+      |> json_response(403)
+    end
+
+    test "allowed when user is admin", %{conn: conn, calculation: calculation} do
+      {:ok, user} = Calculations.create_member(calculation, %{"name" => "Admin", "token" => "ABCD", "role" => "admin"})
+      conn
+      |> put(calculation_path(conn, :update, user.token), calculation: @update_attrs)
+      |> response(200)
     end
   end
 
@@ -107,11 +134,38 @@ defmodule ApiServerWeb.CalculationControllerTest do
         get conn, calculation_path(conn, :show, member.token)
       end
     end
+
+    test "forbidden when no valid token", %{conn: conn} do
+      assert "Forbidden" == conn
+      |> delete(calculation_path(conn, :delete, "NVLD_TKN"))
+      |> json_response(403)
+    end
+
+    test "forbidden when user is observer", %{conn: conn, calculation: calculation} do
+      {:ok, user} = Calculations.create_member(calculation, %{"name" => "Observer", "token" => "ABCD", "role" => "observer"})
+      assert "Forbidden" == conn
+      |> delete(calculation_path(conn, :delete, user.token))
+      |> json_response(403)
+    end
+
+    test "forbidden when user is editor", %{conn: conn, calculation: calculation} do
+      {:ok, user} = Calculations.create_member(calculation, %{"name" => "Editor", "token" => "ABCD", "role" => "editor"})
+      assert "Forbidden" == conn
+      |> delete(calculation_path(conn, :delete, user.token))
+      |> json_response(403)
+    end
+
+    test "allowed when user is admin", %{conn: conn, calculation: calculation} do
+      {:ok, user} = Calculations.create_member(calculation, %{"name" => "Admin", "token" => "ABCD", "role" => "admin"})
+      conn
+      |> delete(calculation_path(conn, :delete, user.token))
+      |> response(204)
+    end
   end
 
   defp create_calculation_and_member(_) do
     {:ok, calculation} = Calculations.create_calculation(@create_attrs)
-    {:ok, member} = Calculations.create_member(calculation, %{"name" => "A member", "token" => "ABCD"})
-    {:ok, member: member}
+    {:ok, member} = Calculations.create_member(calculation, %{"name" => "A member", "token" => "ABCD", "role" => "admin"})
+    {:ok, member: member, calculation: calculation}
   end
 end

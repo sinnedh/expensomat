@@ -3,9 +3,9 @@ defmodule ApiServerWeb.MemberControllerTest do
 
   alias ApiServer.Calculations
 
-  @valid_attrs %{"name" => "Schlucke"}
-  @update_attrs %{"name" => "Martin"}
-  @invalid_attrs %{"name" => 22}
+  @valid_attrs %{"name" => "Schlucke", "role" => "admin"}
+  @update_attrs %{"name" => "Martin", "role" => "editor"}
+  @invalid_attrs %{"name" => 22, "role" => "invalid"}
 
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
@@ -18,12 +18,12 @@ defmodule ApiServerWeb.MemberControllerTest do
   end
 
   defp create_member(calculation) do
-    create_member(calculation, %{name: "Kalle", token: "ABCD"})
+    create_member(calculation, %{name: "Kalle", token: "ABCD", role: "admin"})
   end
-  defp create_member(calculation, %{name: name, token: token}) do
+  defp create_member(calculation, %{name: name, token: token, role: role}) do
     {:ok, member} = Calculations.create_member(
       calculation,
-      %{"name" => name, "token" => token}
+      %{"name" => name, "token" => token, "role" => role}
     )
     {:ok, member: member}
   end
@@ -33,11 +33,11 @@ defmodule ApiServerWeb.MemberControllerTest do
 
     test "list all members of calculation for all members", %{conn: conn, calculation: calculation} do
       {:ok, member: member1} = create_member(calculation)
-      {:ok, member: member2} = create_member(calculation, %{name: "Keek", token: "EFGH"})
+      {:ok, member: member2} = create_member(calculation, %{name: "Keek", token: "EFGH", role: "editor"})
 
       expected_response = [
-        %{"id" => member1.id, "name" => "Kalle"},
-        %{"id" => member2.id, "name" => "Keek"},
+        %{"id" => member1.id, "name" => "Kalle", "role" => "admin"},
+        %{"id" => member2.id, "name" => "Keek", "role" => "editor"},
       ]
 
       assert expected_response == conn
@@ -53,25 +53,31 @@ defmodule ApiServerWeb.MemberControllerTest do
 
     test "does not list members of other calculations", %{conn: conn, calculation: calculation} do
       {:ok, member: member1} = create_member(calculation)
-      {:ok, member: member2} = create_member(calculation, %{name: "Keek", token: "EFGH"})
+      {:ok, member: member2} = create_member(calculation, %{name: "Keek", token: "EFGH", role: "editor"})
 
       {:ok, calculation: other_calculation} = create_calculation(%{name: "Other calculation"})
-      {:ok, member: other_member} = create_member(other_calculation, %{name: "Franky", token: "IJKL"})
+      {:ok, member: other_member} = create_member(other_calculation, %{name: "Franky", token: "IJKL", role: "editor"})
 
       expected_response = [
-        %{"id" => member1.id, "name" => "Kalle"},
-        %{"id" => member2.id, "name" => "Keek"},
+        %{"id" => member1.id, "name" => "Kalle", "role" => "admin"},
+        %{"id" => member2.id, "name" => "Keek", "role" => "editor"},
       ]
       assert expected_response == conn
       |> get(calculation_member_path(conn, :index, member1.token))
       |> json_response(200)
       |> Map.fetch!("data")
 
-      expected_response = [%{"id" => other_member.id, "name" => "Franky"}]
+      expected_response = [%{"id" => other_member.id, "name" => "Franky", "role" => "editor"}]
       assert expected_response == conn
       |> get(calculation_member_path(conn, :index, other_member.token))
       |> json_response(200)
       |> Map.fetch!("data")
+    end
+
+    test "forbidden when no valid token", %{conn: conn} do
+      assert "Forbidden" == conn
+      |> get(calculation_member_path(conn, :index, "NVLD_TKN"))
+      |> json_response(403)
     end
 
     # TODO: test "list token of members when admin"
@@ -118,7 +124,7 @@ defmodule ApiServerWeb.MemberControllerTest do
       {:ok, member: member1} = create_member(calculation)
 
       attrs = @valid_attrs |> Map.put("token", "ABCD1234")
-      assert %{"id" => id, "name" => "Schlucke"} = conn
+      assert %{"id" => id, "name" => "Schlucke", "role" => "admin"} = conn
       |> post(calculation_member_path(conn, :create, member1.token), member: attrs)
       |> json_response(201)
       |> Map.fetch!("data")
@@ -127,17 +133,32 @@ defmodule ApiServerWeb.MemberControllerTest do
       assert String.length(Calculations.get_member!(member1.id).token) == 24
     end
 
-    # TODO:
-    #test "creates member only when token is valid", %{conn: conn, calculation: calculation} do
-    #  invalid_token = "INVALID"
-    #  conn
-    #  |> post(calculation_member_path(conn, :create, invalid_token), member: @valid_attrs)
-    #  |> json_response(404)
-    #
-    #  assert length(Calculations.get_calculation!(calculation.id).members) == 0
-    #end
-    #
-    # TODO: test "creates member only when admin token is given"
+    test "forbidden when no valid token", %{conn: conn} do
+      assert "Forbidden" == conn
+      |> post(calculation_member_path(conn, :create, "NVLD_TKN"), member: @valid_attrs)
+      |> json_response(403)
+    end
+
+    test "forbidden when user is observer", %{conn: conn, calculation: calculation} do
+      {:ok, member: observer} = create_member(calculation, %{name: "Observer", token: "ABCD", role: "observer"})
+      assert "Forbidden" == conn
+      |> post(calculation_member_path(conn, :create, observer.token), member: @valid_attrs)
+      |> json_response(403)
+    end
+
+    test "forbidden when user is editor", %{conn: conn, calculation: calculation} do
+      {:ok, member: editor} = create_member(calculation, %{name: "Editor", token: "ABCD", role: "editor"})
+      assert "Forbidden" == conn
+      |> post(calculation_member_path(conn, :create, editor.token), member: @valid_attrs)
+      |> json_response(403)
+    end
+
+    test "allowed when user is admin", %{conn: conn, calculation: calculation} do
+      {:ok, member: admin} = create_member(calculation, %{name: "Admin", token: "ABCD", role: "admin"})
+      conn
+      |> post(calculation_member_path(conn, :create, admin.token), member: @valid_attrs)
+      |> response(201)
+    end
   end
 
   describe "update member" do
@@ -146,7 +167,7 @@ defmodule ApiServerWeb.MemberControllerTest do
     test "renders new member when data is valid", %{conn: conn, calculation: calculation} do
       {:ok, member: member1} = create_member(calculation)
 
-      assert %{"id" => member1.id, "name" => "Martin"} == conn
+      assert %{"id" => member1.id, "name" => "Martin", "role" => "editor"} == conn
       |> put(calculation_member_path(conn, :update, member1.token, member1), member: @update_attrs)
       |> json_response(200)
       |> Map.fetch!("data")
@@ -178,17 +199,44 @@ defmodule ApiServerWeb.MemberControllerTest do
       assert String.length(Calculations.get_member!(member1.id).token) == 24
     end
 
-    # TODO: test "updates member only when token is valid"
-    # TODO: test "updates member only when admin token is given"
+    test "forbidden when no valid token", %{conn: conn, calculation: calculation} do
+      {:ok, member: member} = create_member(calculation)
+      assert "Forbidden" == conn
+      |> put(calculation_member_path(conn, :update, "NVLD_TKN", member.id), member: @update_attrs)
+      |> json_response(403)
+    end
+
+    test "forbidden when user is observer", %{conn: conn, calculation: calculation} do
+      {:ok, member: observer} = create_member(calculation, %{name: "Admin", token: "ABCD", role: "observer"})
+      {:ok, member: member} = create_member(calculation)
+      assert "Forbidden" == conn
+      |> put(calculation_member_path(conn, :update, observer.token, member.id), member: @update_attrs)
+      |> json_response(403)
+    end
+
+    test "forbidden when user is editor", %{conn: conn, calculation: calculation} do
+      {:ok, member: editor} = create_member(calculation, %{name: "Admin", token: "ABCD", role: "editor"})
+      {:ok, member: member} = create_member(calculation)
+      assert "Forbidden" == conn
+      |> put(calculation_member_path(conn, :update, editor.token, member.id), member: @update_attrs)
+      |> json_response(403)
+    end
+
+    test "allowed when user is admin", %{conn: conn, calculation: calculation} do
+      {:ok, member: admin} = create_member(calculation, %{name: "Admin", token: "ABCD", role: "admin"})
+      {:ok, member: member} = create_member(calculation)
+      conn
+      |> put(calculation_member_path(conn, :update, admin.token, member.id), member: @update_attrs)
+      |> response(200)
+    end
   end
 
   describe "delete member" do
     setup [:create_calculation]
 
     test "deletes chosen member", %{conn: conn, calculation: calculation} do
+      {:ok, member: member2} = create_member(calculation, %{name: "Keek", token: "EFGH", role: "editor"})
       {:ok, member: member1} = create_member(calculation)
-      {:ok, member: member2} = create_member(calculation, %{name: "Keek", token: "EFGH"})
-
       assert "" == conn
       |> delete(calculation_member_path(conn, :delete, member1.token, member2))
       |> response(204)
@@ -199,91 +247,36 @@ defmodule ApiServerWeb.MemberControllerTest do
     end
 
     # TODO test "member cannot delete himself"
-    # TODO test "deletes member only when token is valid"
-    # TODO test "deletes member only when admin token is given"
+
+    test "forbidden when no valid token", %{conn: conn, calculation: calculation} do
+      {:ok, member: member} = create_member(calculation)
+      assert "Forbidden" == conn
+      |> delete(calculation_member_path(conn, :delete, "NVLD_TKN", member))
+      |> json_response(403)
+    end
+
+    test "forbidden when user is observer", %{conn: conn, calculation: calculation} do
+      {:ok, member: observer} = create_member(calculation, %{name: "Admin", token: "ABCD", role: "observer"})
+      {:ok, member: member} = create_member(calculation)
+      assert "Forbidden" == conn
+      |> delete(calculation_member_path(conn, :delete, observer.token, member))
+      |> json_response(403)
+    end
+
+    test "forbidden when user is editor", %{conn: conn, calculation: calculation} do
+      {:ok, member: editor} = create_member(calculation, %{name: "Admin", token: "ABCD", role: "editor"})
+      {:ok, member: member} = create_member(calculation)
+      assert "Forbidden" == conn
+      |> delete(calculation_member_path(conn, :delete, editor.token, member))
+      |> json_response(403)
+    end
+
+    test "allowed when user is admin", %{conn: conn, calculation: calculation} do
+      {:ok, member: admin} = create_member(calculation, %{name: "Admin", token: "ABCD", role: "admin"})
+      {:ok, member: member} = create_member(calculation)
+      conn
+      |> delete(calculation_member_path(conn, :delete, admin.token, member))
+      |> response(204)
+    end
   end
-
-
-  #  alias ApiServer.Calculations.Member
-  #
-  #  @create_attrs %{name: "some name"}
-  #  @update_attrs %{name: "some updated name"}
-  #  @invalid_attrs %{name: nil}
-
-
-  # defp create_calculation_with_two_members(_) do
-  #   {:ok, calculation: calculation} = create_calculation()
-  #   {:ok, member: member1} = create_member(calculation)
-  #   {:ok, member: member2} = create_member(calculation, %{name: "Keek", token: "EFGH"})
-  #   {:ok, calculation: calculation, member1: member1, member2: member2}
-  # end
-
-
-  #describe "index" do
-  # test "lists all members from the same calculation", %{conn: conn, calculation: calculation} do
-  #    {:ok, other_calculation} = Calculations.create_calculation(%{name: "Another calculation"})
-  #    {:ok, member1} = fixture(calculation, :member)
-  #    {:ok, member2} = fixture(calculation, :member)
-  #    {:ok, member2} = fixture(other_calculation, :member)
-  #    conn = get conn, calculation_member_path(conn, :index, member1.token)
-  #    assert length(json_response(conn, 200)["data"]) == 2
-  #    conn = get conn, calculation_member_path(conn, :index, member2.token)
-  #    assert length(json_response(conn, 200)["data"]) == 2
-  #    conn = get conn, calculation_member_path(conn, :index, other_member.token)
-  #    assert length(json_response(conn, 200)["data"]) == 1
-  #  end
-  #end
-
-#  describe "create member" do
-#    test "renders member when data is valid", %{conn: conn} do
-#      conn = post conn, member_path(conn, :create), member: @create_attrs
-#      assert %{"id" => id} = json_response(conn, 201)["data"]
-#
-#      conn = get conn, member_path(conn, :show, id)
-#      assert json_response(conn, 200)["data"] == %{
-#        "id" => id,
-#        "name" => "some name"}
-#    end
-#
-#    test "renders errors when data is invalid", %{conn: conn} do
-#      conn = post conn, member_path(conn, :create), member: @invalid_attrs
-#      assert json_response(conn, 422)["errors"] != %{}
-#    end
-#  end
-
-#  describe "update member" do
-#    setup [:create_member]
-#
-#    test "renders member when data is valid", %{conn: conn, member: %Member{id: id} = member} do
-#      conn = put conn, member_path(conn, :update, member), member: @update_attrs
-#      assert %{"id" => ^id} = json_response(conn, 200)["data"]
-#
-#      conn = get conn, member_path(conn, :show, id)
-#      assert json_response(conn, 200)["data"] == %{
-#        "id" => id,
-#        "name" => "some updated name"}
-#    end
-#
-#    test "renders errors when data is invalid", %{conn: conn, member: member} do
-#      conn = put conn, member_path(conn, :update, member), member: @invalid_attrs
-#      assert json_response(conn, 422)["errors"] != %{}
-#    end
-#  end
-
-#  describe "delete member" do
-#    setup [:create_member]
-#
-#    test "deletes chosen member", %{conn: conn, member: member} do
-#      conn = delete conn, member_path(conn, :delete, member)
-#      assert response(conn, 204)
-#      assert_error_sent 404, fn ->
-#        get conn, member_path(conn, :show, member)
-#      end
-#    end
-#  end
-#
-#  defp create_member(_) do
-#    member = fixture(:member)
-#    {:ok, member: member}
-#  end
 end

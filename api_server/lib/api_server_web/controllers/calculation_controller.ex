@@ -21,22 +21,22 @@ defmodule ApiServerWeb.CalculationController do
   end
 
   def show(conn, %{"token" => token}) do
-    calculation = Calculations.get_calculation_for_token!(token)
-    render(conn, "show.json", calculation: calculation)
+    member = Calculations.get_member_for_token!(token)
+    calculation = Calculations.get_calculation!(member.calculation_id)
+    render(conn, "show.json", calculation: calculation, member: member)
   end
 
   def update(conn, %{"token" => token, "calculation" => calculation_params}) do
-    calculation = Calculations.get_calculation_for_token!(token)
-
-    with {:ok, %Calculation{} = calculation} <- Calculations.update_calculation(calculation, calculation_params) do
-      render(conn, "show.json", calculation: calculation)
-    end
+    with {:ok, member} <- Calculations.verify_token_with_role(token, ["admin"]),
+         calculation <- Calculations.get_calculation!(member.calculation_id),
+         {:ok, %Calculation{} = new_calculation} <- Calculations.update_calculation(calculation, calculation_params),
+      do: render(conn, "show.json", calculation: new_calculation)
   end
 
   def delete(conn, %{"token" => token}) do
-    calculation = Calculations.get_calculation_for_token!(token)
-    with {:ok, %Calculation{}} <- Calculations.delete_calculation(calculation) do
-      send_resp(conn, :no_content, "")
-    end
+    with {:ok, member} <- Calculations.verify_token_with_role(token, ["admin"]),
+         calculation <- Calculations.get_calculation!(member.calculation_id),
+         {:ok, %Calculation{}} <- Calculations.delete_calculation(calculation),
+    do: send_resp(conn, :no_content, "")
   end
 end

@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import CreateCalculation from '../routes/CreateCalculation';
 import LoadingIndicator from './LoadingIndicator';
 import NotificationMessage from './NotificationMessage';
@@ -7,11 +8,17 @@ import Navigation from './Navigation';
 import AppWithToken from '../containers/AppWithToken';
 
 class App extends React.Component {
+  getChildContext() {
+    return {
+      token: this.props.token,
+    };
+  }
+
   render() {
     return (
       <Router>
         <div className="App">
-          <Navigation token={this.props.token} />
+          <Navigation token={this.props.token} user={this.props.user} />
           <LoadingIndicator isLoading={this.props.isLoading} />
           <NotificationMessage
             text={this.props.notificationText}
@@ -23,6 +30,10 @@ class App extends React.Component {
       </Router>
     )
   }
+}
+
+App.childContextTypes = {
+  token: PropTypes.string,
 }
 
 export default App

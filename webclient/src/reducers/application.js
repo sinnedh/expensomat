@@ -5,6 +5,7 @@ const initialState = Map({
   notificationText: null,
   notificationType: null,
   token: null,
+  user: Map(),
 })
 
 export default (state = initialState, action) => {
@@ -12,6 +13,15 @@ export default (state = initialState, action) => {
 
     case 'APPLICATION:SET_TOKEN':
       return state.update('token', token => action.token)
+
+    case 'APPLICATION:SET_USER':
+      return state.update('user', user => Map({
+        ...action.user,
+        canEditExpenses: ['editor', 'admin'].includes(action.user.role),
+      }))
+
+    case 'APPLICATION:RESET_USER':
+      return state.update('user', user => Map())
 
     case 'APPLICATION:INCREMENT_LOADING_COUNTER':
       return state.update('loadingCounter', l => l + 1)
@@ -23,8 +33,10 @@ export default (state = initialState, action) => {
       return state.update('loadingCounter', _ => 0)
 
     case 'APPLICATION:NOTIFICATION_RESET':
-      return initialState;
-
+    return state.merge({
+      notificationText: null,
+      notificationType: null,
+    })
     case 'APPLICATION:NOTIFICATION_SET':
       return state.merge({
         notificationText: action.notificationText,
