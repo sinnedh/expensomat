@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Forbidden matches snapshot 1`] = `
+<p>
+  You don't have the credentials to view this page
+</p>
+`;

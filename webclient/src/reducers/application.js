@@ -18,6 +18,7 @@ export default (state = initialState, action) => {
       return state.update('user', user => Map({
         ...action.user,
         canEditExpenses: ['editor', 'admin'].includes(action.user.role),
+        canEditCalculation: action.user.role === 'admin',
       }))
 
     case 'APPLICATION:RESET_USER':

@@ -3,10 +3,15 @@ import { connect } from 'react-redux'
 import { EditableInput } from '../components/EditableField'
 import MemberList from '../components/MemberList'
 import MemberForm from '../components/MemberForm'
+import Forbidden from '../components/Forbidden'
 import { createMember, deleteMember, updateCalculation, updateMember } from '../actions'
 
 class ManageCalculation extends React.Component {
   render() {
+    if(this.props.canEditCalculation) {
+      return <Forbidden />
+    }
+
     return (
       <div>
         <h1>Manage calculation:</h1>
@@ -40,6 +45,7 @@ class ManageCalculation extends React.Component {
 }
 
 const mapStateToProps = (state, ownProps) => ({
+  canEditCalculation: state.getIn(['application', 'user', 'canEditCalculation']),
   token: state.getIn(['application', 'token']),
   name: state.getIn(['calculations', 'name']),
   description: state.getIn(['calculations', 'description']),
