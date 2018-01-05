@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ManageCalculation renders properly 1`] = `
+exports[`ManageCalculation matches snapshot when permission is NOT granted 1`] = `
 <div>
   <h1>
     Manage calculation:
@@ -52,3 +52,5 @@ exports[`ManageCalculation renders properly 1`] = `
   />
 </div>
 `;
+
+exports[`ManageCalculation matches snapshot when permission is granted 1`] = `<Forbidden />`;
